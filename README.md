@@ -1,6 +1,6 @@
 # 5by5-UpBank
 
-Cliente: daiane
-Funcionario: Maiara
-Agencia: Gustavo
-Conta: Edenilson, Gabriel
+- Cliente: daiane
+- Funcionario: Maiara
+- Agencia: Gustavo
+- Conta: Edenilson, Gabriel

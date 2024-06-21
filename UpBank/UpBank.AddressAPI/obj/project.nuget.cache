@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xp0NNn6+nx3zfDIHNpoOB04Z6lpA9tn1f0VRpLV0msSyiikaTdM+OUixgLa5KUmwvFq7n7G6M9B+77mcDOLaXw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\UpBank.AddressAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\edeni\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512"
+  ],
+  "logs": []
+}

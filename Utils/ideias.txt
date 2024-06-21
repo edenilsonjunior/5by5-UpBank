@@ -1,0 +1,149 @@
+JA FEITO:
+endereço      : mongo
+
+
+OBS: o Delete apenas move para outra area do banco
+
+daiane:
+cliente{
+    CRUD
+    OBS-> Ao criar um cliente, implicitamente ele solicita uma abertura de conta 
+}
+
+
+funcionário{
+    CRUD
+
+    (HttpPost)
+    Conta CriarConta{
+        parametros:
+            - registroFuncionario
+            - cpfCliente
+
+        controller:
+            * recebe o funcionario do DTO
+            1- busca o cliente pelo cpf - endpoint de cliente
+            2- Verificar se o cliente ja nao tem conta
+            3- chamar DefinirPerfilDeConta(Cliente cliente)
+            4- com o objeto conta, insere no banco
+
+        Conta DefinirPerfilDeConta(Cliente cliente){
+            1- Verificar o perfil de acordo com os dados do cliente
+            2- retorna um objeto Conta
+        }
+    }
+
+    (HttpPatch)
+    bool AprovarConta{
+        parametros:
+            - id da conta
+            - id do funcionario
+        
+        controller:
+            1- busca a conta pelo id
+            2- verifica se o funcionario tem permissao para aprovar a conta
+            3- mudar o campo Restricao da conta para false
+            4- Salvar as alteracoes
+    }  
+}
+
+
+agencia {
+    CRUD
+
+    (HttpGet)
+    List<Conta> ListarContasRestritas{
+        parametros:
+            - string? numero
+    
+        controller:
+            1- buscar no banco de dados todas as contas restritas
+            2- caso o numero seja null, mostrar de todas as agencias
+            3- caso numero != null, mostrar apenas as contas restritas da agencia
+    }
+
+    (HttpGet)
+    list<Conta> ListaContasPorPerfil{
+        parametros:
+            - string TipoPerfil
+            - string? numero
+        controller:
+            1- Verificar se o TipoPerfil condiz com algum enum
+            2- chama o banco de dados, filtrando por TipoPerfil
+            3- retorna as contas
+    }
+
+    (HttpGet)
+    list<Conta> ClientesComEmprestimoAtivo{
+        parametros:
+            - string? numero
+
+        controller:
+            1- Recuperar todas as contas
+            2- Filtrar as contas que possui pelo menos uma transacao onde o enum é "Emprestimo"
+            3- retornar a lista filtrada
+    }
+}  
+
+1- Edenilson
+2- Gabriel
+conta {
+    CRUD
+    EncerrarConta - delete do crud
+
+
+    Transacao EfetuarTransacao{
+        parametros:
+            TransacaoDTO{
+                - string numeroConta
+                - string tipoTransacao
+                - conta? destino
+                - double valor
+            }
+
+        controller:
+            1- Recuperar a conta com base no dto
+            2- verificar se o tipoTransacao condiz
+            3- caso o destino != null, verifica se a conta existe
+            4- atualizar a conta.Extrato com a nova transacao
+            5- Salvar a conta 
+    }
+    List<Transacao> GerarExtrato {
+        parametros:
+            - string numeroConta
+
+        controller:
+            1- Recuperar a conta com base no numeroConta
+            2- retornar o conta.Extrato
+    }
+
+    double ConsultarSaldo {
+        parametros:
+            - string numeroConta
+
+        controller:
+            1- Recuperar a conta com base no numeroConta
+            2- retornar o conta.Saldo
+    }
+
+    ConsultarTransacaoPorTipo{
+        parametros:
+            - string tipoTransacao
+            - string numeroConta
+
+        controller:
+            1- Verifica o tipoTransacao condiz
+            2- Recuperar a conta com base no numeroConta
+            3- Filtrar o conta.Extrato por tipoTransacao
+            4- retorna a lista filtrada
+    }
+}
+
+
+
+
+
+Cliente: daiane
+Funcionario: Maiara
+Agencia: Gustavo
+Conta: Edenilson, Gabriel

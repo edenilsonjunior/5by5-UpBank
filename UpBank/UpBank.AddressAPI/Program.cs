@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Options;
+using Services.People;
+using Services.Utils;
+
 namespace UpBank.AddressAPI
 {
     public class Program
@@ -9,6 +13,16 @@ namespace UpBank.AddressAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            //---------------------------
+            builder.Services.Configure<MongoDataBaseSettings>(
+               builder.Configuration.GetSection(nameof(MongoDataBaseSettings)));
+
+            builder.Services.AddSingleton<IMongoDataBaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongoDataBaseSettings>>().Value);
+
+            builder.Services.AddSingleton<AddressService>();
+            //---------------------------
 
             var app = builder.Build();
 

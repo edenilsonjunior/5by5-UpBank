@@ -1,26 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\",
+  "WorkspaceRootPath": "C:\\5by5\\5by5-UpBank\\UpBank\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|c:\\users\\edeni\\onedrive\\\u00E1rea de trabalho\\5by5-upbank\\upbank\\upbank.addressapi\\controllers\\addressescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|solutionrelative:upbank.addressapi\\controllers\\addressescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\users\\edeni\\onedrive\\\u00E1rea de trabalho\\5by5-upbank\\upbank\\services\\people\\addressservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\people\\addressservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|c:\\users\\edeni\\onedrive\\\u00E1rea de trabalho\\5by5-upbank\\upbank\\upbank.addressapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|solutionrelative:upbank.addressapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|c:\\users\\edeni\\onedrive\\\u00E1rea de trabalho\\5by5-upbank\\upbank\\upbank.addressapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{11621656-BCF7-4010-8B18-1F03E73EB866}|UpBank.AddressAPI\\UpBank.AddressAPI.csproj|solutionrelative:upbank.addressapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\bank\\etransactiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\bank\\etransactiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\users\\edeni\\onedrive\\\u00E1rea de trabalho\\5by5-upbank\\upbank\\services\\utils\\imongodatabasesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\utils\\imongodatabasesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\5by5\\5by5-upbank\\upbank\\services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,87 +34,84 @@
       "DocumentGroups": [
         {
           "DockedHeight": 328,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IMongoDataBaseSettings.cs",
-              "DocumentMoniker": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\Services\\Utils\\IMongoDataBaseSettings.cs",
-              "RelativeDocumentMoniker": "Services\\Utils\\IMongoDataBaseSettings.cs",
-              "ToolTip": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\Services\\Utils\\IMongoDataBaseSettings.cs",
-              "RelativeToolTip": "Services\\Utils\\IMongoDataBaseSettings.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAnAAAA",
+              "DocumentIndex": 0,
+              "Title": "UpBankAgencyAPIContext.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
+              "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
+              "RelativeToolTip": "UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAmwBsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T01:36:11.045Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\appsettings.json",
-              "RelativeDocumentMoniker": "UpBank.AddressAPI\\appsettings.json",
-              "ToolTip": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\appsettings.json",
-              "RelativeToolTip": "UpBank.AddressAPI\\appsettings.json",
-              "ViewState": "AQIAAAQAAAAAAAAAAAAowA4AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-06-22T01:35:27.965Z",
+              "WhenOpened": "2024-06-22T18:25:28.975Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "UpBank.AddressAPI\\Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\Properties\\launchSettings.json",
-              "RelativeToolTip": "UpBank.AddressAPI\\Properties\\launchSettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "UpBank.AgencyAPI\\appsettings.json",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\appsettings.json",
+              "RelativeToolTip": "UpBank.AgencyAPI\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-06-22T01:35:23.293Z",
+              "WhenOpened": "2024-06-22T18:22:42.526Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ETransactionType.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\ETransactionType.cs",
+              "RelativeDocumentMoniker": "Models\\Bank\\ETransactionType.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\ETransactionType.cs",
+              "RelativeToolTip": "Models\\Bank\\ETransactionType.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T17:57:30.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Account.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Account.cs",
+              "RelativeDocumentMoniker": "Models\\Bank\\Account.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Account.cs",
+              "RelativeToolTip": "Models\\Bank\\Account.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T17:05:52.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AgenciesService.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Services\\Agency\\AgenciesService.cs",
+              "RelativeDocumentMoniker": "Services\\Agency\\AgenciesService.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Services\\Agency\\AgenciesService.cs",
+              "RelativeToolTip": "Services\\Agency\\AgenciesService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T16:38:58.298Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AddressService.cs",
-              "DocumentMoniker": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\Services\\People\\AddressService.cs",
-              "RelativeDocumentMoniker": "Services\\People\\AddressService.cs",
-              "ToolTip": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\Services\\People\\AddressService.cs",
-              "RelativeToolTip": "Services\\People\\AddressService.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAADwvyIAAAAAAAAA",
+              "Title": "AgenciesController.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
+              "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
+              "RelativeToolTip": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAAACcAAABgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T01:29:15.304Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AddressesController.cs",
-              "DocumentMoniker": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\Controllers\\AddressesController.cs",
-              "RelativeDocumentMoniker": "UpBank.AddressAPI\\Controllers\\AddressesController.cs",
-              "ToolTip": "C:\\Users\\edeni\\OneDrive\\\u00C1rea de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\Controllers\\AddressesController.cs*",
-              "RelativeToolTip": "UpBank.AddressAPI\\Controllers\\AddressesController.cs*",
-              "ViewState": "AQIAABMAAAAAAAAAAAAowCkAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T01:28:43.799Z",
+              "WhenOpened": "2024-06-22T16:37:10.551Z",
               "EditorCaption": ""
             }
           ]

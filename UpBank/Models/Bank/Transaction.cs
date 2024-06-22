@@ -1,4 +1,4 @@
-﻿namespace Models.Bank
+﻿    namespace Models.Bank
 {
     public class Transaction
     {

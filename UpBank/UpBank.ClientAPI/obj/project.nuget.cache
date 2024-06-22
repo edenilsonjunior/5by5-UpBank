@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "hkl+C9G5RETzaCyZ5/Ym+hvnnWdJvQXgpIoi0c03kAcVrlDpYjjr+wQJZ2D05DpNnOZMMWudfv/H+vrVy5eJ/Q==",
+  "dgSpecHash": "pxsBHoW5/zs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
+  "projectFilePath": "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\edeni\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512"
+    "C:\\Users\\adm\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512"
   ],
   "logs": []
 }

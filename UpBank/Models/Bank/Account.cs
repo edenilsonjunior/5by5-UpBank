@@ -21,6 +21,6 @@ namespace Models.Bank
         public EProfile Profile { get; set; }
         public DateTime CreatedDt { get; set; }
         public double Balance { get; set; }
-        public List<Transaction> Extract { get; set; }
+        public List<BankTransaction> Extract { get; set; }
     }
 }

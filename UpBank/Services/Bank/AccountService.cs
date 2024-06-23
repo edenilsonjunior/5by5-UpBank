@@ -44,5 +44,20 @@ namespace Services.Bank
             return a;
         }
 
+        //public async Task<Account> CreateAccount(AccountDTO accountDTO)
+        //{
+        //    // popular objeto com dto e requisicoes api
+        //    var temp = new Account();
+
+        //    var a = await _repository.PostAccount(temp);
+
+        //    return a;
+        //}
+
+        //public async Task<BankTransaction> MakeTransaction()
+        //{
+        //    var transaction = 
+        //}
+
     }
 }

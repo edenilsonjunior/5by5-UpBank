@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {}
+    "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {
+    "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
+        "projectUniqueName": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
         "projectName": "UpBank.AccountAPI",
-        "projectPath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
-        "packagesPath": "C:\\Users\\edeni\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\obj\\",
+        "projectPath": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
+        "packagesPath": "C:\\Users\\ADM\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\edeni\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADM\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -69,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -11,10 +11,12 @@ namespace UpBank.AccountAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private AccountService _accountService;
+        private TransactionsController _transactionsController;
 
         public AccountsController()
         {
             _accountService = new();
+            _transactionsController = new();
         }
 
         [HttpGet]
@@ -37,6 +39,21 @@ namespace UpBank.AccountAPI.Controllers
 
             var newAccount = await _accountService.CreateAccount(accountDTO);
             return Ok(newAccount);
+        }
+
+        [HttpPost("MakeTransaction")]
+        public async Task<ActionResult<BankTransaction>> MakeTransaction(TransactionDTO transactionDTO)
+        {
+            var account = GetAccount(transactionDTO.AccountNumber).Result.Value;
+            var list = account.Extract = new List<BankTransaction>();
+            if (account.Restriction) return BadRequest("Conta esta restrita e nao pode efetuar transacao");
+            var transaction = await _transactionsController.InsertTransaction(transactionDTO);
+            if (transaction == null) return BadRequest("Erro ao efetuar transacao");
+            if (account == null) return NotFound($"Nao foi encontrada uma conta com o numero {transactionDTO.AccountNumber}");
+
+            list.Add(transaction);
+
+            return Ok(transaction);
         }
     }
 }

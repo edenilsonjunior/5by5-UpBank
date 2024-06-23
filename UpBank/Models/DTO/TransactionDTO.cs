@@ -6,7 +6,7 @@ namespace Models.DTO
     {
         public string AccountNumber { get; set; }
         public string TransactionType { get; set; }
-        public string ReceiverNumber { get; set; }
+        public string? ReceiverNumber { get; set; }
         public double TransactionValue { get; set; }
     }
 }

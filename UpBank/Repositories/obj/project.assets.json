@@ -1983,19 +1983,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adm\\.nuget\\packages\\": {}
+    "C:\\Users\\edeni\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
+      "projectUniqueName": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
       "projectName": "Repositories",
-      "projectPath": "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
-      "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\Repositories\\obj\\",
+      "projectPath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
+      "packagesPath": "C:\\Users\\edeni\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\Repositories\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\adm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\edeni\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2003,15 +2003,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
-              "projectPath": "C:\\Users\\adm\\Documents\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
+            "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+              "projectPath": "C:\\Users\\edeni\\OneDrive\\Área de Trabalho\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
             }
           }
         }
@@ -2056,7 +2055,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
       }
     }
   }

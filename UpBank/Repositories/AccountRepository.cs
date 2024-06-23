@@ -61,7 +61,7 @@ namespace Repositories
             return account;
         }
 
-        public async Task<int> PostAccount(Account account)
+        public async Task<Account> PostAccount(Account account)
         {
             int result = 0;
             try
@@ -89,7 +89,7 @@ namespace Repositories
             {
                 throw;
             }
-            return result;
+            return null;
         }
 
         public async Task<int> DeleteAccount(Account account)

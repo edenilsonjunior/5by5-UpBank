@@ -34,11 +34,14 @@ namespace Services.Bank
             throw new NotImplementedException();
         }
 
-        public async Task<Account> CreateAccount(Account account)
+        public async Task<Account> CreateAccount(AccountDTO accountDTO)
         {
-            var a = await _repository.PostAccount(account);
+            // popular objeto com dto e requisicoes api
+            var temp = new Account();
 
-            throw new NotImplementedException();
+            var a = await _repository.PostAccount(temp);
+
+            return a;
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Bank;
+using Models.DTO;
 using Services.Bank;
 
 namespace UpBank.AccountAPI.Controllers
@@ -31,9 +32,10 @@ namespace UpBank.AccountAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Account>> CreateAccount(Account account)
+        public async Task<ActionResult<Account>> CreateAccount(AccountDTO accountDTO)
         {
-            var newAccount = await _accountService.CreateAccount(account);
+
+            var newAccount = await _accountService.CreateAccount(accountDTO);
             return Ok(newAccount);
         }
     }

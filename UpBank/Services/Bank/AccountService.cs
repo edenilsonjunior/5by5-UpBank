@@ -68,7 +68,7 @@ namespace Services.Bank
                     a.Client.Add(client);
                 }
 
-                a.Extract = await _repository.GetTransactionsByNumber(a.Number);
+                a.Extract = await GetTransactionsByNumber(a.Number);
                 list.Add(a);
             }
 
@@ -113,7 +113,7 @@ namespace Services.Bank
                 account.Client.Add(client);
             }
 
-            account.Extract = await _repository.GetTransactionsByNumber(account.Number);
+            account.Extract = await GetTransactionsByNumber(a.Number);
 
             return account;
         }
@@ -159,6 +159,31 @@ namespace Services.Bank
             {
                 throw;
             }
+        }
+
+        private async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
+        {
+            List<BankTransactionDTO> listDTO = await _repository.GetTransactionsByNumber(number);
+
+            List<BankTransaction> list = new();
+
+            foreach (var dto in listDTO)
+            {
+                BankTransaction bt = new()
+                {
+                    Id = dto.Id,
+                    TransactionDt = dto.TransactionDt,
+                    Type = dto.Type,
+                    Value = dto.Value
+                };
+
+                if (dto.AccountReceiver != null)
+                    bt.Receiver = await GetAccount(dto.AccountReceiver);
+
+                list.Add(bt);
+            }
+
+            return list;
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     public class CreditCard
     {
+        public static readonly string Insert = @"INSERT INTO CreditCard VALUES (@CreditCardNumber, @ExpirationDt, @CreditCardLimit, @Cvv, @Holder, @Flag)";
+
         public long Number { get; set; }
         public DateTime ExpirationDt { get; set; }
         public double Limit { get; set; }

@@ -76,7 +76,7 @@ namespace UpBank.AgencyAPI.Controllers
         [HttpGet("/lending")]
         public async Task<ActionResult<List<Account>>> GetLendingAccounts()
         {
-            List<Account> accounts = _agenciesService.GetAllAccounts().Result.Where(a => a.Extract.Any(e => e.Type == ETransactionType.Lending)).ToList();
+            List<Account> accounts = _agenciesService.GetAllAccounts().Result.Where(a => a.Extract.Any(t => t.Type == ETransactionType.Lending)).ToList();
             if (accounts == null || accounts.Count == 0) return NotFound("Nenhuma conta com empréstimo ativo encontrada.");
             return Ok(accounts);
         }

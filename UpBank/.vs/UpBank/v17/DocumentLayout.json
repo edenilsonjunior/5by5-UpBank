@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\5by5\\5by5-UpBank\\UpBank\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\people\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\people\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\dto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\dto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\5by5\\5by5-upbank\\upbank\\services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\data\\upbankagencyapicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -21,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\5by5\\5by5-upbank\\upbank\\services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\agency\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -39,6 +47,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Address.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\People\\Address.cs",
+              "RelativeDocumentMoniker": "Models\\People\\Address.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\People\\Address.cs",
+              "RelativeToolTip": "Models\\People\\Address.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-24T12:49:16.979Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AddressDTO.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AddressDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTO\\AddressDTO.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AddressDTO.cs",
+              "RelativeToolTip": "Models\\DTO\\AddressDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-24T12:49:07.003Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "UpBankAgencyAPIContext.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
               "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Data\\UpBankAgencyAPIContext.cs",
@@ -51,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\appsettings.json",
               "RelativeDocumentMoniker": "UpBank.AgencyAPI\\appsettings.json",
@@ -59,12 +93,11 @@
               "RelativeToolTip": "UpBank.AgencyAPI\\appsettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-06-22T18:22:42.526Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-22T18:22:42.526Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ETransactionType.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\ETransactionType.cs",
               "RelativeDocumentMoniker": "Models\\Bank\\ETransactionType.cs",
@@ -72,12 +105,11 @@
               "RelativeToolTip": "Models\\Bank\\ETransactionType.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T17:57:30.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-22T17:57:30.959Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "Account.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Account.cs",
               "RelativeDocumentMoniker": "Models\\Bank\\Account.cs",
@@ -85,12 +117,11 @@
               "RelativeToolTip": "Models\\Bank\\Account.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAqwBIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T17:05:52.59Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-22T17:05:52.59Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "AgenciesService.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Services\\Agency\\AgenciesService.cs",
               "RelativeDocumentMoniker": "Services\\Agency\\AgenciesService.cs",
@@ -103,13 +134,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AgenciesController.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "RelativeToolTip": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAAACcAAABgAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-22T16:37:10.551Z",
               "EditorCaption": ""

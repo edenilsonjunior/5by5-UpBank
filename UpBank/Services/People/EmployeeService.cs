@@ -2,11 +2,12 @@
 using Models.Bank;
 using Models.DTO;
 using Models.People;
-using System.Net.Http.Json;
+using Newtonsoft.Json;
 using Repositories;
+using Services.Utils;
 using System.Data.SqlClient;
-using System.Net;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Net.Http.Json;
+using System.Text;
 
 namespace Services.People
 {
@@ -15,7 +16,7 @@ namespace Services.People
         private readonly string _connString;
 
         private readonly EmployeeRepository _employeeRepository;
-        
+
         public EmployeeService(string connString)
         {
             _connString = connString;
@@ -61,7 +62,7 @@ namespace Services.People
                     Registry = employeeDTO.Registry
                 };
 
-               bool result = _employeeRepository.Post(employee);
+                bool result = _employeeRepository.Post(employee);
                 if (result)
                 {
                     return employee;
@@ -95,14 +96,14 @@ namespace Services.People
                         Manager = row.Manager,
                         Registry = row.Registry
                     };
-                   
+
                     using HttpClient client = new HttpClient();
                     client.BaseAddress = new Uri("https://localhost:7084");
                     HttpResponseMessage response = await client.GetAsync($"/api/addresses/{row.IdAddress}");
                     Address address = null;
                     if (response.IsSuccessStatusCode)
                     {
-                       address = await response.Content.ReadFromJsonAsync<Address>();
+                        address = await response.Content.ReadFromJsonAsync<Address>();
                     }
                     else
                     {
@@ -216,78 +217,114 @@ namespace Services.People
                 return employee;
             }
         }
-        public async Task<Employee> CreateAccount(string cpf, string registry)
+
+
+        public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
         {
-            //buscar cliente pelo CPF
-            var client = Client.FirstOrDefault(c => c.CPF == cpf);
+            // Consumingo a api de dados mockados
+            string cpf = accountCreateDTO.ClientCPF[0];
+            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}");
+
             if (client == null)
-            {
                 throw new Exception("Cliente não encontrado.");
-            }
-            //verificar se o CPF já possui uma conta
-            var account = Account.FirstOrDefault(a => a.Client.CPF == cpf);
-            if (account != null)
+
+
+            // Consumindo a api de Account
+            List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
+
+            Account? account = null;
+            foreach (var ac in accounts)
             {
+                if (ac.Client[0].CPF.Equals(cpf))
+                {
+                    account = ac;
+                    break;
+                }
+            }
+
+            if (account != null)
                 throw new Exception("Cliente já possui uma conta.");
+        
+            return await InsertAccount(accountCreateDTO);
+        }
+
+
+        public async Task<Account> InsertAccount(AccountCreateDTO accountCreateDTO)
+        {
+            AccountDTO accountDTO = new AccountDTO
+            {
+                ClientCPF = accountCreateDTO.ClientCPF,
+                AccountNumber = accountCreateDTO.AccountNumber,
+                AgencyNumber = accountCreateDTO.AgencyNumber,
+                CreditCard = accountCreateDTO.CreditCard
+            };
+
+            using var httpClient = new HttpClient();
+
+            var json = JsonConvert.SerializeObject(accountDTO);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("https://localhost:7011", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var newAccount = JsonConvert.DeserializeObject<Account>(responseContent);
+                return newAccount;
             }
             else
             {
-                account = new Account();
-                account.Client = client;
-                account.Number = Guid.NewGuid().ToString();
+                var problemDetails = await response.Content.ReadAsStringAsync();
+                throw new Exception(problemDetails);
             }
-            var perfilaccount = DefineAccountProfile(client);
-            Account.Add(account);
-            account.SaveChanges();
-            return account;
-
         }
-        //public Account DefineAccountProfile(Client client)
-        //{
-        //    //perfil de conta
-        //}
+
+
+
         public Account ApproveAccount(string registry, string number)
         {
             //buscar pelo Id
 
-            using (var httpAccount = new HttpClient())
-            {
-                httpAccount.BaseAddress = new Uri("    ");
+            /* using (var httpAccount = new HttpClient())
+             {
+                 httpAccount.BaseAddress = new Uri("    ");
 
-                HttpResponseMessage response = await client.GetAsync("/api/accounts/");
+                 HttpResponseMessage response = await client.GetAsync("/api/accounts/");
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var account = await response.Content.ReadAsStringAsync<Account>();
-                    
-                }
-                else
-                {
-                    throw new Exception("Erro ao consumir o endpoint de GET");
-                }
+                 if (response.IsSuccessStatusCode)
+                 {
+                     var account = await response.Content.ReadAsStringAsync<Account>();
 
-            }
+                 }
+                 else
+                 {
+                     throw new Exception("Erro ao consumir o endpoint de GET");
+                 }
 
-            var account = GetAccount().FirstOrDefault(a => a.Number == number);
-            if (account == null)
-            {
-                throw new Exception("Conta não encontrada.");
-            }
+             }
 
-            //verificar se o funcionário tem permissão de aprovar a conta
-            var employee = GetAllEmployee().FirstOrDefault(e => e.Registry == registry);
-            if (employee == null)
-            {
-                throw new Exception("Funcionário não encontrado.");
-            }
-            if (!employee.Manager)
-            {
-                throw new Exception("Funcionário não tem permissão para aprovar contas.");
-            }
-            //aprovar conta
-            account.Approve();
-            account.SaveChanges();
-            return account;
+             var account = GetAccount().FirstOrDefault(a => a.Number == number);
+             if (account == null)
+             {
+                 throw new Exception("Conta não encontrada.");
+             }
+
+             //verificar se o funcionário tem permissão de aprovar a conta
+             var employee = GetAllEmployee().FirstOrDefault(e => e.Registry == registry);
+             if (employee == null)
+             {
+                 throw new Exception("Funcionário não encontrado.");
+             }
+             if (!employee.Manager)
+             {
+                 throw new Exception("Funcionário não tem permissão para aprovar contas.");
+             }
+             //aprovar conta
+             account.Approve();
+             account.SaveChanges();
+             return account;*/
+
+            throw new NotImplementedException();
         }
 
     }

@@ -1,7 +1,6 @@
-﻿using Models.DTO;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using Models.People;
-using System.Data.SqlClient;
-using Dapper;
 
 namespace Repositories
 {
@@ -31,7 +30,7 @@ namespace Repositories
                     Manager = employee.Manager,
                     Registry = employee.Registry
                 };
-                return connection.Execute(insertEmployeeQuery, obj) > 0;    
+                return connection.Execute(insertEmployeeQuery, obj) > 0;
             }
         }
 

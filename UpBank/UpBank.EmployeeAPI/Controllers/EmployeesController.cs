@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models.Bank;
 using Models.DTO;
 using Models.People;
 using Services.People;
@@ -43,6 +44,12 @@ namespace UpBank.EmployeeAPI.Controllers
         public void RemoveEmployee(int registry)
         {
             _employeeService.RemoveEmployee(registry);
+        }
+
+        [HttpPost("CreateAccount")]
+        public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
+        {
+            return await _employeeService.CreateAccount(accountCreateDTO);
         }
     }
 }

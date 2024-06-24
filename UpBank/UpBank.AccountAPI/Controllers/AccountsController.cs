@@ -42,9 +42,6 @@ namespace UpBank.AccountAPI.Controllers
             }
             catch (Exception e) { return Problem(e.Message); }
         }
-            var newAccount = await _accountService.CreateAccount(accountDTO);
-            return Ok(newAccount);
-        }
 
         [HttpGet("TransactionType/{type}")]
         public async Task<ActionResult<List<BankTransaction>>> GetTransactionByType(string type)
@@ -72,7 +69,7 @@ namespace UpBank.AccountAPI.Controllers
         //[HttpPatch]
         //public async Task<ActionResult<Account>> UpdateAccount(string number)
         //{
-            //if (account.Restriction) return BadRequest("Conta esta restrita e nao pode ter seus dados atualizados");
+        //if (account.Restriction) return BadRequest("Conta esta restrita e nao pode ter seus dados atualizados");
         //}
 
         //[HttpDelete]

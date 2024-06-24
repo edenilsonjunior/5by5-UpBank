@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.Bank;
 using Models.DTO;
 using Services.Bank;
@@ -11,10 +10,12 @@ namespace UpBank.AccountAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private AccountService _accountService;
+        private TransactionsController _transactionsController;
 
         public AccountsController()
         {
             _accountService = new();
+            _transactionsController = new();
         }
 
         [HttpGet]
@@ -41,5 +42,40 @@ namespace UpBank.AccountAPI.Controllers
             }
             catch (Exception e) { return Problem(e.Message); }
         }
+
+        [HttpGet("TransactionType/{type}")]
+        public async Task<ActionResult<List<BankTransaction>>> GetTransactionByType(string type)
+        {
+            var transaction = await _transactionsController.GetTransactionsByType(type);
+            if (transaction.Count == 0) return NotFound("Nao existem transacoes efetuadas deste tipo");
+            return Ok(transaction);
+        }
+
+        [HttpPost("MakeTransaction")]
+        public async Task<ActionResult<BankTransaction>> MakeTransaction(TransactionDTO transactionDTO)
+        {
+            Account account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
+            if (account == null) return NotFound($"Nao foi encontrada uma conta com o numero {transactionDTO.AccountNumber}");
+            if (account.Restriction) return BadRequest("Conta esta restrita e nao pode efetuar transacao");
+            //if(account.CreditCard.Active) return BadRequest("Cartao de credito esta restrito");
+            var transaction = await _transactionsController.InsertTransaction(transactionDTO);
+            if (transaction == null) return BadRequest("Erro ao efetuar transacao");
+
+            return Ok(transaction);
+        }
+
+        //[HttpPatch]
+        //public async Task<ActionResult<Account>> UpdateAccount(string number)
+        //{
+        //if (account.Restriction) return BadRequest("Conta esta restrita e nao pode ter seus dados atualizados");
+        //}
+
+        //[HttpDelete]
+        //public async Task<ActionResult<Account>> CloseAccount(string number)
+        //{
+        //    var account = _accountService.GetAccount(number).Result;
+
+        //    _accountService.CreateAccount(account);
+        //}
     }
 }

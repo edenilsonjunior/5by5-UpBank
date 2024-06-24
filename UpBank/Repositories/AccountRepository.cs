@@ -28,7 +28,7 @@ namespace Repositories
         public async Task<AccountDTO> GetAccount(string number)
         {
             var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new{Number = number });
-
+          
             return new AccountDTO(register);
         }
 

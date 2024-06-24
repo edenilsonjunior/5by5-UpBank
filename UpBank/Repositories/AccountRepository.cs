@@ -2,125 +2,100 @@
 using Microsoft.Data.SqlClient;
 using Models.Bank;
 using Models.DTO;
+using Models.People;
+using Repositories.Utils;
+using System.Runtime.CompilerServices;
+using System.Transactions;
 
 namespace Repositories
 {
     public class AccountRepository
     {
-        private string Conn { get; set; }
-
-        public AccountRepository()
-        {
-            Conn = "Data Source = 127.0.0.1; Initial Catalog=DBAccountUpBank; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=True;";
-        }
+        public AccountRepository() { }
 
         public async Task<List<AccountDTO>> GetAllAccounts()
         {
-            List<AccountDTO> accounts = new();
+            var registers = DapperUtilsRepository<dynamic>.GetAll(Account.Get);
 
-            try
+            var accounts = new List<AccountDTO>();
+            foreach (var row in registers)
             {
-                using (var db = new SqlConnection(Conn))
-                {
-                    db.Open();
-                    var query = await db.QueryAsync<AccountDTO>(Account.GETALL);
-                    foreach (var account in query)
-                    {
-                        accounts.Add(account);
-                    }
-                    db.Close();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                accounts.Add(new AccountDTO(row));
             }
             return accounts;
         }
 
         public async Task<AccountDTO> GetAccount(string number)
         {
-            AccountDTO account = new();
+            var register = DapperUtilsRepository<dynamic>.Get(Account.Get, new{Number = number });
 
-            try
-            {
-                using (var db = new SqlConnection(Conn))
-                {
-                    db.Open();
-                    var query = await db.QueryAsync<AccountDTO>(Account.GET, new { number });
-
-                    account = query.FirstOrDefault();
-
-                    db.Close();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return account;
+            return new AccountDTO(register);
         }
 
-        public async Task<Account> PostAccount(Account account)
+        public async Task<List<BankTransaction>> GetTransactions(string number)
         {
-            int result = 0;
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<string>> GetClientsCpfsByAccountNumber(string number)
+        {
+            return DapperUtilsRepository<string>.GetAll(Account.GetByClientCPF, new { AccountNumber = number });
+        }
+
+
+
+        public Account PostAccount(Account account)
+        {
             try
             {
-                using (var db = new SqlConnection(Conn))
+                object cardObj = new
                 {
-                    db.Open();
-                    result = db.ExecuteScalar<int>(Account.INSERT, new
+                    CreditCardNumber = account.CreditCard.Number,
+                    ExpirationDt = account.CreditCard.ExpirationDt,
+                    CreditCardLimit = account.CreditCard.Limit,
+                    Cvv = account.CreditCard.CVV,
+                    Holder = account.CreditCard.Holder,
+                    Flag = account.CreditCard.Flag
+                };
+
+                DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
+
+
+                object accountObj = new
+                {
+                    AccountNumber = account.Number,
+                    AgencyNumber = account.Agency.Number,
+                    Restriction = account.Restriction,
+                    CreditCardNumber = account.CreditCard.Number,
+                    Overdraft = account.Overdraft,
+                    CreatedDt = account.CreatedDt,
+                    Balance = account.Balance,
+                    AccountProfile = account.Profile.ToString()
+                };
+
+                DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
+
+                foreach (var client in account.Client)
+                {
+                    object c = new
                     {
-                        Number = account.Number,
-                        AgencyNumber = account.Agency.Number,
-                        ClientCpf = account.Client,
-                        Restriction = account.Restriction,
-                        CreditCardNumber = account.CreditCard.Number,
-                        Overdraft = account.Overdraft,
-                        AccountProfile = account.Profile,
-                        CreatedDt = account.CreatedDt,
-                        Balance = account.Balance,
-                        ExtractId = account.Extract
-                    });
-                    db.Close();
+                        AccountNumber = account.Number,
+                        ClientCPF = client.CPF
+                    };
+                    DapperUtilsRepository<Account>.Insert(Client.InsertClientAccount, c);
                 }
+
+                return account;
             }
             catch (Exception)
             {
                 throw;
             }
-            return null;
         }
 
         public async Task<int> DeleteAccount(Account account)
         {
-            int result = 0;
-            try
-            {
-                using (var db = new SqlConnection(Conn))
-                {
-                    db.Open();
-                    result = db.ExecuteScalar<int>(Account.DELETE, new
-                    {
-                        Number = account.Number,
-                        AgencyNumber = account.Agency.Number,
-                        ClientCpf = account.Client,
-                        Restriction = account.Restriction,
-                        CreditCardNumber = account.CreditCard.Number,
-                        Overdraft = account.Overdraft,
-                        AccountProfile = account.Profile,
-                        CreatedDt = account.CreatedDt,
-                        Balance = account.Balance,
-                        ExtractId = account.Extract
-                    });
-                    db.Close();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return result;
+            throw new NotImplementedException();
         }
     }
 }

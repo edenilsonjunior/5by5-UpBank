@@ -29,6 +29,15 @@ public static class DapperUtilsRepository<T>
         return connection.Query<T>(query).ToList();
     }
 
+    public static List<T> GetAll(string query, object obj)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        return connection.Query<T>(query, obj).ToList();
+    }
+
+
+
 
     public static T Get(string query, object obj)
     {

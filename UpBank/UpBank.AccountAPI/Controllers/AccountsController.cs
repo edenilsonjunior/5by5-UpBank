@@ -34,9 +34,12 @@ namespace UpBank.AccountAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> CreateAccount(AccountDTO accountDTO)
         {
-
-            var newAccount = await _accountService.CreateAccount(accountDTO);
-            return Ok(newAccount);
+            try
+            {
+                var newAccount = await _accountService.CreateAccount(accountDTO);
+                return Ok(newAccount);
+            }
+            catch (Exception e) { return Problem(e.Message); }
         }
     }
 }

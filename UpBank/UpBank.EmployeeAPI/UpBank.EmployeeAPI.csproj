@@ -22,4 +22,8 @@
     <ProjectReference Include="..\UpBank.AddressAPI\UpBank.AddressAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj" />
+  </ItemGroup>
+
 </Project>

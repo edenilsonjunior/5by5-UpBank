@@ -177,7 +177,7 @@ namespace Services.Bank
                     Value = dto.Value
                 };
 
-                if (dto.AccountReceiver != null)
+                if (!dto.AccountReceiver.Equals(""))
                     bt.Receiver = await GetAccount(dto.AccountReceiver);
 
                 list.Add(bt);

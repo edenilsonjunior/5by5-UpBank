@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UpBank.AgencyAPI.Data;
 
@@ -11,9 +12,10 @@ using UpBank.AgencyAPI.Data;
 namespace UpBank.AgencyAPI.Migrations
 {
     [DbContext(typeof(UpBankAgencyAPIContext))]
-    partial class UpBankAgencyAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240624230904_AgencyApi-v2")]
+    partial class AgencyApiv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

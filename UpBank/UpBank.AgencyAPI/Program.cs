@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Services.Agency;
+using Services.Agencies;
 using UpBank.AgencyAPI.Data;
 namespace UpBank.AgencyAPI
 {

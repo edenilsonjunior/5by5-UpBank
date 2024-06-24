@@ -18,7 +18,8 @@
 
         public static readonly string GETBYTYPE = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction WHERE TransactionType = @Type";
 
-        public static readonly string GetByAccount = Get + " where AccountNumber = @AccountNumber";
+        public static readonly string GetByAccount = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction where AccountNumber = @AccountNumber";
+
 
         public int Id { get; set; }
         public DateTime TransactionDt { get; set; }

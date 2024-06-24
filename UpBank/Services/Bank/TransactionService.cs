@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Models.Bank;
 using Models.DTO;
 using Repositories;
+using Repositories.Utils;
 
 namespace Services.Bank
 {
@@ -80,6 +81,7 @@ namespace Services.Bank
             }
             return transactions;
         }
+
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
             bool UseOverdraft = false;
@@ -131,50 +133,58 @@ namespace Services.Bank
 
             var transaction = _repository.InsertTransaction(transactionDTO).Result;
 
-            using (var db = new SqlConnection("Data Source=127.0.0.1; Initial Catalog=DbAccountUpBank; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes"))
+            object obj = null;
+            string bankTransaction = null;
+
+            switch (transactionType.ToString())
             {
-                switch (transactionType.ToString())
-                {
-                    case "Lending":
-                    case "Deposit":
-                        await db.ExecuteAsync(BankTransaction.UPDATEBALANCE, new
+                case "Lending":
+                case "Deposit":
+                    obj = new
+                    {
+                        Value = transactionDTO.TransactionValue,
+                        AccountNumber = transactionDTO.AccountNumber
+                    };
+                    bankTransaction = BankTransaction.UPDATEBALANCE;
+                    break;
+                case "Withdraw":
+                    obj = new
+                    {
+                        Value = transactionDTO.TransactionValue,
+                        AccountNumber = transactionDTO.AccountNumber
+                    };
+                    bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAW;
+                    break;
+                case "Transfer":
+                case "Payment":
+                    if (UseOverdraft)
+                    {
+                        obj = new
                         {
                             Value = transactionDTO.TransactionValue,
-                            AccountNumber = transactionDTO.AccountNumber
-                        });
-                        break;
-                    case "Withdraw":
-                        await db.ExecuteAsync(BankTransaction.UPDATEBALANCEWITHDRAW, new
+                            AccountNumber = transactionDTO.AccountNumber,
+                            Diff = diff,
+                            ReceiverNumber = transactionDTO.ReceiverNumber
+                        };
+                        bankTransaction = BankTransaction.UPDATEBALANCEOVERDRAFT;
+                    }
+                    else
+                    {
+                        obj = new
                         {
                             Value = transactionDTO.TransactionValue,
-                            AccountNumber = transactionDTO.AccountNumber
-                        });
-                        break;
-                    case "Transfer":
-                    case "Payment":
-                        if (UseOverdraft)
-                        {
-                            await db.ExecuteAsync(BankTransaction.UPDATEBALANCEOVERDRAFT, new
-                            {
-                                Value = transactionDTO.TransactionValue,
-                                AccountNumber = transactionDTO.AccountNumber,
-                                Diff = diff,
-                                ReceiverNumber = transactionDTO.ReceiverNumber
-                            });
-                        }
-                        else
-                        {
-                            await db.ExecuteAsync(BankTransaction.UPDATEBALANCERECEIVER, new
-                            {
-                                Value = transactionDTO.TransactionValue,
-                                AccountNumber = transactionDTO.AccountNumber,
-                                ReceiverNumber = transactionDTO.ReceiverNumber
-                            });
-                        }
-                        break;
-                }
+                            AccountNumber = transactionDTO.AccountNumber,
+                            ReceiverNumber = transactionDTO.ReceiverNumber
+                        };
+                        bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
+                    }
+                    break;
             }
+
+            DapperUtilsRepository<BankTransaction>.Insert(bankTransaction, obj);
+
             return transaction;
         }
+
     }
 }

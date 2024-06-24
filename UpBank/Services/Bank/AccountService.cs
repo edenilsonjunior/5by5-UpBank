@@ -113,7 +113,7 @@ namespace Services.Bank
                 account.Client.Add(client);
             }
 
-            account.Extract = await GetTransactionsByNumber(a.Number);
+            account.Extract = await GetTransactionsByNumber(account.Number);
 
             return account;
         }

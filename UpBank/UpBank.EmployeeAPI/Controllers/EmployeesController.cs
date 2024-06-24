@@ -15,15 +15,16 @@ namespace UpBank.EmployeeAPI.Controllers
             _employeeService = new EmployeeService("connectionString");
         }
         [HttpPost]
-        public Employee PostEmployee(EmployeeDTO employeeDTO)
+        public async Task <Employee> PostEmployee(EmployeeDTO employeeDTO)
         {
-            return null;
+            return await _employeeService.PostEmployee(employeeDTO);
+            
         }
         // GET: api/Employees
         [HttpGet]
-        public Employee GetAllEmployee()
+        public async Task<List<Employee>> GetAllEmployee()
         {
-            return _employeeService.GetAllEmployee();
+            return  await _employeeService.GetAllEmployee();
         }
         // GETALL: api/Employees
         [HttpGet("{registry}")]

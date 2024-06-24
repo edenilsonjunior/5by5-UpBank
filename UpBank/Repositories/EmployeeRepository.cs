@@ -7,7 +7,7 @@ namespace Repositories
 {
     public class EmployeeRepository
     {
-        public int Post(Employee employee)
+        public bool Post(Employee employee)
         {
             string strConn = "Data Source=127.0.0.1; Initial Catalog=DBEmployee; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes";
 
@@ -18,7 +18,7 @@ namespace Repositories
                 string insertEmployeeQuery = @"INSERT INTO Employee (Name, CPF, BirthDt, Sex, IdAddress, Salary, Phone, Email, Manager, Registry) 
                                                        VALUES (@Name, @CPF, @BirthDt, @Sex, @IdAddress, @Salary, @Phone, @Email, @Manager, @Registry);";
 
-                var id = connection.Execute(insertEmployeeQuery, new
+                object obj = new
                 {
                     Name = employee.Name,
                     CPF = employee.CPF,
@@ -30,8 +30,8 @@ namespace Repositories
                     Email = employee.Email,
                     Manager = employee.Manager,
                     Registry = employee.Registry
-                });
-                return id;
+                };
+                return connection.Execute(insertEmployeeQuery, obj) > 0;    
             }
         }
 

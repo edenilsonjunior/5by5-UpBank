@@ -18,6 +18,8 @@
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\UpBank.AccountAPI\UpBank.AccountAPI.csproj" />
+    <ProjectReference Include="..\UpBank.AddressAPI\UpBank.AddressAPI.csproj" />
   </ItemGroup>
 
 </Project>

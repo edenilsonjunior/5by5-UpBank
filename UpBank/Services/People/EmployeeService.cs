@@ -1,106 +1,115 @@
-﻿using Models.Bank;
+﻿using Dapper;
+using Models.Bank;
 using Models.DTO;
 using Models.People;
 using System.Net.Http.Json;
 using Repositories;
+using System.Data.SqlClient;
 
 namespace Services.People
 {
     public class EmployeeService
     {
-        private EmployeeRepository _employeeRepository;
-        private readonly string _conn;
-        private readonly string _context;
-        public EmployeeService()
+        private readonly string _connString;
+        public EmployeeService(string connString)
         {
-            _employeeRepository = new();
+            _connString = connString;
         }
-        //POST: api/Employees
-        public async Task<Employee> PostEmployee(EmployeeDTO employeeDTO)
-        {
-            Address address = new Address();
-            try
-            {
-                var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("https://localhost:7084/api/Addresses", employeeDTO.Address);
-                if (response.IsSuccessStatusCode)
-                {
-                    address = await response.Content.ReadFromJsonAsync<Address>();
-                }
-                else
-                {
-                    throw new Exception("Falha ao consumir endpoint");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            Employee employee = new Employee
-            {
-                Name = employeeDTO.Name,
-                CPF = employeeDTO.CPF,
-                BirthDt = employeeDTO.BirthDt,
-                Sex = employeeDTO.Sex,
-                IdAddress = employeeDTO.Address,
-                Salary = employeeDTO.Salary,
-                Phone = employeeDTO.Phone,
-                Email = employeeDTO.Email,
-                Manager = employeeDTO.Manager,
-                Registry = employeeDTO.Registry
-            }.Single();
 
-            return employee;
-        }
-        //Get: api/Employees
-        public async Task<List<Employee>> GetAllEmployee(EmployeeDTO employeeDTO)
+        //POST: api/Employees
+        public Employee PostEmployee(EmployeeDTO employeeDTO)
         {
-            var employees = await _context.Employee.ToListAsync();
-            return employees;
-        }
-        //GetRegistry: api/Employees
-        public async Task<Employee> GetEmployee(int registry)
-        {
-            var employee = await _context.Employee.FindAsync(registry);
-            if (employee == null)
+            using (var connection = new SqlConnection(_connString))
             {
-                return NotFound();
-            }
-            return employee;
-        }
-        // PUT: api/Employees
-        public async Task<Employee> PutEmployee(int registry, Employee employee)
-        {
-            if (registry != employee.Registry)
-            {
-                return BadRequest();
-            }
-            _context.(employee).State = Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch ()
-            {
-                if (!EmployeeExists(registry))
+                connection.Open();
+                Address address = new Address();
+                try
                 {
-                    return NotFound();
+                    var httpClient = new HttpClient();
+                    var response = await httpClient.PostAsJsonAsync("https://localhost:7084/api/Addresses", employeeDTO.Address);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        address = await response.Content.ReadFromJsonAsync<Address>();
+                    }
+                    else
+                    {
+                        throw new Exception("Falha ao consumir endpoint");
+                    }
                 }
-                else
+                catch (Exception)
                 {
                     throw;
                 }
+                var employee = connection.QueryFirstOrDefault<Employee>(query, new { Id = 1 });
+
+                return employee;
             }
-            return NoContent();
         }
-        // DELETE: api/Employees/5
-        public async Task<Employee> RemoveEmployee(int registry)
+        //Get: api/Employees
+        public List<Employee> GetAllEmployee(EmployeeDTO employeeDTO)
         {
-            using (var connection = new System.Data.SqlClient.SqlConnection(_conn))
+            using (var connection = new SqlConnection(_connString))
+            {
+                connection.Open();
+                var query = "SELECT * FROM Employees";
+                var employees = connection.Query<Employee>(query, new { Registry = employeeDTO.Registry }).ToList();
+                return employees;
+            }
+        }
+        //GetRegistry: api/Employees
+        public Employee GetEmployee(int registry)
+        {
+            using (var connection = new SqlConnection(_connString))
+            {
+                connection.Open();
+                var query = "SELECT * FROM Employee WHERE Registry = @Registry";
+                var employee = connection.Query<Employee>(query, new { Registry = registry }).FirstOrDefault();
+                return employee;
+            }
+        }
+        // PUT: api/Employees
+        public void UpdateEmployee(int registry, Employee employee)
+        {
+            using (var connection = new SqlConnection(_connString))
+            {
+                connection.Open();
+                if (registry != employee.Registry)
+                {
+                    if (registry != employee.Registry)
+                    {
+                        throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");
+                    }
+                }
+                var query = @"UPDATE Employee 
+                                    SET Name = @Name, CPF = @CPF, BirthDt = @BirthDt, 
+                                        Sex = @Sex, IdAddress = @IdAddress, Salary = @Salary, 
+                                        Phone = @Phone, Email = @Email, Manager = @Manager 
+                                    WHERE Registry = @Registry";
+
+                connection.Execute(updateQuery, new
+                {
+                    Name = employee.Name,
+                    CPF = employee.CPF,
+                    BirthDt = employee.BirthDt,
+                    Sex = employee.Sex,
+                    IdAddress = employee.Address,
+                    Salary = employee.Salary,
+                    Phone = employee.Phone,
+                    Email = employee.Email,
+                    Manager = employee.Manager,
+                    Registry = registry
+                });
+            }
+        }
+
+        // DELETE: api/Employees/5
+        public Employee RemoveEmployee(int registry)
+        {
+            using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
 
-                var employee = GetEmployee(registry).Result;
+                var employee = GetEmployee(registry);
                 if (employee == null)
                 {
                     Console.WriteLine("Funcionário não encontrado.");
@@ -144,71 +153,73 @@ namespace Services.People
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Erro ao cancelar funcionário: " + ex.Message);
+                        Console.WriteLine("Erro ao excluir funcionário: " + ex.Message);
                     }
                     return employee;
                 }
+                return employee;
             }
         }
-        private bool EmployeeExists(int id)
+        private bool EmployeeExists(int registry)
         {
-            return (_context.Employee?.Any(e => e.Registry == id)).GetValueOrDefault();
+            return registry.Employee.Any(e => e.Registry == registry);
         }
-        public async Task<Employee> CreateAccount(string cpf, string registry)
+        public Employee CreateAccount(string cpf, string registry)
         {
             //buscar cliente pelo CPF
-            var cliente = _context.Client.SingleOrDefault(c => c.CPF == cpf);
-            if (cliente == null)
+            var client = Client.FirstOrDefault(c => c.CPF == cpf);
+            if (client == null)
             {
-                return NotFound("Cliente não encontrado");
+                throw new Exception("Cliente não encontrado.");
             }
-
             //verificar se o CPF já possui uma conta
-            if (_context.Account.Any(a => a.ClientId == cliente.Id))
+            var account = Account.FirstOrDefault(a => a.Client.CPF == cpf);
+            if (account != null)
             {
-                return Conflict("Cliente já possui uma conta");
+                throw new Exception("Cliente já possui uma conta.");
             }
+            else
+            {
+                account = new Account();
+                account.Client = client;
+                account.Number = Guid.NewGuid().ToString();
+            }
+            var perfilaccount = DefineAccountProfile(client);
+            Account.Add(account);
+            account.SaveChanges();
+            return account;
 
-            //definir perfil de conta
-            var conta = DefineAccountProfile(cliente);
-
-            //criar conta e inserir no banco
-            _context.Account.Add(conta);
-            await _context.SaveChangesAsync();
-            return Ok(conta);
-            //return CreatedAtAction("GetAccount", new { id = conta.Id }, conta);
         }
-        private Account DefineAccountProfile(Client cliente)
+        public Account DefineAccountProfile(Client client)
         {
-            var conta = new Account();
-            conta.ClientId = cliente.Cpf;
-            conta.Type = AccountType.Type;
-            return conta;
+            //perfil de conta
         }
-        public async Task<Account> ApproveAccount(string registry, string number)
+        public Account ApproveAccount(string registry, string number)
         {
             //buscar pelo Id
-            var conta = _context.Account.SingleOrDefault(a => a.Number == number);
-            if (conta == null)
+            var account = Account.FirstOrDefault(a => a.Number == number);
+            if (account == null)
             {
-                return NotFound("Conta não encontrada.");
+                throw new Exception("Conta não encontrada.");
             }
+
             //verificar se o funcionário tem permissão de aprovar a conta
-            var employee = _context.Employee.SingleOrDefault(f => f.Registry == registry);
+            var employee = Employee.FirstOrDefault(e => e.Registry == registry);
             if (employee == null)
             {
-                return NotFound("Funcionário não encontrado.");
+                throw new Exception("Funcionário não encontrado.");
             }
             if (!employee.Manager)
             {
-                return Unauthorized("Apenas o gerente pode aprovar conta.");
+                throw new Exception("Funcionário não tem permissão para aprovar contas.");
             }
+
             //aprovar conta
-            conta.Approved = true;
-            //_context.Account.Update(conta);
-            await _context.SaveChangesAsync();
-            return Ok($"Conta aprovada {conta}");
+            account.Approve();
+            account.SaveChanges();
+            return account;
         }
+
     }
 }
 

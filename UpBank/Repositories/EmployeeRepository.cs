@@ -1,13 +1,13 @@
 ﻿using Models.DTO;
 using Models.People;
 using System.Data.SqlClient;
-
+using Dapper;
 
 namespace Repositories
 {
     public class EmployeeRepository
     {
-        public Employee Post(Employee employee)
+        public int Post(Employee employee)
         {
             string strConn = "Data Source=127.0.0.1; Initial Catalog=DBEmployee; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes";
 
@@ -16,9 +16,9 @@ namespace Repositories
                 connection.Open();
 
                 string insertEmployeeQuery = @"INSERT INTO Employee (Name, CPF, BirthDt, Sex, IdAddress, Salary, Phone, Email, Manager, Registry) 
-                                                   VALUES (@Name, @CPF, @BirthDt, @Sex, @IdAddress, @Salary, @Phone, @Email, @Manager, @Registry);";
+                                                       VALUES (@Name, @CPF, @BirthDt, @Sex, @IdAddress, @Salary, @Phone, @Email, @Manager, @Registry);";
 
-                var id = connection.Query<int>(insertEmployeeQuery, new
+                var id = connection.Execute(insertEmployeeQuery, new
                 {
                     Name = employee.Name,
                     CPF = employee.CPF,
@@ -30,8 +30,8 @@ namespace Repositories
                     Email = employee.Email,
                     Manager = employee.Manager,
                     Registry = employee.Registry
-                }).Single();
-
+                });
+                return id;
             }
         }
 

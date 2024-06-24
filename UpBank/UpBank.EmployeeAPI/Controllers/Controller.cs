@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 using Models.People;
 using Services.People;
+
 namespace UpBank.EmployeeAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EmployeesController : ControllerBase
+    public class Controller
     {
         private readonly EmployeeService _employeeService;
 
@@ -14,6 +14,7 @@ namespace UpBank.EmployeeAPI.Controllers
         {
             _employeeService = new EmployeeService("connectionString");
         }
+
         [HttpPost]
         public Employee PostEmployee(EmployeeDTO employeeDTO)
         {
@@ -45,5 +46,3 @@ namespace UpBank.EmployeeAPI.Controllers
         }
     }
 }
-
-

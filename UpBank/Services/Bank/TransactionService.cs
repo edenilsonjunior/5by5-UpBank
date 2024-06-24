@@ -3,8 +3,6 @@ using Microsoft.Data.SqlClient;
 using Models.Bank;
 using Models.DTO;
 using Repositories;
-using System.Data.Common;
-using System.Transactions;
 
 namespace Services.Bank
 {
@@ -27,7 +25,7 @@ namespace Services.Bank
 
             foreach (var dto in transactionDTO)
             {
-                var account = await _accountService.GetAccount(dto.AccountNumber);
+                var account = await _accountService.GetAccount(dto.ReceiverNumber);
                 var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
 
                 transactions.Add(new BankTransaction
@@ -47,7 +45,7 @@ namespace Services.Bank
             var transactionDTO = await _repository.GetTransaction(Id);
             if (transactionDTO == null) throw new ArgumentNullException("O identificador da transacao nao existe.");
 
-            var account = await _accountService.GetAccount(transactionDTO.AccountNumber);
+            var account = await _accountService.GetAccount(transactionDTO.ReceiverNumber);
             var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
 
             return new BankTransaction
@@ -68,7 +66,7 @@ namespace Services.Bank
 
             foreach (var dto in transactionDTO)
             {
-                var account = await _accountService.GetAccount(dto.AccountNumber);
+                var account = await _accountService.GetAccount(dto.ReceiverNumber);
                 var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
 
                 transactions.Add(new BankTransaction
@@ -85,48 +83,49 @@ namespace Services.Bank
 
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
-            Account account = new();
-            //var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result.Value;
+            var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
-            AccountDTO receiver;
-            var transaction = _repository.InsertTransaction(transactionDTO).Result;
+            Account receiver;
 
-            //if (transaction.Receiver.Number != null)
-            //{
-            //    receiver = await _accountService.GetAccount(transactionDTO.ReceiverNumber);
-            //    if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
-            //}
+            if (transactionDTO.ReceiverNumber != null)
+            {
+                receiver = _accountService.GetAccount(transactionDTO.ReceiverNumber).Result;
+                if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
+            }
 
-            if (Enum.TryParse<ETransactionType>(transaction.Type.ToString(), out var transactionType))
+            if (Enum.TryParse<ETransactionType>(transactionDTO.TransactionType.ToString(), out var transactionType))
             {
                 switch (transactionType)
                 {
                     case ETransactionType.Withdraw:
-                        if (transaction.Value > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
-                        account.Balance -= transaction.Value;
+                        if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
+                        if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
                         break;
                     case ETransactionType.Deposit:
                     case ETransactionType.Lending:
-                        account.Balance += transaction.Value;
+                        if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
                         break;
                     case ETransactionType.Payment:
                     case ETransactionType.Transfer:
-                        if (transaction.Value > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar a transferencia");
-                        if (transaction.Receiver == null) throw new ArgumentNullException("Receiver nao pode ser null para transferencia ou pagamento");
-                        account.Balance -= transaction.Value;
+                        if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar a transferencia.");
+                        if (transactionDTO.ReceiverNumber == null) throw new InvalidOperationException("Transferencia ou pagamento devem ter conta destino.");
                         break;
-                    default:
-                        throw new ArgumentException("Nao existe esse tipo de transacao");
                 }
             }
+            else
+            {
+                throw new ArgumentException("Nao existe esse tipo de transacao");
+            }
+
+            var transaction = _repository.InsertTransaction(transactionDTO).Result;
 
             using (var db = new SqlConnection("Data Source=127.0.0.1; Initial Catalog=DbAccountUpBank; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes"))
             {
-                if (transaction.Receiver.Number == null)
+                if (transactionDTO.ReceiverNumber == null)
                 {
                     await db.ExecuteAsync(BankTransaction.UPDATEBALANCE, new
                     {
-                        Value = transaction.Value,
+                        Value = transactionDTO.TransactionValue,
                         AccountNumber = transactionDTO.AccountNumber
                     });
                 }
@@ -134,7 +133,7 @@ namespace Services.Bank
                 {
                     await db.ExecuteAsync(BankTransaction.UPDATEBALANCERECEIVER, new
                     {
-                        Value = transaction.Value,
+                        Value = transactionDTO.TransactionValue,
                         AccountNumber = transactionDTO.AccountNumber,
                         ReceiverNumber = transactionDTO.ReceiverNumber
                     });

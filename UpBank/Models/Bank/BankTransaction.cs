@@ -14,7 +14,6 @@
 
         public static readonly string GETBYTYPE = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction WHERE TransactionType = @Type";
 
-
         public int Id { get; set; }
         public DateTime TransactionDt { get; set; }
         public ETransactionType Type { get; set; }

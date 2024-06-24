@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.Bank;
 using Models.DTO;
-using Repositories;
 using Services.Bank;
 
 namespace UpBank.AccountAPI.Controllers
@@ -26,7 +24,6 @@ namespace UpBank.AccountAPI.Controllers
 
         [HttpGet("Type/{type}")]
         public async Task<List<BankTransaction>> GetTransactionsByType(string type) => await _transactionService.GetTransactionByType(type);
-
 
         [HttpPost]
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)

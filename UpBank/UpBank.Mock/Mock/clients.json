@@ -42,7 +42,7 @@
   {
     "Name": "Charlie Brown",
     "CPF": "11122233344",
-    "BirthDt": "1970-05-20T00:00:00",
+    "BirthDt": "2010-05-20T00:00:00",
     "Sex": "M",
     "Address": {
       "Id": "60d5ec3f9f1b146570a0b911",

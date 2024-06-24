@@ -24,6 +24,12 @@ public class MocksController : ControllerBase
     [HttpGet("/GetClients")]
     public List<Client> GetClients() => _clients;
 
+    [HttpGet("/GetClients/{cpf}")]
+    public Client? GetClient(string cpf) => _clients.FirstOrDefault(c => c.CPF.Equals(cpf));
+
+    [HttpGet("/GetAgencies/{number}")]
+    public Agency? GetAgency(string number) => _agencies.FirstOrDefault(a => a.Number.Equals(number));
+
 
     private void LoadData()
     {

@@ -37,6 +37,8 @@ public static class DapperUtilsRepository<T>
     }
 
 
+
+
     public static T Get(string query, object obj)
     {
         using var connection = new SqlConnection(_connectionString);

@@ -1,5 +1,13 @@
+
+if exists (select * from sysdatabases where name='DBAccountUpBank')
+	drop database DBAccountUpBank;
+
 create database DBAccountUpBank;
 use DBAccountUpBank;
+
+select * from account;
+select * from ClientAccount;
+select * from CreditCard;
 
 if exists (select * from sysobjects where name='AccountTransaction' and xtype='U')
 	drop table AccountTransaction;
@@ -82,3 +90,5 @@ CREATE TABLE AccountTransaction
     CONSTRAINT FK_TRANSACTION_ACCOUNT FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber),
     CONSTRAINT FK_TRANSACTION_RECEIVER FOREIGN KEY (ReceiverAccount) REFERENCES Account(AccountNumber)
 )
+
+insert into AccountTransaction (AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue) values ('123456789', '2021-01-01', 'DEPOSIT', null, 1000);

@@ -3,31 +3,97 @@ using Microsoft.Data.SqlClient;
 using Models.Bank;
 using Models.DTO;
 using Repositories;
+using System.Data.Common;
+using System.Transactions;
 
 namespace Services.Bank
 {
     public class TransactionService
     {
         private TransactionRepository _repository;
-        private AccountRepository _accountRepository;
+        private AccountService _accountService;
 
         public TransactionService()
         {
             _repository = new();
-            _accountRepository = new();
+            _accountService = new();
+        }
+
+        public async Task<List<BankTransaction>> GetAllTransactions()
+        {
+            List<BankTransaction> transactions = new();
+            var transactionDTO = await _repository.GetAllTransactions();
+            if (transactionDTO.Count == 0) throw new ArgumentNullException("Nao existe nenhuma transacao efetuada");
+
+            foreach (var dto in transactionDTO)
+            {
+                var account = await _accountService.GetAccount(dto.AccountNumber);
+                var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
+
+                transactions.Add(new BankTransaction
+                {
+                    Id = dto.Id,
+                    Receiver = account,
+                    TransactionDt = dto.TransactionDt,
+                    Type = type,
+                    Value = dto.TransactionValue
+                });
+            }
+            return transactions;
+        }
+
+        public async Task<BankTransaction> GetTransaction(int Id)
+        {
+            var transactionDTO = await _repository.GetTransaction(Id);
+            if (transactionDTO == null) throw new ArgumentNullException("O identificador da transacao nao existe.");
+
+            var account = await _accountService.GetAccount(transactionDTO.AccountNumber);
+            var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
+
+            return new BankTransaction
+            {
+                Id = transactionDTO.Id,
+                Receiver = account,
+                TransactionDt = transactionDTO.TransactionDt,
+                Type = type,
+                Value = transactionDTO.TransactionValue
+            };
+        }
+
+        public async Task<List<BankTransaction>> GetTransactionByType(string Type)
+        {
+            List<BankTransaction> transactions = new();
+            var transactionDTO = await _repository.GetTransactionsByType(Type);
+            if (transactionDTO.Count == 0) throw new ArgumentNullException("Nao existe nenhuma transacao efetuada");
+
+            foreach (var dto in transactionDTO)
+            {
+                var account = await _accountService.GetAccount(dto.AccountNumber);
+                var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
+
+                transactions.Add(new BankTransaction
+                {
+                    Id = dto.Id,
+                    Receiver = account,
+                    TransactionDt = dto.TransactionDt,
+                    Type = type,
+                    Value = dto.TransactionValue
+                });
+            }
+            return transactions;
         }
 
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
             Account account = new();
-            //var account = _accountRepository.GetAccount(transactionDTO.AccountNumber).Result.Value;
+            //var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result.Value;
             double totalBalance = account.Balance + account.Overdraft;
             AccountDTO receiver;
             var transaction = _repository.InsertTransaction(transactionDTO).Result;
 
             //if (transaction.Receiver.Number != null)
             //{
-            //    receiver = await _accountRepository.GetAccount(transactionDTO.ReceiverNumber);
+            //    receiver = await _accountService.GetAccount(transactionDTO.ReceiverNumber);
             //    if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
             //}
 

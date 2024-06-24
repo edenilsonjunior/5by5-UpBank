@@ -36,24 +36,37 @@ namespace UpBank.AccountAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> CreateAccount(AccountDTO accountDTO)
         {
-
             var newAccount = await _accountService.CreateAccount(accountDTO);
             return Ok(newAccount);
+        }
+
+        [HttpGet("TransactionType/{type}")]
+        public async Task<ActionResult<List<BankTransaction>>> GetTransactionByType(string type)
+        {
+            var transaction = await _transactionsController.GetTransactionsByType(type);
+            if (transaction.Count == 0) return NotFound("Nao existem transacoes efetuadas deste tipo");
+            return Ok(transaction);
         }
 
         [HttpPost("MakeTransaction")]
         public async Task<ActionResult<BankTransaction>> MakeTransaction(TransactionDTO transactionDTO)
         {
             var account = GetAccount(transactionDTO.AccountNumber).Result.Value;
-            var list = account.Extract = new List<BankTransaction>();
+            account.Extract = new List<BankTransaction>();
             if (account.Restriction) return BadRequest("Conta esta restrita e nao pode efetuar transacao");
             var transaction = await _transactionsController.InsertTransaction(transactionDTO);
             if (transaction == null) return BadRequest("Erro ao efetuar transacao");
             if (account == null) return NotFound($"Nao foi encontrada uma conta com o numero {transactionDTO.AccountNumber}");
 
-            list.Add(transaction);
+            account.Extract.Add(transaction);
 
             return Ok(transaction);
         }
+
+        //[HttpDelete]
+        //public async Task<ActionResult<Account>> CloseAccount(string number)
+        //{
+
+        //}
     }
 }

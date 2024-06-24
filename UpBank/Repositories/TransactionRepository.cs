@@ -13,6 +13,21 @@ namespace Repositories
             Conn = "Data Source=127.0.0.1; Initial Catalog=DbAccountUpBank; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes";
         }
 
+        public async Task<List<TransactionDTO>> GetAllTransactions()
+        {
+            return DapperUtilsRepository<TransactionDTO>.GetAll(BankTransaction.GETALL);
+        }
+
+        public async Task<TransactionDTO> GetTransaction(int Id)
+        {
+            return DapperUtilsRepository<TransactionDTO>.Get(BankTransaction.GET, new { Id });
+        }
+
+        public async Task<List<TransactionDTO>> GetTransactionsByType(string Type)
+        {
+            return DapperUtilsRepository<TransactionDTO>.GetAll(BankTransaction.GETBYTYPE, new { Type });
+        }
+
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
             BankTransaction transaction = new();

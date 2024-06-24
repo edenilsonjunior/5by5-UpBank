@@ -54,14 +54,12 @@ namespace UpBank.AccountAPI.Controllers
         [HttpPost("MakeTransaction")]
         public async Task<ActionResult<BankTransaction>> MakeTransaction(TransactionDTO transactionDTO)
         {
-            var account = GetAccount(transactionDTO.AccountNumber).Result.Value;
-            account.Extract = new List<BankTransaction>();
+            Account account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
+            if (account == null) return NotFound($"Nao foi encontrada uma conta com o numero {transactionDTO.AccountNumber}");
             if (account.Restriction) return BadRequest("Conta esta restrita e nao pode efetuar transacao");
+            //if(account.CreditCard.Active) return BadRequest("Cartao de credito esta restrito");
             var transaction = await _transactionsController.InsertTransaction(transactionDTO);
             if (transaction == null) return BadRequest("Erro ao efetuar transacao");
-            if (account == null) return NotFound($"Nao foi encontrada uma conta com o numero {transactionDTO.AccountNumber}");
-
-            account.Extract.Add(transaction);
 
             return Ok(transaction);
         }
@@ -75,7 +73,9 @@ namespace UpBank.AccountAPI.Controllers
         //[HttpDelete]
         //public async Task<ActionResult<Account>> CloseAccount(string number)
         //{
+        //    var account = _accountService.GetAccount(number).Result;
 
+        //    _accountService.CreateAccount(account);
         //}
     }
 }

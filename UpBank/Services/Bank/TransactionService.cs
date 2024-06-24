@@ -80,9 +80,10 @@ namespace Services.Bank
             }
             return transactions;
         }
-
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
+            bool UseOverdraft = false;
+            double diff = 0.0;
             var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
             Account receiver;
@@ -107,7 +108,18 @@ namespace Services.Bank
                         break;
                     case ETransactionType.Payment:
                     case ETransactionType.Transfer:
-                        if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar a transferencia.");
+                        if (transactionDTO.TransactionValue > account.Balance)
+                        {
+                            UseOverdraft = true;
+                            diff = transactionDTO.TransactionValue - account.Balance;
+
+                            if (diff > account.Overdraft)
+                            {
+                                throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
+                            }
+
+                            transactionDTO.TransactionValue = totalBalance;
+                        };
                         if (transactionDTO.ReceiverNumber == null) throw new InvalidOperationException("Transferencia ou pagamento devem ter conta destino.");
                         break;
                 }
@@ -121,22 +133,45 @@ namespace Services.Bank
 
             using (var db = new SqlConnection("Data Source=127.0.0.1; Initial Catalog=DbAccountUpBank; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes"))
             {
-                if (transactionDTO.ReceiverNumber == null)
+                switch (transactionType.ToString())
                 {
-                    await db.ExecuteAsync(BankTransaction.UPDATEBALANCE, new
-                    {
-                        Value = transactionDTO.TransactionValue,
-                        AccountNumber = transactionDTO.AccountNumber
-                    });
-                }
-                else
-                {
-                    await db.ExecuteAsync(BankTransaction.UPDATEBALANCERECEIVER, new
-                    {
-                        Value = transactionDTO.TransactionValue,
-                        AccountNumber = transactionDTO.AccountNumber,
-                        ReceiverNumber = transactionDTO.ReceiverNumber
-                    });
+                    case "Lending":
+                    case "Deposit":
+                        await db.ExecuteAsync(BankTransaction.UPDATEBALANCE, new
+                        {
+                            Value = transactionDTO.TransactionValue,
+                            AccountNumber = transactionDTO.AccountNumber
+                        });
+                        break;
+                    case "Withdraw":
+                        await db.ExecuteAsync(BankTransaction.UPDATEBALANCEWITHDRAW, new
+                        {
+                            Value = transactionDTO.TransactionValue,
+                            AccountNumber = transactionDTO.AccountNumber
+                        });
+                        break;
+                    case "Transfer":
+                    case "Payment":
+                        if (UseOverdraft)
+                        {
+                            await db.ExecuteAsync(BankTransaction.UPDATEBALANCEOVERDRAFT, new
+                            {
+                                Value = transactionDTO.TransactionValue,
+                                AccountNumber = transactionDTO.AccountNumber,
+                                Diff = diff,
+                                ReceiverNumber = transactionDTO.ReceiverNumber
+                            });
+                        }
+                        else
+                        {
+                            await db.ExecuteAsync(BankTransaction.UPDATEBALANCERECEIVER, new
+                            {
+                                Value = transactionDTO.TransactionValue,
+                                AccountNumber = transactionDTO.AccountNumber,
+                                ReceiverNumber = transactionDTO.ReceiverNumber
+                            });
+                        }
+                        break;
                 }
             }
             return transaction;

@@ -32,7 +32,7 @@ namespace Models.Bank
 
         public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
-        public static readonly string DELETE = "INSERT INTO AccountHistory VALUES (@Number, @AgencyNumber, @ClientCPF, @Restriction, @CreditCardNumber, @Overdraft, @AccountProfile, @CreatedDt, @Balance, @ExtractId);DELETE FROM Account WHERE Number = @Number";
+        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);DELETE FROM Account WHERE AccountNumber = @Number";
 
         public string Number { get; set; }
         public Agency Agency { get; set; }

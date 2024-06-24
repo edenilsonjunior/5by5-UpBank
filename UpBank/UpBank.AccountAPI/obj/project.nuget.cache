@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "n3jPERdUcec=",
+  "dgSpecHash": "33BpP8oURQQ=",
   "success": true,
-  "projectFilePath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
+  "projectFilePath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adm\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.6\\microsoft.visualstudio.azure.containers.tools.targets.1.19.6.nupkg.sha512"
   ],

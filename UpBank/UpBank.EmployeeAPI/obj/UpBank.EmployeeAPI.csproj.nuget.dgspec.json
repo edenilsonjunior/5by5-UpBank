@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj": {}
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\obj\\",
         "projectStyle": "PackageReference",
@@ -75,79 +75,14 @@
         }
       }
     },
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj": {
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj",
         "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\adm\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net6.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj",
-        "projectName": "Services",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\obj\\",
+        "outputPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -169,8 +104,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
               }
             }
           }
@@ -190,6 +125,88 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj",
+        "projectName": "Services",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\adm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
+              },
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.5.1, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.26.0, )"
@@ -219,14 +236,14 @@
         }
       }
     },
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj": {
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj",
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj",
         "projectName": "UpBank.EmployeeAPI",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj",
         "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\obj\\",
+        "outputPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -248,14 +265,14 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
-                "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj"
               },
-              "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj": {
-                "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj"
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\Repositories.csproj"
               },
-              "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj": {
-                "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj"
+              "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj"
               }
             }
           }
@@ -275,16 +292,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[6.0.29, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[6.0.29, )"
-            },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.19.6, )"

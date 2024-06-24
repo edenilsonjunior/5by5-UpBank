@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {}
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\Models\\obj\\",
         "projectStyle": "PackageReference",

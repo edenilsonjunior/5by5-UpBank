@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\services\\people\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\people\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C56DD935-6615-44DB-84EF-FB25A80C6F9C}|Repositories\\Repositories.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\repositories\\employeerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C56DD935-6615-44DB-84EF-FB25A80C6F9C}|Repositories\\Repositories.csproj|solutionrelative:repositories\\employeerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B227CB9A-1A98-40E9-A25A-8B5A326CC52E}|UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\upbank.employeeapi\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B227CB9A-1A98-40E9-A25A-8B5A326CC52E}|UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj|solutionrelative:upbank.employeeapi\\controllers\\employeescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\people\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\people\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B227CB9A-1A98-40E9-A25A-8B5A326CC52E}|UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\upbank.employeeapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B227CB9A-1A98-40E9-A25A-8B5A326CC52E}|UpBank.EmployeeAPI\\UpBank.EmployeeAPI.csproj|solutionrelative:upbank.employeeapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\dto\\employeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\dto\\employeedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,34 +26,8 @@
       "DocumentGroups": [
         {
           "DockedHeight": 328,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EmployeesController.cs",
-              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
-              "RelativeDocumentMoniker": "UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
-              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
-              "RelativeToolTip": "UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T19:18:43.608Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Program.cs",
-              "RelativeDocumentMoniker": "UpBank.EmployeeAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Program.cs",
-              "RelativeToolTip": "UpBank.EmployeeAPI\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAADNAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T19:03:11.306Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -64,15 +42,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Employee.cs",
-              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Employee.cs",
-              "RelativeDocumentMoniker": "Models\\People\\Employee.cs",
-              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Employee.cs",
-              "RelativeToolTip": "Models\\People\\Employee.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "DocumentIndex": 3,
+              "Title": "EmployeeDTO.cs",
+              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTO\\EmployeeDTO.cs",
+              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTO.cs",
+              "RelativeToolTip": "Models\\DTO\\EmployeeDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAA7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T19:09:04.692Z",
+              "WhenOpened": "2024-06-23T19:12:06.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmployeeRepository.cs",
+              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\EmployeeRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\EmployeeRepository.cs",
+              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Repositories\\EmployeeRepository.cs",
+              "RelativeToolTip": "Repositories\\EmployeeRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-24T13:24:40.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EmployeeService.cs",
+              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\People\\EmployeeService.cs",
+              "RelativeDocumentMoniker": "Services\\People\\EmployeeService.cs",
+              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\Services\\People\\EmployeeService.cs",
+              "RelativeToolTip": "Services\\People\\EmployeeService.cs",
+              "ViewState": "AQIAAK8AAAAAAAAAAAAAwMoAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-24T13:19:22.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmployeesController.cs",
+              "DocumentMoniker": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
+              "RelativeDocumentMoniker": "UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
+              "ToolTip": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
+              "RelativeToolTip": "UpBank.EmployeeAPI\\Controllers\\EmployeesController.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwCkAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T19:18:43.608Z",
               "EditorCaption": ""
             }
           ]

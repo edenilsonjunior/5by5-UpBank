@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {}
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {
+    "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
+        "projectUniqueName": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
         "projectName": "UpBank.AccountAPI",
-        "projectPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
+        "projectPath": "C:\\Users\\adm\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\UpBank.AccountAPI.csproj",
         "packagesPath": "C:\\Users\\adm\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\adm\\Source\\Repos\\5by5-UpBank\\UpBank\\UpBank.AccountAPI\\obj\\",
         "projectStyle": "PackageReference",

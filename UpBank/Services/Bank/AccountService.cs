@@ -67,8 +67,8 @@ namespace Services.Bank
 
                     a.Client.Add(client);
                 }
-                // TODO: GET ALL BankTransactions
-                a.Extract = new();
+
+                a.Extract = await _repository.GetTransactionsByNumber(a.Number);
                 list.Add(a);
             }
 
@@ -113,8 +113,7 @@ namespace Services.Bank
                 account.Client.Add(client);
             }
 
-            // TODO: GET ALL BankTransactions
-            account.Extract = new();
+            account.Extract = await _repository.GetTransactionsByNumber(account.Number);
 
             return account;
         }

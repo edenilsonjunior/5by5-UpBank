@@ -27,14 +27,29 @@ namespace Repositories
 
         public async Task<AccountDTO> GetAccount(string number)
         {
-            var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new { Number = number });
-
+            var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new{Number = number });
+          
             return new AccountDTO(register);
         }
 
-        public async Task<List<BankTransaction>> GetTransactions(string number)
+        public async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
         {
-            throw new NotImplementedException();
+            var registers = DapperUtilsRepository<dynamic>.GetAll(BankTransaction.GetByAccount, new { AccountNumber = number });
+
+            var transactions = new List<BankTransaction>();
+            foreach (var row in registers)
+            {
+                BankTransaction bt = new(row);
+         
+                if(row.ReceiverAccount != null)
+                {
+                    bt.Receiver = GetAccount(row.ReceiverAccount);
+                }
+
+                transactions.Add(bt);
+            }
+
+            return transactions;
         }
 
         public async Task<List<string>> GetClientsCpfsByAccountNumber(string number)

@@ -1,13 +1,16 @@
-
-if exists (select * from sysdatabases where name='DBAccountUpBank')
-	drop database DBAccountUpBank;
-
 create database DBAccountUpBank;
 use DBAccountUpBank;
 
 select * from account;
 select * from ClientAccount;
 select * from CreditCard;
+select * from AccountTransaction;
+
+select * from AccountHistory
+
+delete from AccountTransaction;
+
+SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction where AccountNumber = '123456789';
 
 if exists (select * from sysobjects where name='AccountTransaction' and xtype='U')
 	drop table AccountTransaction;
@@ -33,6 +36,7 @@ CREATE TABLE CreditCard
 	Cvv CHAR(3),
 	Holder VARCHAR(50),
 	Flag VARCHAR(50),
+	Active BIT,
 	CONSTRAINT PK_CREDITCARD PRIMARY KEY (CreditCardNumber),
 )
 
@@ -40,6 +44,7 @@ CREATE TABLE Account
 (
 	AccountNumber VARCHAR(10),
 	AgencyNumber VARCHAR(255),
+	SavingAccountNumber VARCHAR(20),
 	Restriction BIT,
 	CreditCardNumber BIGINT,
 	Overdraft float,
@@ -55,6 +60,7 @@ CREATE TABLE AccountHistory
 (
 	AccountNumber VARCHAR(10),
 	AgencyNumber VARCHAR(255),
+	SavingAccountNumber VARCHAR(20),
 	Restriction BIT,
 	CreditCardNumber BIGINT,
 	Overdraft float,
@@ -90,5 +96,3 @@ CREATE TABLE AccountTransaction
     CONSTRAINT FK_TRANSACTION_ACCOUNT FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber),
     CONSTRAINT FK_TRANSACTION_RECEIVER FOREIGN KEY (ReceiverAccount) REFERENCES Account(AccountNumber)
 )
-
-insert into AccountTransaction (AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue) values ('123456789', '2021-01-01', 'DEPOSIT', null, 1000);

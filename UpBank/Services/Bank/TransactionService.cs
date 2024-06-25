@@ -99,7 +99,7 @@ namespace Services.Bank
             double diff = 0.0;
             var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
-            Account receiver = null;
+            Account receiver = new();
 
             if (transactionDTO.ReceiverAccount != null)
             {
@@ -136,6 +136,10 @@ namespace Services.Bank
                     break;
                 case "Transfer":
                 case "Payment":
+
+                    if (transactionDTO.ReceiverAccount == null)
+                        throw new InvalidOperationException("Nao foi informado a conta destino para transferencia ou pagamento");
+
                     if (transactionDTO.TransactionValue > account.Balance)
                     {
                         UseOverdraft = true;
@@ -173,7 +177,7 @@ namespace Services.Bank
                                 Value = remainingAmount + totalCoveredAmount,
                                 Diff = overdraftCovered,
                                 AccountNumber = transactionDTO.AccountNumber,
-                                ReceiverNumber = transactionDTO.ReceiverAccount
+                                ReceiverAccount = transactionDTO.ReceiverAccount
                             };
                             bankTransaction = BankTransaction.UPDATEBALANCERECEIVEROVERDRAFT;
                         }
@@ -183,7 +187,7 @@ namespace Services.Bank
                             {
                                 Value = transactionDTO.TransactionValue,
                                 AccountNumber = transactionDTO.AccountNumber,
-                                ReceiverNumber = transactionDTO.ReceiverAccount
+                                ReceiverAccount = transactionDTO.ReceiverAccount
                             };
                             bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
                         }
@@ -196,7 +200,9 @@ namespace Services.Bank
             DapperUtilsRepository<BankTransaction>.Insert(bankTransaction, obj);
 
             var transaction = _repository.InsertTransaction(transactionDTO).Result;
-            transaction.Receiver = receiver;
+
+            if (transactionDTO.ReceiverAccount != null)
+                transaction.Receiver = receiver;
 
             return transaction;
         }

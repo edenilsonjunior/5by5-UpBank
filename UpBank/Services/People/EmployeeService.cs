@@ -456,19 +456,18 @@ namespace Services.People
             return true;
         }
 
-        public async Task<Account> DefineProfile(Client cliente)
+        public async Task<EProfile> DefineProfile(Client cliente)
         {
+            EProfile profile;
             //Consumir a api de dados mockados
             string cpf = cliente.CPF;
             Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}"); //7142 Clientes
             if (client == null)
                 throw new Exception("Cliente não encontrado.");
-            if (client.CPF == cpf)
+            if (client.CPF == cpf && cliente.Salary != null)
             {
-                double salary = cliente.Salary.Value;
-                
-                EProfile profile;
-                double income = 0;
+                double salary = cliente.Salary;                      
+                double income = 0;//=salary********************************************************************************
                 double creditLimit = 0;
                 double overdraftLimit = 0;
                 Random r = new();
@@ -502,7 +501,11 @@ namespace Services.People
                         break;
                 }
             }
-            return profile;
+            else
+            {
+                throw new Exception("Cliente não encontrado.");
+            }
+            return profile;      
         }
     }
 }

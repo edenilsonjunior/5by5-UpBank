@@ -53,7 +53,7 @@ namespace Services.Bank
             var t1 = RetrieveAgency(register.AgencyNumber);
             var t2 = GetTransactionsByNumber(register.AccountNumber);
 
-            var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AgencyNumber);
+            var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AccountNumber);
             var t3 = RetrieveClients(cpfs);
 
             Agency agency = t1.Result;
@@ -160,6 +160,15 @@ namespace Services.Bank
                 if (c.Restriction == true)
                     throw new ArgumentException($"Cliente {c.Name} com restrição");
             }
+        }
+
+        public async Task<Account> DeleteAccount(string number)
+        {
+            var account = await GetAccount(number);
+            if (account == null) throw new NullReferenceException($"A conta com o numero {number} nao consta na tabela Account");
+            _repository.PostAccountHistory(account);
+
+            return account;
         }
     }
 }

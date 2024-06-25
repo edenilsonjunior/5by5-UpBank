@@ -100,9 +100,30 @@ namespace Repositories
             }
         }
 
-        public async Task<int> DeleteAccount(Account account)
+        public Account PostAccountHistory(Account account)
         {
-            throw new NotImplementedException();
+            try
+            {
+                object accountObj = new
+                {
+                    AccountNumber = account.Number,
+                    AgencyNumber = account.Agency.Number,
+                    Restriction = account.Restriction,
+                    CreditCardNumber = account.CreditCard.Number,
+                    Overdraft = account.Overdraft,
+                    CreatedDt = account.CreatedDt,
+                    Balance = account.Balance,
+                    AccountProfile = account.Profile.ToString(),
+                };
+
+                DapperUtilsRepository<Account>.Insert(Account.DELETE, accountObj);
+
+                return account;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

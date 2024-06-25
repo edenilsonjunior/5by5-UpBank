@@ -97,6 +97,12 @@ namespace Services.Bank
             double totalBalance = account.Balance + account.Overdraft;
             Account receiver = new();
 
+            if (account.Number.Equals(transactionDTO.ReceiverAccount))
+            {
+                throw new InvalidOperationException("Nao pode ter pagamento ou transferencia para si mesmo.");
+            }
+
+
             if (transactionDTO.ReceiverAccount != null)
             {
                 receiver = _accountService.GetAccount(transactionDTO.ReceiverAccount).Result;

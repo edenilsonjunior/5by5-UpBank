@@ -32,7 +32,7 @@ namespace Models.Bank
 
         public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
-        public static readonly string DELETE = "INSERT INTO AccountHistory VALUES (@Number, @AgencyNumber, @ClientCPF, @Restriction, @CreditCardNumber, @Overdraft, @AccountProfile, @CreatedDt, @Balance, @ExtractId);DELETE FROM Account WHERE Number = @Number";
+        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);DELETE FROM Account WHERE AccountNumber = @Number";
 
         public string Number { get; set; }
         public Agency Agency { get; set; }
@@ -61,5 +61,23 @@ namespace Models.Bank
             Extract = new();
             Profile = EProfile.Normal;
         }
+
+        public Account(AccountDTO dto, Agency agency, List<Client> clients, List<BankTransaction> extract)
+        {
+            Number = dto.AccountNumber;
+            Restriction = dto.Restriction;
+            CreditCard = dto.CreditCard;
+            Overdraft = dto.Overdraft;
+            Balance = dto.Balance;
+            CreatedDt = dto.CreatedDt;
+
+            Client = clients;
+            Agency = agency;
+            Extract = extract;
+
+            if (Enum.TryParse<EProfile>(dto.AccountProfile, true, out var result))
+                Profile = result;   
+        }
     }
 }
+

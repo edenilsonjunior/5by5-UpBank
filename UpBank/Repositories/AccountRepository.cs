@@ -1,11 +1,7 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Models.Bank;
+﻿using Models.Bank;
 using Models.DTO;
 using Models.People;
 using Repositories.Utils;
-using System.Runtime.CompilerServices;
-using System.Transactions;
 
 namespace Repositories
 {
@@ -27,26 +23,24 @@ namespace Repositories
 
         public async Task<AccountDTO> GetAccount(string number)
         {
-            var register = DapperUtilsRepository<dynamic>.Get(Account.Get, new{Number = number });
+            var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new { Number = number });
+
+            if (register == null)
+                return null;
 
             return new AccountDTO(register);
         }
 
-        public async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
+        public async Task<List<BankTransactionDTO>> GetTransactionsByNumber(string number)
         {
             var registers = DapperUtilsRepository<dynamic>.GetAll(BankTransaction.GetByAccount, new { AccountNumber = number });
 
-            var transactions = new List<BankTransaction>();
+            var transactions = new List<BankTransactionDTO>();
             foreach (var row in registers)
             {
-                BankTransaction bt = new(row);
-         
-                if(row.ReceiverAccount != null)
-                {
-                    bt.Receiver = GetAccount(row.ReceiverAccount);
-                }
 
-                transactions.Add(bt);
+                BankTransactionDTO btDTO = new(row);
+                transactions.Add(btDTO);
             }
 
             return transactions;
@@ -55,6 +49,13 @@ namespace Repositories
         public async Task<List<string>> GetClientsCpfsByAccountNumber(string number)
         {
             return DapperUtilsRepository<string>.GetAll(Account.GetByClientCPF, new { AccountNumber = number });
+        }
+
+
+        public async Task<bool> ApproveAccount(Account account)
+        {
+            string query = "update Account set Restriction = 0 where AccountNumber = @AccountNumber";
+            return DapperUtilsRepository<Account>.Insert(query, new { AccountNumber = account.Number });
         }
 
 
@@ -73,7 +74,14 @@ namespace Repositories
                     Flag = account.CreditCard.Flag
                 };
 
-                DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
+                try
+                {
+                    DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Erro ao inserir: O cartao de crédito pertence a outra conta");
+                }
 
 
                 object accountObj = new
@@ -88,7 +96,16 @@ namespace Repositories
                     AccountProfile = account.Profile.ToString()
                 };
 
-                DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
+                try
+                {
+                    DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
+
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Erro ao inserir. O numero de conta digitado pertence a outra conta");
+                }
+
 
                 foreach (var client in account.Client)
                 {
@@ -112,5 +129,7 @@ namespace Repositories
         {
             throw new NotImplementedException();
         }
+
     }
 }
+

@@ -116,7 +116,7 @@ namespace Services.Bank
             {
                 case "Lending":
                 case "Deposit":
-                    if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
+                    if (transactionDTO.ReceiverAccount != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
                     obj = new
                     {
                         Value = transactionDTO.TransactionValue,
@@ -125,7 +125,7 @@ namespace Services.Bank
                     bankTransaction = BankTransaction.UPDATEBALANCE;
                     break;
                 case "Withdraw":
-                    if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
+                    if (transactionDTO.ReceiverAccount != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
                     if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
                     obj = new
                     {
@@ -173,7 +173,7 @@ namespace Services.Bank
                                 Value = remainingAmount + totalCoveredAmount,
                                 Diff = overdraftCovered,
                                 AccountNumber = transactionDTO.AccountNumber,
-                                ReceiverNumber = transactionDTO.ReceiverNumber
+                                ReceiverNumber = transactionDTO.ReceiverAccount
                             };
                             bankTransaction = BankTransaction.UPDATEBALANCERECEIVEROVERDRAFT;
                         }
@@ -183,7 +183,7 @@ namespace Services.Bank
                             {
                                 Value = transactionDTO.TransactionValue,
                                 AccountNumber = transactionDTO.AccountNumber,
-                                ReceiverNumber = transactionDTO.ReceiverNumber
+                                ReceiverNumber = transactionDTO.ReceiverAccount
                             };
                             bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
                         }

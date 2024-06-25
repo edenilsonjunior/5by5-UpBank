@@ -1,0 +1,238 @@
+﻿[
+  {
+    "Number": "001",
+    "Address": {
+      "Id": "60d5ec3f9f1b146570a0b901",
+      "Street": "Main Street",
+      "Number": 101,
+      "Complement": "Building A",
+      "ZipCode": "12345-678",
+      "City": "Springfield",
+      "State": "SP",
+      "District": "Downtown"
+    },
+    "CNPJ": "12345678000100",
+    "Employees": [
+      {
+        "Name": "Alice Johnson",
+        "CPF": "12345678901",
+        "BirthDt": "1990-01-01T00:00:00",
+        "Sex": "F",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b902",
+          "Street": "Main Street",
+          "Number": 123,
+          "Complement": "Apt 1",
+          "ZipCode": "12345-678",
+          "City": "Springfield",
+          "State": "SP",
+          "District": "Downtown"
+        },
+        "Salary": 5000.00,
+        "Phone": "555-1234",
+        "Email": "alice.johnson@example.com",
+        "Manager": true,
+        "Registry": 1001
+      },
+      {
+        "Name": "Bob Smith",
+        "CPF": "98765432100",
+        "BirthDt": "1985-02-15T00:00:00",
+        "Sex": "M",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b903",
+          "Street": "Second Avenue",
+          "Number": 456,
+          "Complement": "Suite 2",
+          "ZipCode": "98765-432",
+          "City": "Metropolis",
+          "State": "RJ",
+          "District": "Center"
+        },
+        "Salary": 4000.00,
+        "Phone": "555-5678",
+        "Email": "bob.smith@example.com",
+        "Manager": false,
+        "Registry": 1002
+      }
+    ],
+    "Restriction": false
+  },
+  {
+    "Number": "002",
+    "Address": {
+      "Id": "60d5ec3f9f1b146570a0b904",
+      "Street": "Elm Street",
+      "Number": 202,
+      "Complement": "Office 5",
+      "ZipCode": "23456-789",
+      "City": "Shelbyville",
+      "State": "MG",
+      "District": "Industrial"
+    },
+    "CNPJ": "23456789000111",
+    "Employees": [
+      {
+        "Name": "Charlie Brown",
+        "CPF": "11122233344",
+        "BirthDt": "1970-05-20T00:00:00",
+        "Sex": "M",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b905",
+          "Street": "Third Street",
+          "Number": 789,
+          "Complement": "House",
+          "ZipCode": "11111-222",
+          "City": "Gotham",
+          "State": "MG",
+          "District": "West Side"
+        },
+        "Salary": 4500.00,
+        "Phone": "555-9101",
+        "Email": "charlie.brown@example.com",
+        "Manager": true,
+        "Registry": 1003
+      },
+      {
+        "Name": "Diana Prince",
+        "CPF": "22233344455",
+        "BirthDt": "1980-07-25T00:00:00",
+        "Sex": "F",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b906",
+          "Street": "Fourth Boulevard",
+          "Number": 321,
+          "Complement": "Villa",
+          "ZipCode": "33333-444",
+          "City": "Paradise",
+          "State": "RS",
+          "District": "East End"
+        },
+        "Salary": 4800.00,
+        "Phone": "555-1122",
+        "Email": "diana.prince@example.com",
+        "Manager": false,
+        "Registry": 1004
+      }
+    ],
+    "Restriction": true
+  },
+  {
+    "Number": "003",
+    "Address": {
+      "Id": "60d5ec3f9f1b146570a0b907",
+      "Street": "Fifth Avenue",
+      "Number": 303,
+      "Complement": "Tower B",
+      "ZipCode": "34567-890",
+      "City": "Star City",
+      "State": "SC",
+      "District": "North Point"
+    },
+    "CNPJ": "34567890000122",
+    "Employees": [
+      {
+        "Name": "Eve Adams",
+        "CPF": "33344455566",
+        "BirthDt": "1995-09-10T00:00:00",
+        "Sex": "F",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b908",
+          "Street": "Fifth Avenue",
+          "Number": 654,
+          "Complement": "Condo",
+          "ZipCode": "55555-666",
+          "City": "Star City",
+          "State": "SC",
+          "District": "North Point"
+        },
+        "Salary": 5500.00,
+        "Phone": "555-3344",
+        "Email": "eve.adams@example.com",
+        "Manager": true,
+        "Registry": 1005
+      },
+      {
+        "Name": "Frank Castle",
+        "CPF": "44455566677",
+        "BirthDt": "1988-11-30T00:00:00",
+        "Sex": "M",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b909",
+          "Street": "Sixth Street",
+          "Number": 987,
+          "Complement": "Penthouse",
+          "ZipCode": "77777-888",
+          "City": "Central City",
+          "State": "PR",
+          "District": "South Side"
+        },
+        "Salary": 7000.00,
+        "Phone": "555-5566",
+        "Email": "frank.castle@example.com",
+        "Manager": false,
+        "Registry": 1006
+      }
+    ],
+    "Restriction": false
+  },
+  {
+    "Number": "004",
+    "Address": {
+      "Id": "60d5ec3f9f1b146570a0b910",
+      "Street": "Sixth Avenue",
+      "Number": 404,
+      "Complement": "Suite 100",
+      "ZipCode": "45678-901",
+      "City": "Central City",
+      "State": "PR",
+      "District": "Financial District"
+    },
+    "CNPJ": "45678900000133",
+    "Employees": [
+      {
+        "Name": "Grace Lee",
+        "CPF": "55566677788",
+        "BirthDt": "1975-03-17T00:00:00",
+        "Sex": "F",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b911",
+          "Street": "Seventh Road",
+          "Number": 741,
+          "Complement": "Cabin",
+          "ZipCode": "99999-000",
+          "City": "Smallville",
+          "State": "AM",
+          "District": "Old Town"
+        },
+        "Salary": 6500.00,
+        "Phone": "555-7788",
+        "Email": "grace.lee@example.com",
+        "Manager": true,
+        "Registry": 1007
+      },
+      {
+        "Name": "Henry Cavill",
+        "CPF": "66677788899",
+        "BirthDt": "1992-06-05T00:00:00",
+        "Sex": "M",
+        "Address": {
+          "Id": "60d5ec3f9f1b146570a0b912",
+          "Street": "Eighth Avenue",
+          "Number": 258,
+          "Complement": "Ranch",
+          "ZipCode": "12321-321",
+          "City": "Elizabethtown",
+          "State": "GO",
+          "District": "Countryside"
+        },
+        "Salary": 9000.00,
+        "Phone": "555-9900",
+        "Email": "henry.cavill@example.com",
+        "Manager": false,
+        "Registry": 1008
+      }
+    ],
+    "Restriction": true
+  }
+]

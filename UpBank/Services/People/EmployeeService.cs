@@ -503,7 +503,7 @@ namespace Services.People
             }
             else
             {
-                throw new Exception("Cliente não encontrado.");
+                throw new Exception("Cliente encontrado, verifique o salário.");
             }
             return profile;      
         }

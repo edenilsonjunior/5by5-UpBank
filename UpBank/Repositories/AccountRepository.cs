@@ -52,6 +52,13 @@ namespace Repositories
         }
 
 
+        public async Task<bool> ApproveAccount(Account account)
+        {
+            string query = "update Account set Restriction = 0 where AccountNumber = @AccountNumber";
+            return DapperUtilsRepository<Account>.Insert(query, new { AccountNumber = account.Number });
+        }
+
+
 
         public Account PostAccount(Account account)
         {
@@ -122,5 +129,7 @@ namespace Repositories
         {
             throw new NotImplementedException();
         }
+
     }
 }
+

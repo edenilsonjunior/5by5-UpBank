@@ -2,6 +2,8 @@
 using Models.Bank;
 using Models.DTO;
 using Services.Bank;
+using System.Net.Http;
+using System.Net;
 
 namespace UpBank.AccountAPI.Controllers
 {
@@ -75,6 +77,27 @@ namespace UpBank.AccountAPI.Controllers
 
             return Ok(transaction);
         }
+
+
+        [HttpPatch("ApproveAccount/{accountNumber}")]
+        public async Task<ActionResult<Account>> ApproveAccount(string accountNumber)
+        {
+            var account = _accountService.GetAccount(accountNumber).Result;
+            if (account == null)
+                return NotFound($"Nao foi encontrada uma conta com o numero {accountNumber}");
+            if (!account.Restriction)
+                return BadRequest("Conta ja esta aprovada");
+
+            account.Restriction = false;
+
+            bool updatedAccount = await _accountService.ApproveAccount(account);
+
+            if (!updatedAccount)
+                return BadRequest("Erro ao aprovar conta");
+
+            return Ok(account);
+        }
+
 
         [HttpGet("GetBankStatement/{accountNumber}")]
         public async Task<ActionResult<List<BankTransaction>>> GetBankStatement(string accountNumber)

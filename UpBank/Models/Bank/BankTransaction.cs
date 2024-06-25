@@ -8,9 +8,9 @@
 
         public static readonly string UPDATEBALANCEWITHDRAW = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber";
 
-        public static readonly string UPDATEBALANCEOVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Overdraft = Overdraft - @Diff WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverNumber";
+        public static readonly string UPDATEBALANCEOVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Overdraft = Overdraft - @Diff WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
 
-        public static readonly string UPDATEBALANCERECEIVER = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverNumber";
+        public static readonly string UPDATEBALANCERECEIVER = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
 
         public static readonly string GETALL = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction";
 

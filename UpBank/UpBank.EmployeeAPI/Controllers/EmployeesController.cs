@@ -10,16 +10,14 @@ namespace UpBank.EmployeeAPI.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly EmployeeService _employeeService;
-
         public EmployeesController()
         {
-            _employeeService = new EmployeeService("connectionString");
+            _employeeService = new EmployeeService("Data Source=127.0.0.1; Initial Catalog=DBEmployee; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
         }
         [HttpPost]
         public async Task <Employee> PostEmployee(EmployeeDTO employeeDTO)
         {
-            return await _employeeService.PostEmployee(employeeDTO);
-            
+            return await _employeeService.PostEmployee(employeeDTO);        
         }
         // GET: api/Employees
         [HttpGet]
@@ -33,8 +31,8 @@ namespace UpBank.EmployeeAPI.Controllers
         {
             return _employeeService.GetEmployee(registry);
         }
-        // PUT: api/Employees
-        [HttpPut("{registry}")]
+        // PATCH: api/Employees
+        [HttpPatch("{registry}")]
         public void UpdateEmployee(int registry, Employee employee)
         {
             _employeeService.UpdateEmployee(registry, employee);
@@ -45,19 +43,16 @@ namespace UpBank.EmployeeAPI.Controllers
         {
             _employeeService.RemoveEmployee(registry);
         }
-
         [HttpPost("CreateAccount")]
         public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
         {
             return await _employeeService.CreateAccount(accountCreateDTO);
         }
-
-        [HttpPatch("ApproveAccount")]
-        public async Task<Account> ApproveAccount(string registry, string number)
+        [HttpPatch("ApproveAccount/{registry}/{number}")]
+        public async Task<Account> ApproveAccount(int registry, string number)
         {
             return await _employeeService.ApproveAccount(registry,number);
         }
-
     }
 }
 

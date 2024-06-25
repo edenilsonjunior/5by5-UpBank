@@ -7,8 +7,10 @@ using Newtonsoft.Json;
 using Repositories;
 using Services.Utils;
 using System;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -51,6 +53,11 @@ namespace Services.People
                     throw;
                 }
 
+                if (!ValidateCPF(employeeDTO.CPF))
+                {
+                    throw new Exception("CPF inválido");
+                }
+
                 Employee employee = new Employee
                 {
                     Name = employeeDTO.Name,
@@ -82,7 +89,7 @@ namespace Services.People
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
-                var query = "SELECT * FROM Employees";
+                var query = "SELECT * FROM Table_Employee";
                 var employees = connection.Query<dynamic>(query).ToList();
                 List<Employee> list = new List<Employee>();
                 foreach (var row in employees)
@@ -92,7 +99,7 @@ namespace Services.People
                         Name = row.Name,
                         CPF = row.CPF,
                         BirthDt = row.BirthDt,
-                        Sex = row.Sex,
+                        Sex = char.Parse(row.Sex),
                         Salary = row.Salary,
                         Phone = row.Phone,
                         Email = row.Email,
@@ -124,37 +131,74 @@ namespace Services.People
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
-                var query = "SELECT * FROM Employee WHERE Registry = @Registry";
-                var employee = connection.Query<Employee>(query, new { Registry = registry }).FirstOrDefault();
+                var query = "SELECT * FROM Table_Employee WHERE Registry = @Registry";
+                var row = connection.Query<dynamic>(query, new { Registry = registry }).FirstOrDefault();
+                Employee employee = new Employee()
+                {
+                    Name = row.Name,
+                    CPF = row.CPF,
+                    BirthDt = row.BirthDt,
+                    Sex = char.Parse(row.Sex),
+                    Salary = row.Salary,
+                    Phone = row.Phone,
+                    Email = row.Email,
+                    Manager = row.Manager,
+                    Registry = row.Registry
+                };
+
+                using HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("https://localhost:7084");
+                HttpResponseMessage response = client.GetAsync($"/api/addresses/{row.IdAddress}").Result;
+                Address address = null;
+                if (response.IsSuccessStatusCode)
+                {
+                    address = response.Content.ReadFromJsonAsync<Address>().Result;
+                }
+                else
+                {
+                    throw new Exception("Erro ao consumir o endpoint de GET");
+                }
+                employee.Address = address;
                 return employee;
             }
+
         }
-        //PUT: api/Employees
+        //PATCH: api/Employees
         public void UpdateEmployee(int registry, Employee employee)
         {
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
+                var updateEmployee = GetEmployee(registry);
                 if (registry != employee.Registry)
                 {
-                    if (registry != employee.Registry)
-                    {
-                        throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");
-                    }
+                   throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");                
                 }
-                var query = @"UPDATE Employee 
-                                    SET Name = @Name, CPF = @CPF, BirthDt = @BirthDt, 
-                                        Sex = @Sex, IdAddress = @IdAddress, Salary = @Salary, 
-                                        Phone = @Phone, Email = @Email, Manager = @Manager 
+                var querySelect = @"SELECT * FROM Table_Employee WHERE Registry = @Registry";
+                var result = connection.Query<dynamic>(querySelect, new { Registry = registry }).FirstOrDefault();
+                if (result == null)
+                {
+                    throw new Exception("Funcionário não encontrado no banco de dados.");
+                }
+               var query = @"UPDATE Table_Employee
+                                    SET Name = @Name, 
+                                        
+                                        BirthDt = @BirthDt, 
+                                        Sex = @Sex, 
+                                        IdAddress = @IdAddress, 
+                                        Salary = @Salary, 
+                                        Phone = @Phone, 
+                                        Email = @Email, 
+                                        Manager = @Manager 
                                     WHERE Registry = @Registry";
 
                 connection.Execute(query, new
                 {
                     Name = employee.Name,
-                    CPF = employee.CPF,
+                    //CPF = employee.CPF,
                     BirthDt = employee.BirthDt,
                     Sex = employee.Sex,
-                    IdAddress = employee.Address,
+                    IdAddress = employee.Address.Id,
                     Salary = employee.Salary,
                     Phone = employee.Phone,
                     Email = employee.Email,
@@ -180,7 +224,7 @@ namespace Services.People
                 {
                     try //cria um registro na tabela de funcionário excluído
                     {
-                        string insertCanceledEmployee = @"INSERT INTO EmployeeCanceled (Name, CPF, BirthDt, Sex, IdAddress, Salary, Phone, Email, Manager, Registry) 
+                        string insertCanceledEmployee = @"INSERT INTO Table_EmployeeCanceled (Name, CPF, BirthDt, Sex, IdAddress, Salary, Phone, Email, Manager, Registry) 
                                                    VALUES (@Name, @CPF, @BirthDt, @Sex, @IdAddress, @Salary, @Phone, @Email, @Manager, @Registry)";
                         connection.Execute(insertCanceledEmployee, new
                         {
@@ -188,21 +232,21 @@ namespace Services.People
                             CPF = employee.CPF,
                             BirthDt = employee.BirthDt,
                             Sex = employee.Sex,
-                            IdAddress = employee.Address,
+                            IdAddress = employee.Address.Id,
                             Salary = employee.Salary,
                             Phone = employee.Phone,
                             Email = employee.Email,
                             Manager = employee.Manager,
                             Registry = employee.Registry
                         });
-                        string updateEmployee = "UPDATE Employee SET Name=0, CPF=0, BirthDt=0, Sex=0, IdAddress=0, Salary=0, Phone=0, Email=0, Manager=0, Registry=0 WHERE Registry = @Registry";
-                        connection.Execute(updateEmployee, new
+                        string deleteEmployee = "DELETE FROM Table_Employee WHERE Registry = @Registry";
+                        connection.Execute(deleteEmployee, new
                         {
                             Name = employee.Name,
                             CPF = employee.CPF,
                             BirthDt = employee.BirthDt,
                             Sex = employee.Sex,
-                            IdAddress = employee.Address,
+                            IdAddress = employee.Address.Id,
                             Salary = employee.Salary,
                             Phone = employee.Phone,
                             Email = employee.Email,
@@ -251,12 +295,18 @@ namespace Services.People
             }
 
             //Definir perfil da conta        
-            DefineAccountProfile(client); //******************************************* ou CPF
+            DefineAccountProfile(client);
 
             return await InsertAccount(accountCreateDTO);
         }
         public async Task<Account> InsertAccount(AccountCreateDTO accountCreateDTO)
         {
+            Employee employee = GetEmployee(accountCreateDTO.EmployeeRegister);
+            if (employee == null)
+            {
+                throw new Exception("Funcionário não encontrado.");
+            }
+
             AccountDTO accountDTO = new AccountDTO
             {
                 ClientCPF = accountCreateDTO.ClientCPF,
@@ -270,7 +320,7 @@ namespace Services.People
             var json = JsonConvert.SerializeObject(accountDTO);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await httpClient.PostAsync("https://localhost:7011", content);
+            var response = await httpClient.PostAsync("https://localhost:7011/api/Accounts", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -284,7 +334,7 @@ namespace Services.People
                 throw new Exception(problemDetails);
             }
         }
-        public async Task<Account> ApproveAccount(string registry, string number)
+        public async Task<Account> ApproveAccount(int registry, string number)
         {
             // Consumindo a api de Account
             List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
@@ -300,31 +350,40 @@ namespace Services.People
             }
             //verificar se o funcionário tem permissão de aprovar a conta
             var employees = await GetAllEmployee();
-            Employee? employee = null;
-            foreach (var emp in employees)
+            Employee? employee = employees.Find(e => e.Registry == registry);
+            if (employee == null)
             {
-                if (emp.Registry == int.Parse(registry))
+                throw new Exception("Funcionário não encontrado.");
+            }
+            if (!employee.Manager)
+            {
+                throw new Exception("Funcionário não tem permissão para aprovar contas.");
+            }
+            var httpClient = new HttpClient();
+            var response = await httpClient.PatchAsync($"https://localhost:7011/api/Accounts/ApproveAccount/{account.Number}", null);
+            if (!response.IsSuccessStatusCode)
+            {
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    employee = emp;
+                    throw new Exception($"Nao foi encontrada uma conta com o numero {account.Number}");
                 }
-                if (employee == null)
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    throw new Exception("Funcionário não encontrado.");
+                    throw new Exception("Conta ja esta aprovada");
                 }
-                if (!employee.Manager)
+                else
                 {
-                    account.Restriction = true; //reprovado
-                    throw new Exception("Funcionário não tem permissão para aprovar contas.");
+                    throw new Exception("Erro ao aprovar conta");
                 }
-                if (employee.Manager)
-                {
-                    account.Restriction = false; //aprovado
-                    //await account.Restriction.ApproveAccount();
-                }
+            }
+            else
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var newAccount = JsonConvert.DeserializeObject<Account>(responseContent);
+                return newAccount;
             }
             return account;
         }
-
         public async Task<Account> DefineAccountProfile(Client cliente)
         {
             //Consumir a api de dados mockados
@@ -353,6 +412,97 @@ namespace Services.People
                 throw new Exception("Conta não localizada.");
             }
             return account; //retornar um objeto conta com o profile 
+        }
+        public static bool ValidateCPF(string cpf)
+        {
+            // Removendo caracteres não numéricos do CPF
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+            // Verificando se o CPF possui 11 dígitos
+            if (cpf.Length != 11)
+            {
+                return false;
+            }
+            // Verificando se todos os dígitos são iguais
+            if (cpf.Distinct().Count() == 1)
+            {
+                return false;
+            }
+            // Calculando o primeiro dígito verificador
+            int soma = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                soma += int.Parse(cpf[i].ToString()) * (10 - i);
+            }
+            int resto = soma % 11;
+            int digitoVerificador1 = resto < 2 ? 0 : 11 - resto;
+            // Verificando o primeiro dígito verificador
+            if (int.Parse(cpf[9].ToString()) != digitoVerificador1)
+            {
+                return false;
+            }
+            // Calculando o segundo dígito verificador
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                soma += int.Parse(cpf[i].ToString()) * (11 - i);
+            }
+            resto = soma % 11;
+            int digitoVerificador2 = resto < 2 ? 0 : 11 - resto;
+            // Verificando o segundo dígito verificador
+            if (int.Parse(cpf[10].ToString()) != digitoVerificador2)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<Account> DefineProfile(Client cliente)
+        {
+            //Consumir a api de dados mockados
+            string cpf = cliente.CPF;
+            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}"); //7142 Clientes
+            if (client == null)
+                throw new Exception("Cliente não encontrado.");
+            if (client.CPF == cpf)
+            {
+                double salary = cliente.Salary.Value;
+                
+                EProfile profile;
+                double income = 0;
+                double creditLimit = 0;
+                double overdraftLimit = 0;
+                Random r = new();
+                if (income < 3000)
+                {
+                    profile = EProfile.Academic;
+                }
+                else if (income >= 3000 && income < 10000)
+                {
+                    profile = EProfile.Normal;
+                }
+                else
+                {
+                    profile = EProfile.VIP;
+                }
+                switch (profile)
+                {
+                    case EProfile.Academic:
+                        creditLimit = r.Next(1000, 3001);  // Limite de 1000 a 3000
+                        overdraftLimit = r.Next(500, 1501);  // Limite de 500 a 1500
+                        break;
+
+                    case EProfile.Normal:
+                        creditLimit = r.Next(3000, 10001);  // Limite de 3000 a 10000
+                        overdraftLimit = r.Next(1500, 5001);  // Limite de 1500 a 5000
+                        break;
+
+                    case EProfile.VIP:
+                        creditLimit = r.Next(10000, 50001);  // Limite de 10000 a 50000
+                        overdraftLimit = r.Next(5000, 20001);  // Limite de 5000 a 20000
+                        break;
+                }
+            }
+            return profile;
         }
     }
 }

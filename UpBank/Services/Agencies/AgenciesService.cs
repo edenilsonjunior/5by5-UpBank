@@ -91,7 +91,7 @@ namespace Services.Agencies
             }
         }
 
-        public async Task<Agency> AgencyBuilder(AgencyDTO agency, string newAgencyNumber)
+        public async Task<AgencyDTOEntity> AgencyDTOEntityBuilder(AgencyDTO agency, string newAgencyNumber)
         {
             List<Employee> employees = await GetAllEmployees();
             List<EmployeeDTOEntity> newAgencyEmployees = new();
@@ -114,8 +114,7 @@ namespace Services.Agencies
                         Phone = employee.Phone,
                         Email = employee.Email,
                         Manager = employee.Manager,
-                        Registry = employee.Registry,
-                        AgencyNumber = newAgencyNumber
+                        Registry = employee.Registry
                     });
                 }
                 else { throw new Exception("CPF de funcionário não encontrado no banco de dados.");}
@@ -123,7 +122,7 @@ namespace Services.Agencies
 
             if (managerQuantity == 0) throw new Exception("A agência deve ter pelo menos um gerente.");
 
-            return new Agency
+            return new AgencyDTOEntity
             {
                 Number = newAgencyNumber,
                 Address = await GetAddressById(agency.AddressId),

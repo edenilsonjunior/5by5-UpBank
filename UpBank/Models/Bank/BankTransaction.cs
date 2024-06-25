@@ -12,6 +12,8 @@
 
         public static readonly string UPDATEBALANCERECEIVER = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
 
+        public static readonly string UPDATEBALANCERECEIVEROVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = @Value WHERE AccountNumber = @ReceiverNumber;UPDATE Account SET Overdraft = Overdraft + @Diff WHERE AccountNumber = @ReceiverNumber";
+
         public static readonly string GETALL = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction";
 
         public static readonly string GET = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction WHERE Id = @Id";

@@ -187,5 +187,14 @@ namespace Services.Bank
                     throw new ArgumentException($"Cliente {c.Name} com restrição");
             }
         }
+
+        public async Task<Account> DeleteAccount(string number)
+        {
+            var account = await GetAccount(number);
+            if (account == null) throw new NullReferenceException($"A conta com o numero {number} nao consta na tabela Account");
+            _repository.PostAccountHistory(account);
+
+            return account;
+        }
     }
 }

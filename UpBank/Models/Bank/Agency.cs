@@ -12,6 +12,8 @@ namespace Models.Bank
         public string Number { get; set; }
         [NotMapped]
         public Address Address { get; set; }
+
+        [JsonIgnore]
         public string AddressId { get; set; }
         public string CNPJ { get; set; }
         public virtual List<EmployeeDTOEntity> Employees { get; set; }

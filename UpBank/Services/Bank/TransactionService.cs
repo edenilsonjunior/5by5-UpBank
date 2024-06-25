@@ -39,7 +39,7 @@ namespace Services.Bank
                 if (dto.ReceiverAccount != null)
                 {
                     var account = await _accountService.GetAccount(dto.ReceiverAccount);
-                    bt.Receiver = account;
+                    bt.Receiver = account.Number;
                 }
 
                 transactions.Add(bt);
@@ -58,7 +58,7 @@ namespace Services.Bank
             return new BankTransaction
             {
                 Id = transactionDTO.Id,
-                Receiver = account,
+                Receiver = account.Number,
                 TransactionDt = transactionDTO.TransactionDt,
                 Type = type,
                 Value = transactionDTO.TransactionValue
@@ -80,13 +80,9 @@ namespace Services.Bank
                     Id = dto.Id,
                     TransactionDt = dto.TransactionDt,
                     Type = type,
+                    Value = dto.TransactionValue,
+                    Receiver = dto.ReceiverAccount
                 };
-
-                if (dto.ReceiverAccount != null)
-                {
-                    var account = await _accountService.GetAccount(dto.ReceiverAccount);
-                    bt.Receiver = account;
-                }
 
                 transactions.Add(bt);
             }
@@ -137,20 +133,37 @@ namespace Services.Bank
                 case "Transfer":
                 case "Payment":
 
+                    double qntTiraOverdraft = 0.0;
+
                     if (transactionDTO.ReceiverAccount == null)
                         throw new InvalidOperationException("Nao foi informado a conta destino para transferencia ou pagamento");
+
 
                     if (transactionDTO.TransactionValue > account.Balance)
                     {
                         UseOverdraft = true;
-                        diff = transactionDTO.TransactionValue - account.Balance;
 
-                        if (diff > account.Overdraft)
+
+                        if (account.Balance >= 0)
+                        {
+                            diff = transactionDTO.TransactionValue - account.Balance; // O novo saldo da conta vai ser o valor da transacao menos o saldo atual
+                            qntTiraOverdraft = diff; // O valor que vai ser retirado do cheque especial vai ser o valor da diferenca
+
+                            diff *= -1; // Multiplica por -1 para o saldo ficar negativo
+                        }
+                        else
+                        {
+                            // O saldo novo vai ser a trasacao negativada e o saldo atual (exemplo: -10 + -100 = -110)
+                            diff = transactionDTO.TransactionValue * -1;
+                            diff += account.Balance;
+
+                            qntTiraOverdraft = transactionDTO.TransactionValue; // O valor que vai ser retirado do cheque especial vai ser o valor da transacao
+                        }
+
+                        if (qntTiraOverdraft > account.Overdraft)
                         {
                             throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
                         }
-
-                        transactionDTO.TransactionValue = totalBalance;
                     };
                     if (UseOverdraft)
                     {
@@ -159,7 +172,8 @@ namespace Services.Bank
                             Value = transactionDTO.TransactionValue,
                             AccountNumber = transactionDTO.AccountNumber,
                             Diff = diff,
-                            ReceiverAccount = transactionDTO.ReceiverAccount
+                            ReceiverAccount = transactionDTO.ReceiverAccount,
+                            AtualizarOverdrat = qntTiraOverdraft
                         };
                         bankTransaction = BankTransaction.UPDATEBALANCEOVERDRAFT;
                     }
@@ -202,7 +216,7 @@ namespace Services.Bank
             var transaction = _repository.InsertTransaction(transactionDTO).Result;
 
             if (transactionDTO.ReceiverAccount != null)
-                transaction.Receiver = receiver;
+                transaction.Receiver = receiver.Number;
 
             return transaction;
         }

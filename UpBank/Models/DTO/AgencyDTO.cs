@@ -14,5 +14,6 @@ namespace Models.DTO
         public string AddressId { get; set; }
         public string CNPJ { get; set; }
         public virtual List<string> Employees { get; set; }
+        public bool? Restriction { get; set; }
     }
 }

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Bank;
 using Models.DTO;
-using Models.People;
 using Services.Agencies;
 using UpBank.AgencyAPI.Data;
 using UpBank.AgencyAPI.Utils;
@@ -31,8 +25,20 @@ namespace UpBank.AgencyAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Agency>>> GetAgency()
         {
-            if (_context.Agency == null) return NotFound();
-            return await _context.Agency.ToListAsync();
+            var agencies = await _context.Agency.ToListAsync();
+            if (agencies == null || agencies.Count == 0) return NotFound("Nenhuma agência encontrada.");
+            foreach (var agency in agencies) agency.Address = await _agenciesService.GetAddressById(agency.AddressId);
+            return Ok(agencies);
+        }
+
+        // GET: api/Agencies/{number}
+        [HttpGet("{number}")]
+        public async Task<ActionResult<Agency>> GetAgency(string number)
+        {
+            var agency = await _context.Agency.FindAsync(number);
+            if (agency == null) return NotFound("Agência não existe ou o número informado não corresponde á agência desejada.");
+            agency.Address = await _agenciesService.GetAddressById(agency.AddressId);
+            return Ok(agency);
         }
 
         // GET: api/Agencies/restrict
@@ -81,39 +87,68 @@ namespace UpBank.AgencyAPI.Controllers
             return Ok(accounts);
         }
 
-        // GET: api/Agencies/{number}
-        [HttpGet("{number}")]
-        public async Task<ActionResult<Agency>> GetAgency(string number)
-        {
-            var agency = await _context.Agency.FindAsync(number);
-
-            if (agency == null) return NotFound();
-
-            return agency;
-        }
-
         // PUT: api/Agencies/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAgency(string id, Agency agency)
+        [HttpPut("{number}")]
+        public async Task<ActionResult<Agency>> PutAgency(string number, AgencyDTO agency)
         {
-            if (id != agency.Number) return BadRequest($"O numero informado {id} não condiz com o número da agência {agency.Number}.");
+            var agencyFromBank = await _context.Agency.FindAsync(number);
+            if (agencyFromBank == null) return NotFound("Número da agência informado não corresponde a uma agência cadastrada.");
 
-            _context.Entry(agency).State = EntityState.Modified;
+            if (!CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
 
-            try
+            var address = await _agenciesService.GetAddressById(agency.AddressId);
+            if (address == null) return NotFound("Id de endereço fornecido não foi encontrado no banco de dados.");
+
+            
+            if (agency.Restriction == agencyFromBank.Restriction)
             {
-                await _context.SaveChangesAsync();
+                string status = agencyFromBank.Restriction ? "RESTRINGIDA" : "LIBERADA";
+                return BadRequest($"A agência já está {status}.");
             }
+            else agencyFromBank.Restriction = agency.Restriction.GetValueOrDefault();
+
+            var employees = await _agenciesService.GetAllEmployees();
+            
+            foreach (var CPF in agency.Employees)
+            {
+                var employee = employees.FirstOrDefault(e => e.CPF == CPF);
+                if (employee == null) return BadRequest($"CPF {CPF} não foi encontrado no banco de dados.");
+                if (agencyFromBank.Employees.Any(e => e.CPF == CPF)) return BadRequest($"CPF {CPF} já está registrado na agência.");
+                agencyFromBank.Employees.Add(new EmployeeDTOEntity
+                {
+                    Name = employee.Name,
+                    CPF = employee.CPF,
+                    BirthDt = employee.BirthDt,
+                    Sex = employee.Sex,
+                    AddressId = employee.Address.Id,
+                    Salary = employee.Salary,
+                    Phone = employee.Phone,
+                    Email = employee.Email,
+                    Manager = employee.Manager,
+                    Registry = employee.Registry,
+                    AgencyNumber = agencyFromBank.Number
+                });
+            }
+
+            if (agencyFromBank.AddressId != agency.AddressId)
+            {
+                agencyFromBank.Address = address;
+                agencyFromBank.AddressId = agency.AddressId;
+            }
+
+            _context.Entry(agencyFromBank).State = EntityState.Modified;
+
+            try { await _context.SaveChangesAsync(); }
             catch (Exception) { throw; }
 
-            return NoContent();
+            return Ok(agencyFromBank);
         }
 
         // POST: api/Agencies
         [HttpPost]
         public async Task<ActionResult<Agency>> PostAgency(AgencyDTO agency)
         {
-            if (CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
+            if (!CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
 
             string newAgencyNumber;
             bool agencyExists;
@@ -129,28 +164,24 @@ namespace UpBank.AgencyAPI.Controllers
             Agency newAgency = null;
             try { newAgency = await _agenciesService.AgencyBuilder(agency, newAgencyNumber); }
             catch (Exception e) { return BadRequest(e.Message); }
-            
+
+            var result = _context.Agency.Add(newAgency);
+            await _context.SaveChangesAsync();
             return Ok(newAgency);
         }
 
         // DELETE: api/Agencies/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAgency(string id)
+        [HttpDelete("{number}")]
+        public async Task<ActionResult<Agency>> DeleteAgency(string number)
         {
-            if (_context.Agency == null)
-            {
-                return NotFound();
-            }
-            var agency = await _context.Agency.FindAsync(id);
-            if (agency == null)
-            {
-                return NotFound();
-            }
+            var agency = await _context.Agency.FindAsync(number);
+            if (agency == null) return NotFound("Número da agência informado não corresponde a uma agência cadastrada.");
 
-            _context.Agency.Remove(agency);
+            agency.Restriction = true;
+            _context.Agency.Update(agency);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(agency);
         }
 
         private async Task<bool> AgencyExistsAsync(string number) => await Task.Run(() => (_context.Agency?.Any(e => e.Number == number)).GetValueOrDefault());

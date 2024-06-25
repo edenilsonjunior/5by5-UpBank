@@ -12,8 +12,8 @@ using UpBank.AgencyAPI.Data;
 namespace UpBank.AgencyAPI.Migrations
 {
     [DbContext(typeof(UpBankAgencyAPIContext))]
-    [Migration("20240622163725_Initial-agency-migration")]
-    partial class Initialagencymigration
+    [Migration("20240625164735_AgencyApiv4")]
+    partial class AgencyApiv4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,8 @@ namespace UpBank.AgencyAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AddressId")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
@@ -41,58 +42,20 @@ namespace UpBank.AgencyAPI.Migrations
 
                     b.HasKey("Number");
 
-                    b.HasIndex("AddressId");
-
                     b.ToTable("Agency");
                 });
 
-            modelBuilder.Entity("Models.People.Address", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Complement")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("District")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Address");
-                });
-
-            modelBuilder.Entity("Models.People.Employee", b =>
+            modelBuilder.Entity("Models.DTO.EmployeeDTOEntity", b =>
                 {
                     b.Property<string>("CPF")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AddressId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AgencyNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BirthDt")
@@ -125,35 +88,18 @@ namespace UpBank.AgencyAPI.Migrations
 
                     b.HasKey("CPF");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("AgencyNumber");
 
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("Models.Bank.Agency", b =>
+            modelBuilder.Entity("Models.DTO.EmployeeDTOEntity", b =>
                 {
-                    b.HasOne("Models.People.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Models.People.Employee", b =>
-                {
-                    b.HasOne("Models.People.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Models.Bank.Agency", null)
                         .WithMany("Employees")
-                        .HasForeignKey("AgencyNumber");
-
-                    b.Navigation("Address");
+                        .HasForeignKey("AgencyNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Bank.Agency", b =>

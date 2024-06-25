@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\5by5\\5by5-UpBank\\UpBank\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\dto\\agencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\dto\\agencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|c:\\5by5\\5by5-upbank\\upbank\\services\\agencies\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFE05DCE-42DD-472F-A320-51308B31FF8B}|Services\\Services.csproj|solutionrelative:services\\agencies\\agenciesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\utils\\cnpjvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\utils\\cnpjvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|c:\\5by5\\5by5-upbank\\upbank\\upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{422C001B-D644-4A09-8F2F-8525AE7BF99D}|UpBank.AgencyAPI\\UpBank.AgencyAPI.csproj|solutionrelative:upbank.agencyapi\\controllers\\agenciescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\bank\\agency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\bank\\agency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\dto\\agencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\dto\\agencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\5by5\\5by5-upbank\\upbank\\models\\dto\\employeedtoentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,43 +30,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "CnpjValidator.cs",
-              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Utils\\CnpjValidator.cs",
-              "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Utils\\CnpjValidator.cs",
-              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Utils\\CnpjValidator.cs",
-              "RelativeToolTip": "UpBank.AgencyAPI\\Utils\\CnpjValidator.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAlAAAA",
+              "DocumentIndex": 4,
+              "Title": "EmployeeDTOEntity.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTOEntity.cs",
+              "RelativeDocumentMoniker": "Models\\DTO\\EmployeeDTOEntity.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTOEntity.cs",
+              "RelativeToolTip": "Models\\DTO\\EmployeeDTOEntity.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-24T22:55:20.596Z",
+              "WhenOpened": "2024-06-25T12:16:46.432Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AgenciesController.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "RelativeDocumentMoniker": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
               "RelativeToolTip": "UpBank.AgencyAPI\\Controllers\\AgenciesController.cs",
-              "ViewState": "AQIAAF0AAAAAAAAAAAAAAGoAAAAdAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAQwCMAAABjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-24T19:54:56.649Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "AgenciesService.cs",
               "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Services\\Agencies\\AgenciesService.cs",
               "RelativeDocumentMoniker": "Services\\Agencies\\AgenciesService.cs",
               "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Services\\Agencies\\AgenciesService.cs",
               "RelativeToolTip": "Services\\Agencies\\AgenciesService.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAowFMAAAABAAAA",
+              "ViewState": "AQIAAFgAAAAAAAAAAAAAwG8AAABqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-24T15:03:07.265Z",
               "EditorCaption": ""
@@ -83,43 +79,30 @@
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "FloatingWindowState": {
-        "Id": "7b30ae5c-fd2c-4d1e-8cae-662efb12d560",
+        "Id": "c86d92df-533f-4797-a56d-c153357af0d0",
         "Display": 1,
-        "X": 364,
-        "Y": 0,
-        "Width": 1574,
-        "Height": 809,
+        "X": 243,
+        "Y": 64,
+        "Width": 1549,
+        "Height": 764,
         "WindowState": 2
       },
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "EmployeeDTOEntity.cs",
-              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTOEntity.cs",
-              "RelativeDocumentMoniker": "Models\\DTO\\EmployeeDTOEntity.cs",
-              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\EmployeeDTOEntity.cs",
-              "RelativeToolTip": "Models\\DTO\\EmployeeDTOEntity.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAAAB4AAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "Agency.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Agency.cs",
+              "RelativeDocumentMoniker": "Models\\Bank\\Agency.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Agency.cs",
+              "RelativeToolTip": "Models\\Bank\\Agency.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-24T14:39:03.993Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AgencyDTO.cs",
-              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AgencyDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTO\\AgencyDTO.cs",
-              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AgencyDTO.cs",
-              "RelativeToolTip": "Models\\DTO\\AgencyDTO.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-24T19:31:38.474Z",
+              "WhenOpened": "2024-06-25T12:54:58.524Z",
               "EditorCaption": ""
             }
           ]
@@ -130,15 +113,15 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Agency.cs",
-              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Agency.cs",
-              "RelativeDocumentMoniker": "Models\\Bank\\Agency.cs",
-              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\Bank\\Agency.cs",
-              "RelativeToolTip": "Models\\Bank\\Agency.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBUAAAAAAAAA",
+              "DocumentIndex": 3,
+              "Title": "AgencyDTO.cs",
+              "DocumentMoniker": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AgencyDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTO\\AgencyDTO.cs",
+              "ToolTip": "C:\\5by5\\5by5-UpBank\\UpBank\\Models\\DTO\\AgencyDTO.cs",
+              "RelativeToolTip": "Models\\DTO\\AgencyDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-24T14:25:03.452Z",
+              "WhenOpened": "2024-06-25T12:15:19.405Z",
               "EditorCaption": ""
             }
           ]

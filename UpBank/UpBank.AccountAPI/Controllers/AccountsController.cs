@@ -2,6 +2,8 @@
 using Models.Bank;
 using Models.DTO;
 using Services.Bank;
+using System.Net.Http;
+using System.Net;
 
 namespace UpBank.AccountAPI.Controllers
 {
@@ -17,6 +19,9 @@ namespace UpBank.AccountAPI.Controllers
             _accountService = new();
             _transactionsController = new();
         }
+        
+
+        // Gets
 
         [HttpGet]
         public async Task<ActionResult<List<Account>>> GetAllAccounts()
@@ -25,12 +30,60 @@ namespace UpBank.AccountAPI.Controllers
             return Ok(accounts);
         }
 
+
         [HttpGet("{number}")]
         public async Task<ActionResult<Account>> GetAccount(string number)
         {
-            var account = await _accountService.GetAccount(number);
-            return Ok(account);
+            try
+            {
+                var account = await _accountService.GetAccount(number);
+                return Ok(account);
+            }
+            catch (Exception) { return NotFound("Conta nao encontrada"); }
         }
+
+
+        [HttpGet("TransactionType/{type}")]
+        public async Task<ActionResult<List<BankTransaction>>> GetTransactionByType(string type)
+        {
+            var transaction = await _transactionsController.GetTransactionsByType(type);
+
+            return transaction.Count == 0 ? NotFound("Nao existem transacoes efetuadas deste tipo") : Ok(transaction);
+        }
+
+        
+        [HttpGet("GetBankStatement/{accountNumber}")]
+        public async Task<ActionResult<List<BankTransaction>>> GetBankStatement(string accountNumber)
+        {
+            var account = _accountService.GetAccount(accountNumber).Result;
+
+            if (account == null)
+                return NotFound($"Nao foi encontrada uma conta com o numero {accountNumber}");
+
+            var transactions = await _accountService.GetTransactionsByNumber(accountNumber);
+
+            return Ok(transactions);
+        }
+
+
+        [HttpGet("GetBalance/{accountNumber}")]
+        public async Task<ActionResult<BalanceDTO>> GetBalance(string accountNumber)
+        {
+            try
+            {
+                var account = _accountService.GetAccount(accountNumber).Result;
+                BalanceDTO balance = new(account);
+
+                return Ok(balance);
+            }
+            catch (Exception)
+            {
+                return NotFound($"Nao foi encontrada uma conta com o numero {accountNumber}");
+            }
+        }
+
+
+        // Posts
 
         [HttpPost]
         public async Task<ActionResult<Account>> CreateAccount(AccountDTO accountDTO)
@@ -43,16 +96,8 @@ namespace UpBank.AccountAPI.Controllers
             catch (NullReferenceException e) { return BadRequest(e.Message); }
             catch (ArgumentException e) { return BadRequest(e.Message); }
             catch (Exception e) { return StatusCode(500, e.Message); }
-
         }
 
-        [HttpGet("TransactionType/{type}")]
-        public async Task<ActionResult<List<BankTransaction>>> GetTransactionByType(string type)
-        {
-            var transaction = await _transactionsController.GetTransactionsByType(type);
-            if (transaction.Count == 0) return NotFound("Nao existem transacoes efetuadas deste tipo");
-            return Ok(transaction);
-        }
 
         [HttpPost("MakeTransaction")]
         public async Task<ActionResult<BankTransaction>> MakeTransaction(TransactionDTO transactionDTO)
@@ -66,6 +111,32 @@ namespace UpBank.AccountAPI.Controllers
 
             return Ok(transaction);
         }
+
+
+        // Patches
+
+        [HttpPatch("ApproveAccount/{accountNumber}")]
+        public async Task<ActionResult<Account>> ApproveAccount(string accountNumber)
+        {
+            var account = _accountService.GetAccount(accountNumber).Result;
+            if (account == null)
+                return NotFound($"Nao foi encontrada uma conta com o numero {accountNumber}");
+            if (!account.Restriction)
+                return BadRequest("Conta ja esta aprovada");
+
+            account.Restriction = false;
+
+            bool updatedAccount = await _accountService.ApproveAccount(account);
+
+            if (!updatedAccount)
+                return BadRequest("Erro ao aprovar conta");
+
+            return Ok(account);
+        }
+
+
+
+
 
         //[HttpPatch]
         //public async Task<ActionResult<Account>> UpdateAccount(string number)

@@ -28,14 +28,13 @@ namespace Repositories
                 AccountNumber = transactionDTO.AccountNumber,
                 TransactionDt = DateTime.Now,
                 TransactionType = transactionDTO.TransactionType,
-                ReceiverAccount = transactionDTO.ReceiverNumber,
+                ReceiverAccount = transactionDTO.ReceiverAccount,
                 TransactionValue = transactionDTO.TransactionValue
             };
 
             transaction.TransactionDt = DateTime.Now;
             transaction.Value = transactionDTO.TransactionValue;
             if (Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType)) transaction.Type = transactionType;
-            transaction.Receiver = new Account { Number = transactionDTO.ReceiverNumber };
             transaction.Id = DapperUtilsRepository<BankTransaction>.InsertWithScalar(BankTransaction.INSERT, obj);
 
 

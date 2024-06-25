@@ -26,17 +26,23 @@ namespace Services.Bank
 
             foreach (var dto in transactionDTO)
             {
-                var account = await _accountService.GetAccount(dto.ReceiverNumber);
                 var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
 
-                transactions.Add(new BankTransaction
+                BankTransaction bt = new()
                 {
                     Id = dto.Id,
-                    Receiver = account,
                     TransactionDt = dto.TransactionDt,
                     Type = type,
                     Value = dto.TransactionValue
-                });
+                };
+
+                if (dto.ReceiverAccount != null)
+                {
+                    var account = await _accountService.GetAccount(dto.ReceiverAccount);
+                    bt.Receiver = account;
+                }
+
+                transactions.Add(bt);
             }
             return transactions;
         }
@@ -46,7 +52,7 @@ namespace Services.Bank
             var transactionDTO = await _repository.GetTransaction(Id);
             if (transactionDTO == null) throw new ArgumentNullException("O identificador da transacao nao existe.");
 
-            var account = await _accountService.GetAccount(transactionDTO.ReceiverNumber);
+            var account = await _accountService.GetAccount(transactionDTO.ReceiverAccount);
             var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
 
             return new BankTransaction
@@ -63,21 +69,26 @@ namespace Services.Bank
         {
             List<BankTransaction> transactions = new();
             var transactionDTO = await _repository.GetTransactionsByType(Type);
-            if (transactionDTO.Count == 0) throw new ArgumentNullException("Nao existe nenhuma transacao efetuada");
+            if (transactionDTO.Count == 0) return new();
 
             foreach (var dto in transactionDTO)
             {
-                var account = await _accountService.GetAccount(dto.ReceiverNumber);
                 var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
 
-                transactions.Add(new BankTransaction
+                BankTransaction bt = new()
                 {
                     Id = dto.Id,
-                    Receiver = account,
                     TransactionDt = dto.TransactionDt,
                     Type = type,
-                    Value = dto.TransactionValue
-                });
+                };
+
+                if (dto.ReceiverAccount != null)
+                {
+                    var account = await _accountService.GetAccount(dto.ReceiverAccount);
+                    bt.Receiver = account;
+                }
+
+                transactions.Add(bt);
             }
             return transactions;
         }
@@ -88,11 +99,11 @@ namespace Services.Bank
             double diff = 0.0;
             var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
-            Account receiver = new();
+            Account receiver = null;
 
-            if (transactionDTO.ReceiverNumber != null)
+            if (transactionDTO.ReceiverAccount != null)
             {
-                receiver = _accountService.GetAccount(transactionDTO.ReceiverNumber).Result;
+                receiver = _accountService.GetAccount(transactionDTO.ReceiverAccount).Result;
                 if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
             }
 
@@ -144,7 +155,7 @@ namespace Services.Bank
                             Value = transactionDTO.TransactionValue,
                             AccountNumber = transactionDTO.AccountNumber,
                             Diff = diff,
-                            ReceiverNumber = transactionDTO.ReceiverNumber
+                            ReceiverAccount = transactionDTO.ReceiverAccount
                         };
                         bankTransaction = BankTransaction.UPDATEBALANCEOVERDRAFT;
                     }
@@ -185,6 +196,7 @@ namespace Services.Bank
             DapperUtilsRepository<BankTransaction>.Insert(bankTransaction, obj);
 
             var transaction = _repository.InsertTransaction(transactionDTO).Result;
+            transaction.Receiver = receiver;
 
             return transaction;
         }

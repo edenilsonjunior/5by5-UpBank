@@ -30,7 +30,7 @@ namespace Services.Bank
                 var t1 = RetrieveAgency(register.AgencyNumber);
                 var t2 = GetTransactionsByNumber(register.AccountNumber);
 
-                var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AgencyNumber);
+                var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AccountNumber);
                 var t3 = RetrieveClients(cpfs);
 
                 Agency agency = t1.Result;
@@ -49,6 +49,9 @@ namespace Services.Bank
         public async Task<Account> GetAccount(string number)
         {
             AccountDTO register = await _repository.GetAccount(number);
+
+            if (register == null)
+                throw new ArgumentException("Conta não encontrada");
 
             var t1 = RetrieveAgency(register.AgencyNumber);
             var t2 = GetTransactionsByNumber(register.AccountNumber);
@@ -90,6 +93,13 @@ namespace Services.Bank
         }
 
 
+        public async Task<bool> ApproveAccount(Account account)
+        {
+            return await _repository.ApproveAccount(account);
+        }
+
+
+
         private async Task<List<Client>> RetrieveClients(List<string> cpfs)
         {
             var clientsTask = cpfs.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{cpf}")).ToList();
@@ -125,7 +135,8 @@ namespace Services.Bank
         }
 
 
-        private async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
+
+        public async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
         {
             List<BankTransactionDTO> listDTO = await _repository.GetTransactionsByNumber(number);
 
@@ -141,7 +152,7 @@ namespace Services.Bank
                     Value = dto.Value
                 };
 
-                if (!dto.AccountReceiver.Equals(""))
+                if (dto.AccountReceiver != null)
                     bt.Receiver = await GetAccount(dto.AccountReceiver);
 
                 list.Add(bt);
@@ -152,6 +163,21 @@ namespace Services.Bank
 
         private void ValidadeAccount(Account account)
         {
+            List<Account> accounts = GetAllAccounts().Result;
+
+
+            foreach(var ac in accounts)
+            {
+                if (ac.Number.Equals(account.Number))
+                    throw new ArgumentException("Erro ao inserir. O numero de conta digitado pertence a outra conta");
+
+                if (ac.CreditCard.Number == account.CreditCard.Number)
+                    throw new ArgumentException("Erro ao inserir: O numero do cartao de crédito pertence a outra conta");
+
+                if (ac.Client.Find(Client => Client.CPF.Equals(account.Client[0].CPF)) != null)
+                    throw new ArgumentException("Erro ao inserir. O CPF digitado já pertence a outra conta");
+            }
+
             if (account.Client[0].BirthDt.AddYears(18) > DateTime.Now)
                 throw new ArgumentException("O dono da conta deve ser maior de idade");
 

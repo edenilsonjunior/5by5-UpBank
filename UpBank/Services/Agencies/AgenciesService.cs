@@ -37,30 +37,6 @@ namespace Services.Agencies
             //    return null;
             //}
 
-            //var addressFaker = new Faker<Address>()
-            //    .RuleFor(a => a.Id, f => f.Random.Guid().ToString())
-            //    .RuleFor(a => a.Street, f => f.Address.StreetName())
-            //    .RuleFor(a => a.Number, f => f.Random.Int(1, 1000))
-            //    .RuleFor(a => a.Complement, f => f.Address.SecondaryAddress())
-            //    .RuleFor(a => a.ZipCode, f => f.Address.ZipCode())
-            //    .RuleFor(a => a.City, f => f.Address.City())
-            //    .RuleFor(a => a.State, f => f.Address.State())
-            //    .RuleFor(a => a.District, f => f.Address.County()); 
-
-            //var employeeFaker = new Faker<Employee>()
-            //    .RuleFor(e => e.Name, f => f.Name.FullName())
-            //    .RuleFor(e => e.CPF, f => f.Random.Replace("###.###.###-##"))
-            //    .RuleFor(e => e.BirthDt, f => f.Date.Past(50, DateTime.Now.AddYears(-18)))
-            //    .RuleFor(e => e.Sex, f => f.PickRandom(new[] { 'M', 'F' }))
-            //    .RuleFor(e => e.Address, f => addressFaker.Generate())
-            //    .RuleFor(e => e.Salary, f => f.Random.Double(2000, 10000))
-            //    .RuleFor(e => e.Phone, f => f.Phone.PhoneNumber())
-            //    .RuleFor(e => e.Email, f => f.Internet.Email())
-            //    .RuleFor(e => e.Manager, f => f.Random.Bool())
-            //    .RuleFor(e => e.Registry, f => f.Random.Int(1000, 9999));
-
-            //return employeeFaker.Generate(10);
-
             return await Task.FromResult(new List<Employee>
                 {
                     new Employee

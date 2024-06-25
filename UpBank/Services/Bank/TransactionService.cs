@@ -88,7 +88,7 @@ namespace Services.Bank
             double diff = 0.0;
             var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
-            Account receiver;
+            Account receiver = new();
 
             if (transactionDTO.ReceiverNumber != null)
             {
@@ -96,42 +96,7 @@ namespace Services.Bank
                 if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
             }
 
-            if (Enum.TryParse<ETransactionType>(transactionDTO.TransactionType.ToString(), out var transactionType))
-            {
-                switch (transactionType)
-                {
-                    case ETransactionType.Withdraw:
-                        if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
-                        if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
-                        break;
-                    case ETransactionType.Deposit:
-                    case ETransactionType.Lending:
-                        if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
-                        break;
-                    case ETransactionType.Payment:
-                    case ETransactionType.Transfer:
-                        if (transactionDTO.TransactionValue > account.Balance)
-                        {
-                            UseOverdraft = true;
-                            diff = transactionDTO.TransactionValue - account.Balance;
-
-                            if (diff > account.Overdraft)
-                            {
-                                throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
-                            }
-
-                            transactionDTO.TransactionValue = totalBalance;
-                        };
-                        if (transactionDTO.ReceiverNumber == null) throw new InvalidOperationException("Transferencia ou pagamento devem ter conta destino.");
-                        break;
-                }
-            }
-            else
-            {
-                throw new ArgumentException("Nao existe esse tipo de transacao");
-            }
-
-            var transaction = _repository.InsertTransaction(transactionDTO).Result;
+            var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
 
             object obj = null;
             string bankTransaction = null;
@@ -140,6 +105,7 @@ namespace Services.Bank
             {
                 case "Lending":
                 case "Deposit":
+                    if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
                     obj = new
                     {
                         Value = transactionDTO.TransactionValue,
@@ -148,6 +114,8 @@ namespace Services.Bank
                     bankTransaction = BankTransaction.UPDATEBALANCE;
                     break;
                 case "Withdraw":
+                    if (transactionDTO.ReceiverNumber != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
+                    if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
                     obj = new
                     {
                         Value = transactionDTO.TransactionValue,
@@ -157,6 +125,18 @@ namespace Services.Bank
                     break;
                 case "Transfer":
                 case "Payment":
+                    if (transactionDTO.TransactionValue > account.Balance)
+                    {
+                        UseOverdraft = true;
+                        diff = transactionDTO.TransactionValue - account.Balance;
+
+                        if (diff > account.Overdraft)
+                        {
+                            throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
+                        }
+
+                        transactionDTO.TransactionValue = totalBalance;
+                    };
                     if (UseOverdraft)
                     {
                         obj = new
@@ -170,21 +150,43 @@ namespace Services.Bank
                     }
                     else
                     {
-                        obj = new
+                        //Se o receiver estiver com valor negativo, ele usou o cheque especial. Ao entrar uma transferencia na conta, primeiro completara o cheque para depois ir para o saldo
+                        if (receiver.Balance < 0)
                         {
-                            Value = transactionDTO.TransactionValue,
-                            AccountNumber = transactionDTO.AccountNumber,
-                            ReceiverNumber = transactionDTO.ReceiverNumber
-                        };
-                        bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
+                            //Verifica qual o menor valor entre o saldo do destino e o valor da transacao e retorna ele.
+                            double overdraftCovered = Math.Min(-receiver.Balance, transactionDTO.TransactionValue);
+                            double totalCoveredAmount = receiver.Balance + overdraftCovered;
+                            double remainingAmount = transactionDTO.TransactionValue - overdraftCovered;
+                            obj = new
+                            {
+                                Value = remainingAmount + totalCoveredAmount,
+                                Diff = overdraftCovered,
+                                AccountNumber = transactionDTO.AccountNumber,
+                                ReceiverNumber = transactionDTO.ReceiverNumber
+                            };
+                            bankTransaction = BankTransaction.UPDATEBALANCERECEIVEROVERDRAFT;
+                        }
+                        else
+                        {
+                            obj = new
+                            {
+                                Value = transactionDTO.TransactionValue,
+                                AccountNumber = transactionDTO.AccountNumber,
+                                ReceiverNumber = transactionDTO.ReceiverNumber
+                            };
+                            bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
+                        }
                     }
                     break;
+                default:
+                    throw new ArgumentException("Nao existe esse tipo de transacao");
             }
 
             DapperUtilsRepository<BankTransaction>.Insert(bankTransaction, obj);
 
+            var transaction = _repository.InsertTransaction(transactionDTO).Result;
+
             return transaction;
         }
-
     }
 }

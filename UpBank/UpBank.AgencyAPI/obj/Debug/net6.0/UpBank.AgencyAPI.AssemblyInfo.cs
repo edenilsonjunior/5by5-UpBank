@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UpBank.AgencyAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9865a1adb1449102440c178d6be3f6895460ee9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8da95e800b9430c99d67095bd19efdc8f67a6f8f")]
 [assembly: System.Reflection.AssemblyProductAttribute("UpBank.AgencyAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UpBank.AgencyAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

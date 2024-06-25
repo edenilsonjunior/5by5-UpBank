@@ -1,7 +1,10 @@
-﻿namespace Models.Bank
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Models.Bank
 {
     public class CreditCard
     {
+        [Key]
         public long Number { get; set; }
         public DateTime ExpirationDt { get; set; }
         public double Limit { get; set; }

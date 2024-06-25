@@ -7,12 +7,28 @@
       "RelativeMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|solutionrelative:upbank.clientapi\\controllers\\clientscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\upbank.clientapi\\upbank.clientapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|solutionrelative:upbank.clientapi\\upbank.clientapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\upbank.clientapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|solutionrelative:upbank.clientapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\upbank.clientapi\\upbank.clientapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{C25AD6AF-C3C5-430B-AFBD-A6B4A3460B6A}|UpBank.ClientAPI\\UpBank.ClientAPI.csproj|solutionrelative:upbank.clientapi\\upbank.clientapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\dto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\dto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\bank\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\people\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\people\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|c:\\users\\adm\\source\\repos\\5by5-upbank\\upbank\\models\\people\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6E4885E-CD0F-4D7E-8446-7837B56EC51A}|Models\\Models.csproj|solutionrelative:models\\people\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,11 +38,88 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Person.cs",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Person.cs",
+              "RelativeDocumentMoniker": "Models\\People\\Person.cs",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Person.cs",
+              "RelativeToolTip": "Models\\People\\Person.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-25T04:13:03.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Client.cs",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Client.cs",
+              "RelativeDocumentMoniker": "Models\\People\\Client.cs",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Client.cs",
+              "RelativeToolTip": "Models\\People\\Client.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAACXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-25T04:12:24.615Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Account.cs",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Bank\\Account.cs",
+              "RelativeDocumentMoniker": "Models\\Bank\\Account.cs",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\Bank\\Account.cs",
+              "RelativeToolTip": "Models\\Bank\\Account.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABIAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-25T04:11:42.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AddressDTO.cs",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\DTO\\AddressDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTO\\AddressDTO.cs",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\DTO\\AddressDTO.cs",
+              "RelativeToolTip": "Models\\DTO\\AddressDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-25T03:58:49.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UpBank.ClientAPI",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
+              "RelativeDocumentMoniker": "UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
+              "RelativeToolTip": "UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-06-25T02:43:49.937Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\Program.cs",
+              "RelativeDocumentMoniker": "UpBank.ClientAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\Program.cs",
+              "RelativeToolTip": "UpBank.ClientAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-24T22:44:27.98Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -36,35 +129,9 @@
               "RelativeDocumentMoniker": "UpBank.ClientAPI\\Controllers\\ClientsController.cs",
               "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\Controllers\\ClientsController.cs",
               "RelativeToolTip": "UpBank.ClientAPI\\Controllers\\ClientsController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAMQAAABTAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-23T19:53:46.223Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UpBank.ClientAPI",
-              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
-              "RelativeDocumentMoniker": "UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
-              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
-              "RelativeToolTip": "UpBank.ClientAPI\\UpBank.ClientAPI.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-06-23T19:52:34.902Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Client.cs",
-              "DocumentMoniker": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Client.cs",
-              "RelativeDocumentMoniker": "Models\\People\\Client.cs",
-              "ToolTip": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Models\\People\\Client.cs",
-              "RelativeToolTip": "Models\\People\\Client.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-23T19:51:20.536Z",
+              "WhenOpened": "2024-06-24T22:13:21.279Z",
               "EditorCaption": ""
             }
           ]

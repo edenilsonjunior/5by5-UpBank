@@ -11,6 +11,7 @@ namespace UpBank.ClientAPI
             builder.Services.AddDbContext<UpBankClientAPIContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("UpBankClientAPIContext") ?? throw new InvalidOperationException("Connection string 'UpBankClientAPIContext' not found.")));
 
+
             // Add services to the container.
 
             builder.Services.AddControllers();

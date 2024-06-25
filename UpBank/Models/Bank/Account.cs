@@ -29,13 +29,9 @@ namespace Models.Bank
 
         public static readonly string GetByClientCPF = @"SELECT ClientCPF FROM ClientAccount WHERE AccountNumber = @AccountNumber";
 
-
         public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
-        public static readonly string DELETE = @"
-            INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);
-            DELETE FROM ClientAccount WHERE AccountNumber = @AccountNumber;
-            DELETE FROM Account WHERE AccountNumber = @AccountNumber";
+        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);";
 
         public string Number { get; set; }
         public Agency Agency { get; set; }

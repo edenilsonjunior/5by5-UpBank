@@ -93,6 +93,13 @@ namespace Services.Bank
         }
 
 
+        public async Task<bool> ApproveAccount(Account account)
+        {
+            return await _repository.ApproveAccount(account);
+        }
+
+
+
         private async Task<List<Client>> RetrieveClients(List<string> cpfs)
         {
             var clientsTask = cpfs.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{cpf}")).ToList();
@@ -126,6 +133,7 @@ namespace Services.Bank
             if (cpfs.Count == 0 || cpfs.Count > 2)
                 throw new ArgumentException("Deve conter pelo menos um cliente e no máximo 2");
         }
+
 
 
         public async Task<List<BankTransaction>> GetTransactionsByNumber(string number)

@@ -8,13 +8,12 @@ namespace Models.Bank
 {
     public class Agency
     {
-        [Key]
+        public static readonly string INSERT = "INSERT INTO AgencyDeleted (Number, AddressId, CNPJ, Restriction) VALUES (@Number, @AddressId, @CNPJ, @Restriction);";
+
         public string Number { get; set; }
-        [NotMapped]
         public Address Address { get; set; }
-        public string AddressId { get; set; }
         public string CNPJ { get; set; }
-        public virtual List<EmployeeDTOEntity> Employees { get; set; }
+        public List<Employee> Employees { get; set; }
         public bool Restriction { get; set; }
     }
 }

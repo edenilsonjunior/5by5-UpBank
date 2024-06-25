@@ -12,7 +12,7 @@ namespace UpBank.AgencyAPI.Data
         {
         }
 
-        public DbSet<Agency> Agency { get; set; } = default!;
+        public DbSet<AgencyDTOEntity> Agency { get; set; } = default!;
         public DbSet<EmployeeDTOEntity> Employee { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace UpBank.AgencyAPI.Data
             modelBuilder.Ignore<Address>();
 
             modelBuilder.Entity<EmployeeDTOEntity>()
-                .HasOne<Agency>()
+                .HasOne<AgencyDTOEntity>()
                 .WithMany(a => a.Employees)
                 .HasForeignKey(e => e.AgencyNumber)
                 .HasPrincipalKey(a => a.Number);
@@ -29,6 +29,7 @@ namespace UpBank.AgencyAPI.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSqlServer("Data Source=127.0.0.1; Initial Catalog=UpBank.AgencyAPI; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
             optionsBuilder.UseLazyLoadingProxies();
         }
     }

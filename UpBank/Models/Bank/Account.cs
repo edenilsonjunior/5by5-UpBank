@@ -61,5 +61,23 @@ namespace Models.Bank
             Extract = new();
             Profile = EProfile.Normal;
         }
+
+        public Account(AccountDTO dto, Agency agency, List<Client> clients, List<BankTransaction> extract)
+        {
+            Number = dto.AccountNumber;
+            Restriction = dto.Restriction;
+            CreditCard = dto.CreditCard;
+            Overdraft = dto.Overdraft;
+            Balance = dto.Balance;
+            CreatedDt = dto.CreatedDt;
+
+            Client = clients;
+            Agency = agency;
+            Extract = extract;
+
+            if (Enum.TryParse<EProfile>(dto.AccountProfile, true, out var result))
+                Profile = result;   
+        }
     }
 }
+

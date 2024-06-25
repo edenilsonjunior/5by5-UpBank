@@ -40,7 +40,10 @@ namespace UpBank.AccountAPI.Controllers
                 var newAccount = await _accountService.CreateAccount(accountDTO);
                 return Ok(newAccount);
             }
-            catch (Exception e) { return Problem(e.Message); }
+            catch (NullReferenceException e) { return BadRequest(e.Message); }
+            catch (ArgumentException e) { return BadRequest(e.Message); }
+            catch (Exception e) { return StatusCode(500, e.Message); }
+
         }
 
         [HttpGet("TransactionType/{type}")]

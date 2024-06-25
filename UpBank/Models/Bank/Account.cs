@@ -31,7 +31,7 @@ namespace Models.Bank
 
         public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
-        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);";
+        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);UPDATE Account SET Restriction = 1";
 
         public string Number { get; set; }
         public Agency Agency { get; set; }
@@ -79,4 +79,3 @@ namespace Models.Bank
         }
     }
 }
-

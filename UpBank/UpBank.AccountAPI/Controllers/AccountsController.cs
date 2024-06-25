@@ -76,7 +76,8 @@ namespace UpBank.AccountAPI.Controllers
         [HttpDelete("{number}")]
         public async Task<ActionResult<Account>> CloseAccount(string number)
         {
-            var accountDeleted =  await _accountService.DeleteAccount(number);
+            var accountDeleted = await _accountService.DeleteAccount(number);
+            if (accountDeleted == null) return BadRequest("Erro ao fechar a conta");
 
             return Ok(accountDeleted);
         }

@@ -22,7 +22,7 @@ namespace Models.DTO
             Id = data.Id;
             TransactionDt = data.TransactionDt;
             Enum.TryParse<ETransactionType>(data.TransactionType, true, out ETransactionType type);
-            AccountReceiver = data.AccountReceiver == null ? "" : data.AccountReceiver;
+            AccountReceiver = data.ReceiverAccount;
             Type = type;
             Value = data.TransactionValue;
         }

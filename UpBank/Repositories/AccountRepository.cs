@@ -25,12 +25,14 @@ namespace Repositories
         {
             var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new { Number = number });
 
+            if (register == null)
+                return null;
+
             return new AccountDTO(register);
         }
 
         public async Task<List<BankTransactionDTO>> GetTransactionsByNumber(string number)
         {
-
             var registers = DapperUtilsRepository<dynamic>.GetAll(BankTransaction.GetByAccount, new { AccountNumber = number });
 
             var transactions = new List<BankTransactionDTO>();
@@ -65,7 +67,14 @@ namespace Repositories
                     Flag = account.CreditCard.Flag
                 };
 
-                DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
+                try
+                {
+                    DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Erro ao inserir: O cartao de crédito pertence a outra conta");
+                }
 
 
                 object accountObj = new
@@ -80,7 +89,16 @@ namespace Repositories
                     AccountProfile = account.Profile.ToString()
                 };
 
-                DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
+                try
+                {
+                    DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
+
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Erro ao inserir. O numero de conta digitado pertence a outra conta");
+                }
+
 
                 foreach (var client in account.Client)
                 {

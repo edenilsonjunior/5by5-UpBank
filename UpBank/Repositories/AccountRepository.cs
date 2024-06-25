@@ -1,11 +1,7 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Models.Bank;
+﻿using Models.Bank;
 using Models.DTO;
 using Models.People;
 using Repositories.Utils;
-using System.Runtime.CompilerServices;
-using System.Transactions;
 
 namespace Repositories
 {
@@ -27,8 +23,8 @@ namespace Repositories
 
         public async Task<AccountDTO> GetAccount(string number)
         {
-            var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new{Number = number });
-          
+            var register = DapperUtilsRepository<dynamic>.Get(Account.GetByNumber, new { Number = number });
+
             return new AccountDTO(register);
         }
 

@@ -1,165 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Repositories;
+﻿using Models.Bank;
 using Models.DTO;
-using Models.Bank;
-using System.Net;
 using Models.People;
+using Repositories;
 using Services.Utils;
-using System.Security.AccessControl;
 
 namespace Services.Bank
 {
     public class AccountService
     {
-        private AccountRepository _repository;
-
-        private string _agenciesUri = "https://localhost:7166";
-        private string _clientsUri = "https://localhost:7166";
-
+        private readonly AccountRepository _repository;
+        private readonly string _agenciesUri;
+        private readonly string _clientsUri;
 
         public AccountService()
         {
             _repository = new();
+            _agenciesUri = "https://localhost:7166";
+            _clientsUri = "https://localhost:7166";
         }
+
 
         public async Task<List<Account>> GetAllAccounts()
         {
             List<AccountDTO> dtoList = await _repository.GetAllAccounts();
-
             var list = new List<Account>();
 
             foreach (var register in dtoList)
             {
-                Account a = new()
-                {
-                    Number = register.AccountNumber,
-                    Restriction = register.Restriction,
-                    CreditCard = register.CreditCard,
-                    Overdraft = register.Overdraft,
-                    Profile = EnumConvert<EProfile>.Parse(register.AccountProfile),
-                    Balance = register.Balance,
-                    CreatedDt = register.CreatedDt,
-                    Client = new()
-                };
+                var t1 = RetrieveAgency(register.AgencyNumber);
+                var t2 = GetTransactionsByNumber(register.AccountNumber);
 
-                var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{register.AgencyNumber}");
+                var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AgencyNumber);
+                var t3 = RetrieveClients(cpfs);
 
-                a.Agency = agency ?? throw new ArgumentException("Agencia não encontrada");
+                Agency agency = t1.Result;
+                List<BankTransaction> extract = t2.Result;
+                List<Client> clients = t3.Result;
 
-                List<string> cpfs = await _repository.GetClientsCpfsByAccountNumber(a.Number);
+                Account account = new(register, agency, clients, extract);
 
-                List<Task<Client>> tasks = new();
-
-                foreach (var c in cpfs)
-                {
-                    tasks.Add(ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{c}"));
-                }
-
-                Task.WaitAll(tasks.ToArray());
-
-                foreach (var task in tasks)
-                {
-                    Client? client = task.Result ?? throw new ArgumentException("Cliente não encontrado");
-
-                    a.Client.Add(client);
-                }
-
-                a.Extract = await GetTransactionsByNumber(a.Number);
-                list.Add(a);
+                list.Add(account);
             }
 
             return list;
         }
 
+
         public async Task<Account> GetAccount(string number)
         {
             AccountDTO register = await _repository.GetAccount(number);
 
-            Account account = new()
-            {
-                Number = register.AccountNumber,
-                Restriction = register.Restriction,
-                CreditCard = register.CreditCard,
-                Overdraft = register.Overdraft,
-                Profile = EnumConvert<EProfile>.Parse(register.AccountProfile),
-                Balance = register.Balance,
-                CreatedDt = register.CreatedDt,
-                Client = new()
-            };
+            var t1 = RetrieveAgency(register.AgencyNumber);
+            var t2 = GetTransactionsByNumber(register.AccountNumber);
 
-            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{register.AgencyNumber}");
+            var cpfs = await _repository.GetClientsCpfsByAccountNumber(register.AgencyNumber);
+            var t3 = RetrieveClients(cpfs);
 
-            account.Agency = agency ?? throw new ArgumentException("Agencia não encontrada");
+            Agency agency = t1.Result;
+            List<BankTransaction> extract = t2.Result;
+            List<Client> clients = t3.Result;
 
-            List<string> cpfs = await _repository.GetClientsCpfsByAccountNumber(account.Number);
-
-            List<Task<Client>> tasks = new();
-
-            foreach (var c in cpfs)
-            {
-                tasks.Add(ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{c}"));
-            }
-
-            Task.WaitAll(tasks.ToArray());
-
-            foreach (var task in tasks)
-            {
-                Client? client = task.Result ?? throw new ArgumentException("Cliente não encontrado");
-
-                account.Client.Add(client);
-            }
-
-            account.Extract = await GetTransactionsByNumber(account.Number);
+            Account account = new(register, agency, clients, extract);
 
             return account;
         }
 
+
         public async Task<Account> CreateAccount(AccountDTO accountDTO)
         {
+            try
+            {
+                ValidadeClientListDto(accountDTO.ClientCPF);
 
-            if (accountDTO.ClientCPF == null || accountDTO.ClientCPF.Count == 0 || accountDTO.ClientCPF.Count > 2)
-                throw new ArgumentException("A lista de clientes é inválida");
+                Account account = new(accountDTO);
 
-            Account account = new(accountDTO);
+                var t1 = RetrieveClients(accountDTO.ClientCPF);
+                var t2 = RetrieveAgency(accountDTO.AgencyNumber);
 
-            var clientsTask = accountDTO.ClientCPF.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{cpf}")).ToList();
-            var agencyTask = ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{accountDTO.AgencyNumber}");
+                await Task.WhenAll(t1, t2);
 
+                account.Client = t1.Result;
+                account.Agency = t2.Result;
+
+
+                ValidadeAccount(account);
+                return _repository.PostAccount(account);
+            }
+            catch (Exception) { throw; }
+        }
+
+
+        private async Task<List<Client>> RetrieveClients(List<string> cpfs)
+        {
+            var clientsTask = cpfs.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{cpf}")).ToList();
             await Task.WhenAll(clientsTask);
+
+            var list = new List<Client>();
 
             foreach (var task in clientsTask)
             {
-                Client? client = task.Result ?? throw new ArgumentException($"Cliente não encontrado");
-
-                account.Client.Add(client);
+                var client = task.Result ?? throw new ArgumentException($"Cliente não encontrado");
+                list.Add(client);
             }
 
-            account.Agency = agencyTask.Result ?? throw new ArgumentException("Agencia não encontrada");
-
-
-            if (account.Client[0].BirthDt.AddYears(18) > DateTime.Now)
-                throw new ArgumentException("O dono da conta deve ser maior de idade");
-
-            foreach (var c in account.Client)
-            {
-                if (c.Restriction == true)
-                    throw new ArgumentException($"Cliente {c.Name} com restrição");
-            }
-
-
-            try
-            {
-                return _repository.PostAccount(account);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return list;
         }
+
+
+        private async Task<Agency> RetrieveAgency(string number)
+        {
+            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{number}");
+
+            return agency ?? throw new ArgumentException("Agencia não encontrada");
+        }
+
+
+        private void ValidadeClientListDto(List<string> cpfs)
+        {
+            if (cpfs == null)
+                throw new NullReferenceException("A lista de clientes é nula");
+
+            if (cpfs.Count == 0 || cpfs.Count > 2)
+                throw new ArgumentException("Deve conter pelo menos um cliente e no máximo 2");
+        }
+
 
         private async Task<List<BankTransaction>> GetTransactionsByNumber(string number)
         {
@@ -184,6 +148,18 @@ namespace Services.Bank
             }
 
             return list;
+        }
+
+        private void ValidadeAccount(Account account)
+        {
+            if (account.Client[0].BirthDt.AddYears(18) > DateTime.Now)
+                throw new ArgumentException("O dono da conta deve ser maior de idade");
+
+            foreach (var c in account.Client)
+            {
+                if (c.Restriction == true)
+                    throw new ArgumentException($"Cliente {c.Name} com restrição");
+            }
         }
     }
 }

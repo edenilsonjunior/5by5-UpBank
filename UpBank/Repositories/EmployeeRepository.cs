@@ -33,10 +33,5 @@ namespace Repositories
                 return connection.Execute(insertEmployeeQuery, obj) > 0;
             }
         }
-
-        public void Delete(int registry)
-        {
-            string strConn = "Data Source=127.0.0.1; Initial Catalog=DBEmployee; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes";
-        }
     }
 }

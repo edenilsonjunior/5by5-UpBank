@@ -51,6 +51,13 @@ namespace UpBank.EmployeeAPI.Controllers
         {
             return await _employeeService.CreateAccount(accountCreateDTO);
         }
+
+        [HttpPatch("ApproveAccount")]
+        public async Task<Account> ApproveAccount(string registry, string number)
+        {
+            return await _employeeService.ApproveAccount(registry,number);
+        }
+
     }
 }
 

@@ -1,11 +1,14 @@
 ﻿using Dapper;
+using Microsoft.SqlServer.Server;
 using Models.Bank;
 using Models.DTO;
 using Models.People;
 using Newtonsoft.Json;
 using Repositories;
 using Services.Utils;
+using System;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -126,7 +129,7 @@ namespace Services.People
                 return employee;
             }
         }
-        // PUT: api/Employees
+        //PUT: api/Employees
         public void UpdateEmployee(int registry, Employee employee)
         {
             using (var connection = new SqlConnection(_connString))
@@ -160,7 +163,6 @@ namespace Services.People
                 });
             }
         }
-
         // DELETE: api/Employees/5
         public Employee RemoveEmployee(int registry)
         {
@@ -217,17 +219,14 @@ namespace Services.People
                 return employee;
             }
         }
-
-
         public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
         {
-            // Consumingo a api de dados mockados
+            // Consumindo a api de dados mockados
             string cpf = accountCreateDTO.ClientCPF[0];
-            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}");
+            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}");//7142 Clientes
 
             if (client == null)
                 throw new Exception("Cliente não encontrado.");
-
 
             // Consumindo a api de Account
             List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
@@ -241,14 +240,21 @@ namespace Services.People
                     break;
                 }
             }
-
             if (account != null)
                 throw new Exception("Cliente já possui uma conta.");
-        
+
+            //buscar funcionário pelo registro
+            Employee? employee = GetEmployee(accountCreateDTO.EmployeeRegister);
+            if (employee == null)
+            {
+                throw new Exception("Funcionário não encontrado.");
+            }
+
+            //Definir perfil da conta        
+            DefineAccountProfile(client); //******************************************* ou CPF
+
             return await InsertAccount(accountCreateDTO);
         }
-
-
         public async Task<Account> InsertAccount(AccountCreateDTO accountCreateDTO)
         {
             AccountDTO accountDTO = new AccountDTO
@@ -278,55 +284,80 @@ namespace Services.People
                 throw new Exception(problemDetails);
             }
         }
-
-
-
-        public Account ApproveAccount(string registry, string number)
+        public async Task<Account> ApproveAccount(string registry, string number)
         {
-            //buscar pelo Id
-
-            /* using (var httpAccount = new HttpClient())
-             {
-                 httpAccount.BaseAddress = new Uri("    ");
-
-                 HttpResponseMessage response = await client.GetAsync("/api/accounts/");
-
-                 if (response.IsSuccessStatusCode)
-                 {
-                     var account = await response.Content.ReadAsStringAsync<Account>();
-
-                 }
-                 else
-                 {
-                     throw new Exception("Erro ao consumir o endpoint de GET");
-                 }
-
-             }
-
-             var account = GetAccount().FirstOrDefault(a => a.Number == number);
-             if (account == null)
-             {
-                 throw new Exception("Conta não encontrada.");
-             }
-
-             //verificar se o funcionário tem permissão de aprovar a conta
-             var employee = GetAllEmployee().FirstOrDefault(e => e.Registry == registry);
-             if (employee == null)
-             {
-                 throw new Exception("Funcionário não encontrado.");
-             }
-             if (!employee.Manager)
-             {
-                 throw new Exception("Funcionário não tem permissão para aprovar contas.");
-             }
-             //aprovar conta
-             account.Approve();
-             account.SaveChanges();
-             return account;*/
-
-            throw new NotImplementedException();
+            // Consumindo a api de Account
+            List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
+            Account? account = null;
+            foreach (var ac in accounts)
+            {
+                if (account != null)
+                    throw new Exception("Conta não encontrada!");
+                else if (ac.Number.Equals(number))
+                {
+                    account = ac;
+                }
+            }
+            //verificar se o funcionário tem permissão de aprovar a conta
+            var employees = await GetAllEmployee();
+            Employee? employee = null;
+            foreach (var emp in employees)
+            {
+                if (emp.Registry == int.Parse(registry))
+                {
+                    employee = emp;
+                }
+                if (employee == null)
+                {
+                    throw new Exception("Funcionário não encontrado.");
+                }
+                if (!employee.Manager)
+                {
+                    account.Restriction = true; //reprovado
+                    throw new Exception("Funcionário não tem permissão para aprovar contas.");
+                }
+                if (employee.Manager)
+                {
+                    account.Restriction = false; //aprovado
+                    //await account.Restriction.ApproveAccount();
+                }
+            }
+            return account;
         }
 
+        public async Task<Account> DefineAccountProfile(Client cliente)
+        {
+            //Consumir a api de dados mockados
+            string cpf = cliente.CPF;
+            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}"); //7142 Clientes
+            if (client == null)
+                throw new Exception("Cliente não encontrado.");
+            // Consumindo a api de Account
+            List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
+            Account? account = null;
+            foreach (var ac in accounts)
+            {
+                if (ac.Client[0].CPF.Equals(cpf))
+                {
+                    account = ac;
+                    break;
+                }
+            }
+            if (account != null)
+            {
+                //pegar o Enum profile da conta existente
+                EProfile profile = account.Profile;
+            }
+            else
+            {
+                throw new Exception("Conta não localizada.");
+            }
+            return account; //retornar um objeto conta com o profile 
+        }
     }
 }
+
+
+
+
 

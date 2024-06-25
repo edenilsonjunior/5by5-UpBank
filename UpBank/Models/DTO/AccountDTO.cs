@@ -7,8 +7,15 @@ namespace Models.DTO
     {
         public string AccountNumber { get; set; }
         public string AgencyNumber { get; set; }
+        public string AccountProfile { get; set; }
         public List<string> ClientCPF { get; set; }
-        public CreditCard CreditCard { get; set; }
+        public double Overdraft { get; set; }
+        public double CreditCardLimit { get; set; }
+        public string CreditCardHolder { get; set; }
+
+
+        [JsonIgnore]
+        public CreditCard? CreditCard { get; set; }
 
         [JsonIgnore]
         public DateTime CreatedDt { get; set; }
@@ -17,14 +24,10 @@ namespace Models.DTO
         public bool Restriction { get; set; }
 
         [JsonIgnore]
-        public string? AccountProfile { get; set; }
-
-        [JsonIgnore]
-        public double Overdraft { get; set; }
-
-
-        [JsonIgnore]
         public double Balance { get; set; }
+
+        [JsonIgnore]
+        public string? SavingAccountNumber { get; set; }
 
         public AccountDTO() { }
 
@@ -47,6 +50,8 @@ namespace Models.DTO
                 Holder = row.Holder,
                 Flag = row.Flag
             };
+
+            SavingAccountNumber = row.SavingAccountNumber;
         }
     }
 }

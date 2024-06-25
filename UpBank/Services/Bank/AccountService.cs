@@ -38,6 +38,7 @@ namespace Services.Bank
                 List<Client> clients = t3.Result;
 
                 Account account = new(register, agency, clients, extract);
+                account.SavingAccountNumber = register.SavingAccountNumber;
 
                 list.Add(account);
             }
@@ -64,6 +65,7 @@ namespace Services.Bank
             List<Client> clients = t3.Result;
 
             Account account = new(register, agency, clients, extract);
+            account.SavingAccountNumber = register.SavingAccountNumber;
 
             return account;
         }

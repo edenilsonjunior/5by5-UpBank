@@ -71,23 +71,22 @@ namespace Repositories
                     CreditCardLimit = account.CreditCard.Limit,
                     Cvv = account.CreditCard.CVV,
                     Holder = account.CreditCard.Holder,
-                    Flag = account.CreditCard.Flag
+                    Flag = account.CreditCard.Flag,
+                    Active = account.CreditCard.Active
                 };
 
                 try
                 {
                     DapperUtilsRepository<Account>.Insert(CreditCard.Insert, cardObj);
                 }
-                catch (Exception)
-                {
-                    throw new InvalidOperationException("Erro ao inserir: O cartao de crédito pertence a outra conta");
-                }
+                catch (Exception) { throw new InvalidOperationException("Erro ao inserir: O cartao de crédito pertence a outra conta"); }
 
 
                 object accountObj = new
                 {
                     AccountNumber = account.Number,
                     AgencyNumber = account.Agency.Number,
+                    SavingAccountNumber = account.SavingAccountNumber,
                     Restriction = account.Restriction,
                     CreditCardNumber = account.CreditCard.Number,
                     Overdraft = account.Overdraft,
@@ -99,12 +98,8 @@ namespace Repositories
                 try
                 {
                     DapperUtilsRepository<Account>.Insert(Account.INSERT, accountObj);
-
                 }
-                catch (Exception)
-                {
-                    throw new InvalidOperationException("Erro ao inserir. O numero de conta digitado pertence a outra conta");
-                }
+                catch (Exception) { throw new InvalidOperationException("Erro ao inserir. O numero de conta digitado pertence a outra conta"); }
 
 
                 foreach (var client in account.Client)
@@ -133,6 +128,7 @@ namespace Repositories
                 {
                     AccountNumber = account.Number,
                     AgencyNumber = account.Agency.Number,
+                    SavingAccountNumber = account.SavingAccountNumber,
                     Restriction = account.Restriction,
                     CreditCardNumber = account.CreditCard.Number,
                     Overdraft = account.Overdraft,

@@ -4,6 +4,8 @@ using Models.DTO;
 using Services.Bank;
 using System.Net.Http;
 using System.Net;
+using System;
+using SharpCompress.Common;
 
 namespace UpBank.AccountAPI.Controllers
 {

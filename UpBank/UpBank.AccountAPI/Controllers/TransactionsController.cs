@@ -26,9 +26,16 @@ namespace UpBank.AccountAPI.Controllers
         public async Task<List<BankTransaction>> GetTransactionsByType(string type) => await _transactionService.GetTransactionByType(type);
 
         [HttpPost]
-        public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
+        public async Task<ActionResult<BankTransaction>> InsertTransaction(TransactionDTO transactionDTO)
         {
-            return await _transactionService.InsertTransaction(transactionDTO);
+            try
+            {
+                BankTransaction bt = await _transactionService.InsertTransaction(transactionDTO);
+                return bt;
+            }
+            catch (Exception e) {
+                throw new Exception("Erro ao inserir transacao", e);
+            }
         }
     }
 }

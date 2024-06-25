@@ -128,7 +128,7 @@ namespace Services.Agencies
                 Address = await GetAddressById(agency.AddressId),
                 AddressId = agency.AddressId,
                 CNPJ = agency.CNPJ,
-                Employees = newAgencyEmployees,
+                //Employees = newAgencyEmployees,
                 Restriction = false
             };
         }

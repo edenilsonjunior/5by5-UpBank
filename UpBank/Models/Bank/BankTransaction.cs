@@ -8,11 +8,11 @@
 
         public static readonly string UPDATEBALANCEWITHDRAW = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber";
 
-        public static readonly string UPDATEBALANCEOVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Overdraft = Overdraft - @Diff WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
+        public static readonly string UPDATEBALANCEOVERDRAFT = "UPDATE Account SET Balance = @Diff WHERE AccountNumber = @AccountNumber;UPDATE Account SET Overdraft = Overdraft - @AtualizarOverdrat WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
 
         public static readonly string UPDATEBALANCERECEIVER = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = Balance + @Value WHERE AccountNumber = @ReceiverAccount";
 
-        public static readonly string UPDATEBALANCERECEIVEROVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = @Value WHERE AccountNumber = @ReceiverNumber;UPDATE Account SET Overdraft = Overdraft + @Diff WHERE AccountNumber = @ReceiverNumber";
+        public static readonly string UPDATEBALANCERECEIVEROVERDRAFT = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;UPDATE Account SET Balance = @Value WHERE AccountNumber = @ReceiverAccount;UPDATE Account SET Overdraft = Overdraft + @Diff WHERE AccountNumber = @ReceiverAccount";
 
         public static readonly string GETALL = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction";
 
@@ -22,11 +22,10 @@
 
         public static readonly string GetByAccount = "SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction where AccountNumber = @AccountNumber";
 
-
         public int Id { get; set; }
         public DateTime TransactionDt { get; set; }
         public ETransactionType Type { get; set; }
-        public Account? Receiver { get; set; }
+        public string? Receiver { get; set; }
         public double Value { get; set; }
 
         public BankTransaction() { }

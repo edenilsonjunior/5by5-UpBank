@@ -154,8 +154,7 @@ namespace Services.Bank
                     Value = dto.Value
                 };
 
-                if (dto.AccountReceiver != null)
-                    bt.Receiver = await GetAccount(dto.AccountReceiver);
+                bt.Receiver = dto.AccountReceiver;
 
                 list.Add(bt);
             }
@@ -168,7 +167,7 @@ namespace Services.Bank
             List<Account> accounts = GetAllAccounts().Result;
 
 
-            foreach(var ac in accounts)
+            foreach (var ac in accounts)
             {
                 if (ac.Number.Equals(account.Number))
                     throw new ArgumentException("Erro ao inserir. O numero de conta digitado pertence a outra conta");

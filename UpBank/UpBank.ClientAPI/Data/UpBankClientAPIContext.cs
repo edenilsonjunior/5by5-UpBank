@@ -22,5 +22,11 @@ namespace UpBank.ClientAPI.Data
         public DbSet<Account> Accounts { get; set; } 
         public DbSet<ClientDTO> Clients { get; set; } 
         public DbSet<ClientCancelled> ClientCancelled { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=127.0.0.1; Initial Catalog=UpBank.ClientAPI; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
+        }
+
     }
 }

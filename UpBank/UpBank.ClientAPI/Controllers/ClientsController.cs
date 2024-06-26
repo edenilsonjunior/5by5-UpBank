@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models.Bank;
@@ -223,6 +224,23 @@ namespace UpBank.ClientAPI.Controllers
                 Phone = clientDTOPost.Phone,
                 Email = clientDTOPost.Email
             };
+
+            var parameter = new[]
+            {
+                new SqlParameter ("@CPF",clientDTO.CPF),
+                new SqlParameter ("@Name",clientDTO.Name),
+                new SqlParameter ("@BirthDt",clientDTO.BirthDt),
+                new SqlParameter ("@Sex",clientDTO.Sex),
+                new SqlParameter ("@AddressId",clientDTO.AddressId,
+                new SqlParameter ("@Salary",clientDTO.Salary),
+                new SqlParameter ("@Phone",clientDTO.Phone),
+                new SqlParameter ("@Email",clientDTO.Email)
+            };
+
+
+
+
+
 
 
             _context.Clients.Add(clientDTO);

@@ -15,8 +15,8 @@ namespace Services.Bank
         public AccountService()
         {
             _repository = new();
-            _agenciesUri = "https://localhost:7166";
-            _clientsUri = "https://localhost:7166";
+            _agenciesUri = "https://localhost:7217";
+            _clientsUri = "https://localhost:7142";
         }
 
 
@@ -85,8 +85,11 @@ namespace Services.Bank
                 await Task.WhenAll(t1, t2);
 
                 account.Client = t1.Result;
-                account.Agency = t2.Result;
+                
+                if(t2.Result.Restriction == true)
+                    throw new ArgumentException("Nao foi possivel criar a conta: Agencia com restrição");
 
+                account.Agency = t2.Result;
 
                 ValidadeAccount(account);
                 return _repository.PostAccount(account);
@@ -105,26 +108,29 @@ namespace Services.Bank
             var account = await GetAccount(accountDTO.Number);
             Random r = new();
             account.CreditCard.Active = accountDTO.CreditCardStatus;
-            var profile = Enum.TryParse<EProfile>(accountDTO.AccountProfile, out var accountProfile) ? accountProfile : throw new ArgumentException("O perfil de conta informado nao existe.");
-            account.Profile = profile;
             account.Restriction = accountDTO.Restriction;
 
-            switch (account.Profile)
+            if(accountDTO.AccountProfile != null)
             {
-                case EProfile.Academic:
-                    account.CreditCard.Limit = r.Next(1000, 3001);
-                    account.Overdraft = r.Next(500, 1501);
-                    break;
+                var profile = Enum.TryParse<EProfile>(accountDTO.AccountProfile, out var accountProfile) ? accountProfile : throw new ArgumentException("O perfil de conta informado nao existe.");
+                account.Profile = profile;
+                switch (account.Profile)
+                {
+                    case EProfile.Academic:
+                        account.CreditCard.Limit = r.Next(1000, 3001);
+                        account.Overdraft = r.Next(500, 1501);
+                        break;
 
-                case EProfile.Normal:
-                    account.CreditCard.Limit = r.Next(3000, 10001);
-                    account.Overdraft = r.Next(1500, 5001);
-                    break;
+                    case EProfile.Normal:
+                        account.CreditCard.Limit = r.Next(3000, 10001);
+                        account.Overdraft = r.Next(1500, 5001);
+                        break;
 
-                case EProfile.VIP:
-                    account.CreditCard.Limit = r.Next(10000, 50001);
-                    account.Overdraft = r.Next(5000, 20001);
-                    break;
+                    case EProfile.VIP:
+                        account.CreditCard.Limit = r.Next(10000, 50001);
+                        account.Overdraft = r.Next(5000, 20001);
+                        break;
+                }
             }
 
             await _repository.UpdateAccount(account);
@@ -134,7 +140,7 @@ namespace Services.Bank
 
         private async Task<List<Client>> RetrieveClients(List<string> cpfs)
         {
-            var clientsTask = cpfs.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"/GetClients/{cpf}")).ToList();
+            var clientsTask = cpfs.Select(cpf => ApiConsume<Client>.Get(_clientsUri, $"api/Clients/{cpf}")).ToList();
             await Task.WhenAll(clientsTask);
 
             var list = new List<Client>();
@@ -151,7 +157,7 @@ namespace Services.Bank
 
         private async Task<Agency> RetrieveAgency(string number)
         {
-            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{number}");
+            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"api/Agencies/{number}");
 
             return agency ?? throw new ArgumentException("Agencia não encontrada");
         }

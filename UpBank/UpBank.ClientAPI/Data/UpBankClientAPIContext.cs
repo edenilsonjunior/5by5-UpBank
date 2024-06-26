@@ -16,10 +16,6 @@ namespace UpBank.ClientAPI.Data
         {
         }
 
-        public DbSet<Models.People.Client> Client { get; set; } = default!;
-
-        // Adicionei encapsulamento abaixo, porque com o entity a entidade Account não estava sendo reconhecida,  precisei atualizar o seu contexto do Entity Framework
-        public DbSet<Account> Accounts { get; set; } 
         public DbSet<ClientDTO> Clients { get; set; } 
         public DbSet<ClientCancelled> DeletedClient { get; set; }
 

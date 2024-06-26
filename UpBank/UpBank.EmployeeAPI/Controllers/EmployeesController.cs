@@ -14,44 +14,92 @@ namespace UpBank.EmployeeAPI.Controllers
         {
             _employeeService = new EmployeeService("Data Source=127.0.0.1; Initial Catalog=DBEmployee; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
         }
-        [HttpPost]
-        public async Task <Employee> PostEmployee(EmployeeDTO employeeDTO)
-        {
-            return await _employeeService.PostEmployee(employeeDTO);        
-        }
-        // GET: api/Employees
+
+        // Gets
+
         [HttpGet]
         public async Task<List<Employee>> GetAllEmployee()
         {
-            return  await _employeeService.GetAllEmployee();
+            return await _employeeService.GetAllEmployee();
         }
-        // GETALL: api/Employees
+
+
         [HttpGet("{registry}")]
-        public Employee GetEmployee(int registry)
+        public ActionResult<Employee> GetEmployee(int registry)
         {
-            return _employeeService.GetEmployee(registry);
+            try
+            {
+                return _employeeService.GetEmployee(registry);
+            }
+            catch (Exception)
+            {
+                return NotFound("Cliente nao encontrado.");
+            }
         }
-        // PATCH: api/Employees
-        [HttpPatch("{registry}")]
-        public void UpdateEmployee(int registry, Employee employee)
+
+
+        // Posts
+
+        [HttpPost]
+        public async Task<ActionResult<Employee>> PostEmployee(EmployeeDTO employeeDTO)
         {
-            _employeeService.UpdateEmployee(registry, employee);
+            try
+            {
+                return await _employeeService.PostEmployee(employeeDTO);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
         }
-        // DELETE: api/Employees
-        [HttpDelete("{registry}")]
-        public void RemoveEmployee(int registry)
-        {
-            _employeeService.RemoveEmployee(registry);
-        }
+
+
         [HttpPost("CreateAccount")]
         public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
         {
             return await _employeeService.CreateAccount(accountCreateDTO);
         }
+
+
+        // Patches
+
+        [HttpPatch]
+        public ActionResult UpdateEmployee(EmployeeUpdateDTO employee)
+        {
+            try
+            {
+                _employeeService.UpdateEmployee(employee);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
+        }
+
+
         [HttpPatch("ApproveAccount/{registry}/{number}")]
         public async Task<Account> ApproveAccount(int registry, string number)
         {
-            return await _employeeService.ApproveAccount(registry,number);
+            return await _employeeService.ApproveAccount(registry, number);
+        }
+
+
+
+        // Deletes
+
+        [HttpDelete("{registry}")]
+        public ActionResult RemoveEmployee(int registry)
+        {
+            try
+            {
+                _employeeService.RemoveEmployee(registry);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
         }
     }
 }

@@ -1,6 +1,12 @@
 create database UpBankClientAPI;
 use UpBankClientAPI;
 
+if exists (select * from sysobjects where name='Clients' and xtype='U')
+    drop table Clients;
+
+if exists (select * from sysobjects where name='DeletedClient' and xtype='U')
+    drop table DeletedClient;
+
 CREATE TABLE Clients (
     CPF VARCHAR(14) NOT NULL,
     Name VARCHAR(100) NOT NULL,

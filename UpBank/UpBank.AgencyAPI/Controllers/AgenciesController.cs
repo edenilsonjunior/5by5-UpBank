@@ -37,6 +37,7 @@ namespace UpBank.AgencyAPI.Controllers
                 {
                     employees.Add(new Employee
                     {
+                        Registry = employee.Registry,
                         CPF = employee.CPF,
                         Name = employee.Name,
                         BirthDt = employee.BirthDt,
@@ -44,7 +45,8 @@ namespace UpBank.AgencyAPI.Controllers
                         Address = await _agenciesService.GetAddressById(employee.AddressId),
                         Salary = employee.Salary,
                         Phone = employee.Phone,
-                        Email = employee.Email
+                        Email = employee.Email,
+                        Manager = employee.Manager
                     });
                 }
 
@@ -61,6 +63,7 @@ namespace UpBank.AgencyAPI.Controllers
             return Ok(agencies);
         }
 
+
         // GET: api/Agencies/{number}
         [HttpGet("{number}")]
         public async Task<ActionResult<Agency>> GetAgency(string number)
@@ -72,6 +75,7 @@ namespace UpBank.AgencyAPI.Controllers
 
             foreach (var employee in agencyDto.Employees) employees.Add(new Employee
             {
+                Registry = employee.Registry,
                 CPF = employee.CPF,
                 Name = employee.Name,
                 BirthDt = employee.BirthDt,
@@ -79,7 +83,8 @@ namespace UpBank.AgencyAPI.Controllers
                 Address = await _agenciesService.GetAddressById(employee.AddressId),
                 Salary = employee.Salary,
                 Phone = employee.Phone,
-                Email = employee.Email
+                Email = employee.Email,
+                Manager = employee.Manager
             });
 
             agency = new Agency
@@ -131,8 +136,10 @@ namespace UpBank.AgencyAPI.Controllers
             return Ok(accounts);
         }
 
+
+
         // GET: api/Agencies/lending
-        [HttpGet("/lending")]
+        [HttpGet("lending")]
         public async Task<ActionResult<List<Account>>> GetLendingAccounts()
         {
             List<Account> accounts = _agenciesService.GetAllAccounts().Result.Where(a => a.Extract.Any(t => t.Type == ETransactionType.Lending)).ToList();
@@ -140,17 +147,16 @@ namespace UpBank.AgencyAPI.Controllers
             return Ok(accounts);
         }
 
+
         // PUT: api/Agencies/5
         [HttpPut("{number}")]
-        public async Task<ActionResult<AgencyDTOEntity>> PutAgency(string number, AgencyDTO agency)
+        public async Task<ActionResult<Agency>> PutAgency(string number, AgencyDTO agency)
         {
             var agencyFromBank = await _context.Agency.FindAsync(number);
             if (agencyFromBank == null) return NotFound("Número da agência informado não corresponde a uma agência cadastrada.");
 
-            if (!CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
-
-            var address = await _agenciesService.GetAddressById(agency.AddressId);
-            if (address == null) return NotFound("Id de endereço fornecido não foi encontrado no banco de dados.");
+            if (!agencyFromBank.CNPJ.Equals(agency.CNPJ))
+                return BadRequest("O cnpj informado nao condiz com a agencia buscada");
 
 
             if (agency.Restriction == agencyFromBank.Restriction)
@@ -162,39 +168,50 @@ namespace UpBank.AgencyAPI.Controllers
 
             var employees = await _agenciesService.GetAllEmployees();
 
-            foreach (var CPF in agency.Employees)
+            if (agency.Employees != null || agency.Employees.Count > 0)
             {
-                var employee = employees.FirstOrDefault(e => e.CPF == CPF);
-                if (employee == null) return BadRequest($"CPF {CPF} não foi encontrado no banco de dados.");
-                if (agencyFromBank.Employees.Any(e => e.CPF == CPF)) return BadRequest($"CPF {CPF} já está registrado na agência.");
-                agencyFromBank.Employees.Add(new EmployeeDTOEntity
+                foreach (var registry in agency.Employees)
                 {
-                    Name = employee.Name,
-                    CPF = employee.CPF,
-                    BirthDt = employee.BirthDt,
-                    Sex = employee.Sex,
-                    AddressId = employee.Address.Id,
-                    Salary = employee.Salary,
-                    Phone = employee.Phone,
-                    Email = employee.Email,
-                    Manager = employee.Manager,
-                    Registry = employee.Registry,
-                    AgencyNumber = agencyFromBank.Number
-                });
+                    var employee = employees.FirstOrDefault(e => e.Registry == registry);
+                    if (employee == null) return BadRequest($"Registro {registry} não foi encontrado no banco de dados.");
+                    if (agencyFromBank.Employees.Any(e => e.Registry == registry)) return BadRequest($"Registro {registry} já está registrado na agência.");
+                    agencyFromBank.Employees.Add(new EmployeeDTOEntity
+                    {
+                        Name = employee.Name,
+                        CPF = employee.CPF,
+                        BirthDt = employee.BirthDt,
+                        Sex = employee.Sex,
+                        AddressId = employee.Address.Id,
+                        Salary = employee.Salary,
+                        Phone = employee.Phone,
+                        Email = employee.Email,
+                        Manager = employee.Manager,
+                        Registry = employee.Registry,
+                        AgencyNumber = agencyFromBank.Number
+                    });
+                }
             }
 
-            if (agencyFromBank.AddressId != agency.AddressId)
+            if (agency.AddressId != null)
             {
-                agencyFromBank.Address = address;
-                agencyFromBank.AddressId = agency.AddressId;
+                var address = await _agenciesService.GetAddressById(agency.AddressId);
+                if (address == null) return NotFound("Id de endereço fornecido não foi encontrado no banco de dados.");
+
+                if (agencyFromBank.AddressId != agency.AddressId)
+                {
+                    agencyFromBank.Address = address;
+                    agencyFromBank.AddressId = agency.AddressId;
+                }
             }
+
 
             _context.Entry(agencyFromBank).State = EntityState.Modified;
 
             try { await _context.SaveChangesAsync(); }
             catch (Exception) { throw; }
 
-            return Ok(agencyFromBank);
+
+            return await GetAgency(agencyFromBank.Number);
         }
 
         // POST: api/Agencies
@@ -202,6 +219,9 @@ namespace UpBank.AgencyAPI.Controllers
         public async Task<ActionResult<EmployeeDTOEntity>> PostAgency(AgencyDTO agency)
         {
             if (!CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
+
+            if (agency.Employees.Count == 0) return BadRequest("A agência deve ter ao menos um funcionário e um deles precisa ser um gerente.");
+
 
             string newAgencyNumber;
             bool agencyExists;
@@ -219,16 +239,31 @@ namespace UpBank.AgencyAPI.Controllers
             catch (Exception e) { return BadRequest(e.Message); }
 
             var result = _context.Agency.Add(newAgency);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Nao foi possivel inserir a agencia. Tente novamente.");
+            }
+
             return Ok(newAgency);
         }
 
         // DELETE: api/Agencies/5
         [HttpDelete("{number}")]
-        public async Task<ActionResult<EmployeeDTOEntity>> DeleteAgency(string number)
+        public async Task<ActionResult<Agency>> DeleteAgency(string number)
         {
             var agency = await _context.Agency.FindAsync(number);
             if (agency == null) return NotFound("Número da agência informado não corresponde a uma agência cadastrada.");
+
+            List<Account> accounts = await _agenciesService.GetAllAccounts();
+
+            if(accounts.Find(accounts => accounts.Agency.Number == number) != null) 
+                return BadRequest("Essa agência nao pode ser deletada pois possui contas vinculadas a ela.");
+
 
             agency.Restriction = true;
             _context.Agency.Update(agency);
@@ -240,7 +275,16 @@ namespace UpBank.AgencyAPI.Controllers
                     new SqlParameter("@CNPJ", agency.CNPJ),
                     new SqlParameter("@Restriction", agency.Restriction)
             };
-            await _context.Database.ExecuteSqlRawAsync(Agency.INSERT, parametersAgency);
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(Agency.INSERT, parametersAgency);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Essa agencia ja consta como deletada.");
+            }
+
 
             foreach (var employee in agency.Employees)
             {
@@ -257,10 +301,18 @@ namespace UpBank.AgencyAPI.Controllers
                     new SqlParameter("@Registry", employee.Registry),
                     new SqlParameter("@AgencyNumber", employee.AgencyNumber)
                 };
-                await _context.Database.ExecuteSqlRawAsync(Employee.INSERT, parametersEmployee);
+
+                try
+                {
+                    await _context.Database.ExecuteSqlRawAsync(Employee.INSERT, parametersEmployee);
+                }
+                catch (Exception)
+                {
+                    return BadRequest("Esse funcionario ja consta como deletado na agencia.");
+                }
             }
 
-            return Ok(agency);
+            return await GetAgency(agency.Number);
         }
 
         private async Task<bool> AgencyExistsAsync(string number) => await Task.Run(() => (_context.Agency?.Any(e => e.Number == number)).GetValueOrDefault());

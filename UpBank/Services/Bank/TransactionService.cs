@@ -92,6 +92,9 @@ namespace Services.Bank
 
         public async Task<BankTransaction> InsertTransaction(TransactionDTO transactionDTO)
         {
+            if (transactionDTO.TransactionValue <= 0) 
+                throw new InvalidOperationException("Impossivel efetuar uma transacao com valor igual ou abaixo de 0.");
+
             bool UseOverdraft = false;
             double diff = 0.0;
             Account account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;

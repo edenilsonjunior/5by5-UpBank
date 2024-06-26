@@ -34,6 +34,11 @@ namespace Models.Bank
 
         public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, SavingAccountNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @SavingAccountNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
+        public static readonly string UPDATE = @"
+        UPDATE Account SET Restriction = @Restriction, Overdraft = @Overdraft WHERE AccountNumber = @AccountNumber;
+        UPDATE Account SET AccountProfile = @AccountProfile WHERE AccountNumber = @AccountNumber;
+        UPDATE CreditCard SET Active = @Active, CreditCardLimit = @CreditCardLimit WHERE CreditCardNumber = @CreditCardNumber";
+
         public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, SavingAccountNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @SavingAccountNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);UPDATE Account SET Restriction = 1 WHERE AccountNumber = @AccountNumber";
 
         private static readonly string[] cardBrands = { "Visa", "MasterCard", "American Express", "Elo" };

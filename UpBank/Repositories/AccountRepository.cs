@@ -58,7 +58,20 @@ namespace Repositories
             return DapperUtilsRepository<Account>.Insert(query, new { AccountNumber = account.Number });
         }
 
-
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            object obj = new
+            {
+                AccountNumber = account.Number,
+                Restriction = account.Restriction,
+                AccountProfile = account.Profile.ToString(),
+                CreditCardNumber = account.CreditCard.Number,
+                CreditCardLimit = account.CreditCard.Limit,
+                Overdraft = account.Overdraft,
+                Active = account.CreditCard.Active,
+            };
+            return DapperUtilsRepository<Account>.Insert(Account.UPDATE, obj);
+        }
 
 
         public Account PostAccount(Account account)

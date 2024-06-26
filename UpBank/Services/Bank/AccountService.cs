@@ -100,7 +100,37 @@ namespace Services.Bank
             return await _repository.ApproveAccount(account);
         }
 
+        public async Task<Account> UpdateAccount(AccountUpdateDTO accountDTO)
+        {
+            var account = await GetAccount(accountDTO.Number);
+            Random r = new();
+            account.CreditCard.Active = accountDTO.CreditCardStatus;
+            var profile = Enum.TryParse<EProfile>(accountDTO.AccountProfile, out var accountProfile) ? accountProfile : throw new ArgumentException("O perfil de conta informado nao existe.");
+            account.Profile = profile;
+            account.Restriction = accountDTO.Restriction;
 
+            switch (account.Profile)
+            {
+                case EProfile.Academic:
+                    account.CreditCard.Limit = r.Next(1000, 3001);
+                    account.Overdraft = r.Next(500, 1501);
+                    break;
+
+                case EProfile.Normal:
+                    account.CreditCard.Limit = r.Next(3000, 10001);
+                    account.Overdraft = r.Next(1500, 5001);
+                    break;
+
+                case EProfile.VIP:
+                    account.CreditCard.Limit = r.Next(10000, 50001);
+                    account.Overdraft = r.Next(5000, 20001);
+                    break;
+            }
+
+            await _repository.UpdateAccount(account);
+
+            return account;
+        }
 
         private async Task<List<Client>> RetrieveClients(List<string> cpfs)
         {

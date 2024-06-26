@@ -19,8 +19,6 @@ namespace Models.DTO
         public double Salary { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public int Registry { get; set; }
-        [ForeignKey("AgencyNumber")]
-        public string AgencyNumber { get; set; }
+        public bool Restriction { get; set; }
     }
 }

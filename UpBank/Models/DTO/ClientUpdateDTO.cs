@@ -5,16 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.People
+namespace Models.DTO
 {
-    public class ClientCancelled
+    public class ClientUpdateDTO
     {
-        public string Name { get; set; }
-        [Key]
         public string CPF { get; set; }
-        public DateTime BirthDt { get; set; }
-        public char Sex { get; set; }
-        public string AddressId { get; set; }
         public double Salary { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }

@@ -21,11 +21,11 @@ namespace UpBank.ClientAPI.Data
         // Adicionei encapsulamento abaixo, porque com o entity a entidade Account não estava sendo reconhecida,  precisei atualizar o seu contexto do Entity Framework
         public DbSet<Account> Accounts { get; set; } 
         public DbSet<ClientDTO> Clients { get; set; } 
-        public DbSet<ClientCancelled> ClientCancelled { get; set; }
+        public DbSet<ClientCancelled> DeletedClient { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=127.0.0.1; Initial Catalog=UpBank.ClientAPI; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
+            optionsBuilder.UseSqlServer("Data Source=127.0.0.1; Initial Catalog=UpBankClientAPI; User Id=sa; Password=SqlServer2019!; TrustServerCertificate=Yes");
         }
 
     }

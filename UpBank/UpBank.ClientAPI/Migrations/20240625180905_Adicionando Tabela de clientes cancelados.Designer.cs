@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UpBank.ClientAPI.Data;
 
@@ -11,9 +12,10 @@ using UpBank.ClientAPI.Data;
 namespace UpBank.ClientAPI.Migrations
 {
     [DbContext(typeof(UpBankClientAPIContext))]
-    partial class UpBankClientAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240625180905_Adicionando Tabela de clientes cancelados")]
+    partial class AdicionandoTabeladeclientescancelados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,49 +138,6 @@ namespace UpBank.ClientAPI.Migrations
                     b.HasIndex("ReceiverNumber");
 
                     b.ToTable("Transaction");
-                });
-
-            modelBuilder.Entity("Models.DTO.ClientDTO", b =>
-                {
-                    b.Property<string>("CPF")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AddressId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AgencyNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("BirthDt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Registry")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Salary")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Sex")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
-
-                    b.HasKey("CPF");
-
-                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Models.People.Address", b =>

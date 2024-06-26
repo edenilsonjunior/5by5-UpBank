@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UpBank.ClientAPI.Data;
 
@@ -11,9 +12,10 @@ using UpBank.ClientAPI.Data;
 namespace UpBank.ClientAPI.Migrations
 {
     [DbContext(typeof(UpBankClientAPIContext))]
-    partial class UpBankClientAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240626013426_add-clientDTO")]
+    partial class addclientDTO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

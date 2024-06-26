@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Models.Bank;
+using Models.DTO;
 using Models.People;
 
 namespace UpBank.ClientAPI.Data
@@ -16,9 +17,10 @@ namespace UpBank.ClientAPI.Data
         }
 
         public DbSet<Models.People.Client> Client { get; set; } = default!;
-        
-        public DbSet<Account> Accounts { get; set; } // Adicionei essa linha porque a entidade Account não estava sendo reconhecida
-        public DbSet<Client> Clients { get; set; } // Aqui porque também não estava sendo reconhecida
 
+        // Adicionei encapsulamento abaixo, porque com o entity a entidade Account não estava sendo reconhecida,  precisei atualizar o seu contexto do Entity Framework
+        public DbSet<Account> Accounts { get; set; } 
+        public DbSet<ClientDTO> Clients { get; set; } 
+        public DbSet<ClientCancelled> ClientCancelled { get; set; }
     }
 }

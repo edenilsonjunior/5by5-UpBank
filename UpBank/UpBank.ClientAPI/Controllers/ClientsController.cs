@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models.Bank;
+using Models.DTO;
 using Models.People;
+using Services.People;
 using UpBank.ClientAPI.Data;
 using static MongoDB.Bson.Serialization.Serializers.SerializerHelper;
 
@@ -21,44 +23,72 @@ namespace UpBank.ClientAPI.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly UpBankClientAPIContext _context;
+        private readonly HttpClient _httpClient;
+        private readonly string _extenalAPIUrl;
+        private readonly ClientService _clientService;
 
-        public ClientsController(UpBankClientAPIContext context)
+        public ClientsController(UpBankClientAPIContext context, HttpClient httpClient, IConfiguration configuration, ClientService clientService)
         {
             _context = context;
-            Console.WriteLine("Contexto inicializado com sucesso!");
+            _httpClient = httpClient;
+            _extenalAPIUrl = configuration.GetValue<string>("https://localhost:7084/api/Addresses");
+            _clientService = clientService;
+            Console.WriteLine("Contexto inicializado com sucesso");
         }
 
         //_________________________________________________________________________________________________
-        //O primeiro método lista todos os clientes por CPF
-        //O segundo método  busca e retorna um único cliente com base no CPF fornecido.
+
+
         // GET: api/Clients
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()// o Task/async siguinifica que é uma tarefa assincrona( pode ser executada em paralelo com outras tarefas)
+        [HttpGet] //Trás lista de todos os clientes, incluindo os endereços associados a cada cliente.
+        public async Task<ActionResult<IEnumerable<Client>>> GetAllClient()// o Task/async siguinifica que é uma tarefa assincrona( pode ser executada em paralelo com outras tarefas)
         {
-            if (_context.Client == null)
+            List<Client> clientsList = new List<Client>();
+            
+            var Clients = await _context.Clients.ToListAsync();
+            foreach (var Client in Clients)
             {
-                return NotFound();
+                Client clientResult = new Client()
+                {
+                    CPF = Client.CPF,
+                    Name = Client.Name,
+                    BirthDt = Client.BirthDt,
+                    Sex = Client.Sex,
+                    Address = await _clientService.GetAddressById(Client.AddressId),
+                    Salary = Client.Salary,
+                    Phone = Client.Phone,
+                    Email = Client.Email
+                };
+               clientsList.Add(clientResult);
             }
-            return await _context.Client.Include(c => c.Address).ToListAsync();
+            return clientsList;
         }
 
         // GET: api/Clients/5 
-        [HttpGet("{cpf}")]
+        [HttpGet("{cpf}")] //busca e retorna um único cliente com base no CPF fornecido.
         public async Task<ActionResult<Client>> GetClient(string cpf)
         {
-            if (_context.Client == null)
-            {
-                return NotFound();
-            }
-            var client = await _context.Client.FindAsync(cpf);
-
+            var client = await _context.Clients.FindAsync(cpf);
             if (client == null)
             {
-                return NotFound();
+                return NotFound("CPF não encontrato no banco de dados");
             }
 
-            return client;
+            Client clientResult = new Client()
+            {
+                CPF = client.CPF,
+                Name = client.Name,
+                BirthDt = client.BirthDt,
+                Sex = client.Sex,
+                Address = await _clientService.GetAddressById(client.AddressId),
+                Salary = client.Salary,
+                Phone = client.Phone,
+                Email = client.Email
+            };
+            return Ok (clientResult);
         }
+
+
         //_________________________________________________________________________________________________
 
 
@@ -94,9 +124,9 @@ namespace UpBank.ClientAPI.Controllers
         }
 
         // O [HttpPost("AddClientToAccount")] tenta adicionar um novo cliente a uma conta existente e responde com base no resultado da tentativa, confirmando o sucesso, informando q a conta não foi encontrada ou indicando que houve um erro com a solicitação.
-      
+
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        
+
         [HttpPost("AddClientToAccount")]
         public async Task<ActionResult> AddClientToAccount(string accountId, [FromBody] Client newClient)
         {
@@ -158,25 +188,44 @@ namespace UpBank.ClientAPI.Controllers
 
         // POST: api/Clients
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
+        public async Task<ActionResult<Client>> PostClient(ClientDTOPost clientDTOPost)
         {
+            if (!ValidateCPF(clientDTOPost.CPF))
+            {
+                return BadRequest("CPF Invalido");
+            }
             if (_context.Client == null)
             {
                 return Problem("Entity set 'UpBankClientAPIContext.Client' is null.");
             }
 
-            if (client.DateOfBirth == null)
+            if (clientDTOPost.BirthDt == null)
             {
                 return BadRequest("A data de nascimento é obrigatória.");
             }
 
             // Verifica se o CPF do cliente já existe no banco de dados.
-            if (ClientExists(client.CPF))
+            if (ClientExists(clientDTOPost.CPF))
             {
                 return Conflict("Já existe um cliente com este CPF.");
             }
 
-            _context.Client.Add(client);
+            Address address = await _clientService.PostAddress(clientDTOPost.AddressDTO);
+
+            ClientDTO clientDTO = new ClientDTO()
+            {
+                CPF = clientDTOPost.CPF,
+                Name = clientDTOPost.Name,
+                BirthDt = clientDTOPost.BirthDt,
+                Sex = clientDTOPost.Sex,
+                AddressId = address.Id,
+                Salary = clientDTOPost.Salary,
+                Phone = clientDTOPost.Phone,
+                Email = clientDTOPost.Email
+            };
+
+
+            _context.Clients.Add(clientDTO);
             try
             {
                 await _context.SaveChangesAsync();
@@ -187,7 +236,7 @@ namespace UpBank.ClientAPI.Controllers
             }
 
             // Retorna o cliente criado usando o CPF como identificador no retorno.
-            return CreatedAtAction("GetClient", new { cpf = client.CPF }, client);
+            return Ok (clientDTO);
         }
 
         // PATCH: api/Clients/AddRestriction/{cpf}
@@ -226,30 +275,96 @@ namespace UpBank.ClientAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(string id)
         {
-            if (_context.Client == null)
+            if (_context.Client == null || _context.ClientCancelled == null)
             {
-                return NotFound();
+                return NotFound("Contexto de clientes não encontrado");
             }
+
+            // Busca cliente original pelo ID
             var client = await _context.Client.FindAsync(id);
             if (client == null)
             {
-                return NotFound();
+                return NotFound("Cliente não encontrado");
             }
 
+            // Cria nova entrada para a tabela de clientes cancelados
+            var clientCancelled = new ClientCancelled
+            {
+                Name = client.Name,
+                CPF = client.CPF,
+                BirthDt = client.BirthDt,
+                Sex = client.Sex,
+                Address = client.Address,
+                Salary = client.Salary,
+                Phone = client.Phone,
+                Email = client.Email
+
+            };
+
+            // Add cliente cancelado na tabela d clientes cancelados
+            _context.ClientCancelled.Add(clientCancelled);
+
+            // Remove cliente original do contexto
             _context.Client.Remove(client);
+
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Cliente movido para a tabela de clientes cancelados e excluído com sucesso.");
         }
 
         private bool ClientExists(string id)
         {
             return _context.Client.Any(e => e.CPF == id);
         }
+
+        public static bool ValidateCPF(string cpf)
+        {
+            // Removendo caracteres não numéricos do CPF
+            cpf = new string(cpf.Where(char.IsDigit).ToArray());
+            // Verificando se o CPF possui 11 dígitos
+            if (cpf.Length != 11)
+            {
+                return false;
+            }
+            // Verificando se todos os dígitos são iguais
+            if (cpf.Distinct().Count() == 1)
+            {
+                return false;
+            }
+            // Calculando o primeiro dígito verificador
+            int soma = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                soma += int.Parse(cpf[i].ToString()) * (10 - i);
+            }
+            int resto = soma % 11;
+            int digitoVerificador1 = resto < 2 ? 0 : 11 - resto;
+            // Verificando o primeiro dígito verificador
+            if (int.Parse(cpf[9].ToString()) != digitoVerificador1)
+            {
+                return false;
+            }
+            // Calculando o segundo dígito verificador
+            soma = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                soma += int.Parse(cpf[i].ToString()) * (11 - i);
+            }
+            resto = soma % 11;
+            int digitoVerificador2 = resto < 2 ? 0 : 11 - resto;
+            // Verificando o segundo dígito verificador
+            if (int.Parse(cpf[10].ToString()) != digitoVerificador2)
+            {
+                return false;
+            }
+            return true;
+        }
     }
+
+
 }
 
 
 
-   
+
 

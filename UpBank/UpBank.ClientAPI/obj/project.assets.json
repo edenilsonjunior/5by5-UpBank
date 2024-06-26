@@ -2531,6 +2531,41 @@
           }
         }
       },
+      "MySql.Data/6.10.9": {
+        "type": "package",
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "4.4.1",
+          "System.Security.Permissions": "4.4.1",
+          "System.Text.Encoding.CodePages": "4.4.0"
+        },
+        "compile": {
+          "lib/netcoreapp2.2/MySql.Data.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp2.2/MySql.Data.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MySql.Data.EntityFrameworkCore/6.10.9": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "2.0.3",
+          "MySql.Data": "6.10.9"
+        },
+        "compile": {
+          "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "type": "package",
         "dependencies": {
@@ -3642,6 +3677,25 @@
         "runtime": {
           "bin/placeholder/Services.dll": {}
         }
+      },
+      "UpBank.AddressAPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.19.6",
+          "Models": "1.0.0",
+          "Newtonsoft.Json": "13.0.3",
+          "Services": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/UpBank.AddressAPI.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/UpBank.AddressAPI.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -7040,6 +7094,44 @@
         "runtimes/win/native/mongocrypt.dll"
       ]
     },
+    "MySql.Data/6.10.9": {
+      "sha512": "nfAf2+UzFrdGCX2/RfEpiII8k4dOdxI0nGFXDUcmsDuvzuCdcCLmBUHnEpe2WKWLMfti1iyONGtwtqPVVwiftw==",
+      "type": "package",
+      "path": "mysql.data/6.10.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/MySql.Data.dll",
+        "lib/net452/MySql.Data.xml",
+        "lib/netcoreapp2.2/MySql.Data.dll",
+        "lib/netcoreapp2.2/MySql.Data.xml",
+        "lib/netstandard1.3/MySql.Data.dll",
+        "lib/netstandard1.3/MySql.Data.xml",
+        "lib/netstandard2.0/MySql.Data.dll",
+        "lib/netstandard2.0/MySql.Data.xml",
+        "mysql.data.6.10.9.nupkg.sha512",
+        "mysql.data.nuspec"
+      ]
+    },
+    "MySql.Data.EntityFrameworkCore/6.10.9": {
+      "sha512": "XNtxOOita2Mg3Db21mrDDPnIfHYPLRtdiQWz9TkXLGclZBTeWLv8EFWAcLl41ceZefCDYGAsgbiw8/8IBlQ2jw==",
+      "type": "package",
+      "path": "mysql.data.entityframeworkcore/6.10.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/MySql.Data.EntityFrameworkCore.dll",
+        "lib/net452/MySql.Data.EntityFrameworkCore.xml",
+        "lib/net461/MySql.Data.EntityFrameworkCore.dll",
+        "lib/net461/MySql.Data.EntityFrameworkCore.xml",
+        "lib/netstandard1.3/MySql.Data.EntityFrameworkCore.dll",
+        "lib/netstandard1.3/MySql.Data.EntityFrameworkCore.xml",
+        "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.dll",
+        "lib/netstandard2.0/MySql.Data.EntityFrameworkCore.xml",
+        "mysql.data.entityframeworkcore.6.10.9.nupkg.sha512",
+        "mysql.data.entityframeworkcore.nuspec"
+      ]
+    },
     "NETStandard.Library/2.0.3": {
       "sha512": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "type": "package",
@@ -9731,6 +9823,11 @@
       "type": "project",
       "path": "../Services/Services.csproj",
       "msbuildProject": "../Services/Services.csproj"
+    },
+    "UpBank.AddressAPI/1.0.0": {
+      "type": "project",
+      "path": "../UpBank.AddressAPI/UpBank.AddressAPI.csproj",
+      "msbuildProject": "../UpBank.AddressAPI/UpBank.AddressAPI.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -9743,8 +9840,10 @@
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.19.6",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.16",
       "Models >= 1.0.0",
+      "MySql.Data.EntityFrameworkCore >= 6.10.9",
       "Repositories >= 1.0.0",
-      "Services >= 1.0.0"
+      "Services >= 1.0.0",
+      "UpBank.AddressAPI >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -9783,6 +9882,9 @@
             },
             "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj": {
               "projectPath": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\Services\\Services.csproj"
+            },
+            "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\UpBank.AddressAPI.csproj": {
+              "projectPath": "C:\\Users\\ADM\\source\\repos\\5by5-UpBank\\UpBank\\UpBank.AddressAPI\\UpBank.AddressAPI.csproj"
             }
           }
         }
@@ -9831,6 +9933,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[6.0.16, )"
+          },
+          "MySql.Data.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[6.10.9, )"
           }
         },
         "imports": [

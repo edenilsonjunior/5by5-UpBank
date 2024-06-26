@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Services.People;
 using UpBank.ClientAPI.Data;
 namespace UpBank.ClientAPI
 {
@@ -15,6 +16,8 @@ namespace UpBank.ClientAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddSingleton<ClientService>();
 
             var app = builder.Build();
 

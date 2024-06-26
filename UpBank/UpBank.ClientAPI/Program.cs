@@ -1,3 +1,7 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Services.People;
+using UpBank.ClientAPI.Data;
 namespace UpBank.ClientAPI
 {
     public class Program
@@ -5,10 +9,15 @@ namespace UpBank.ClientAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<UpBankClientAPIContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("UpBankClientAPIContext") ?? throw new InvalidOperationException("Connection string 'UpBankClientAPIContext' not found.")));
+
 
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddSingleton<ClientService>();
 
             var app = builder.Build();
 

@@ -1,4 +1,6 @@
-﻿namespace Models.Bank
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Models.Bank
 {
     public class CreditCard
     {

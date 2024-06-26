@@ -1,4 +1,4 @@
-﻿using Models.DTO;
+using Models.DTO;
 using Models.People;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

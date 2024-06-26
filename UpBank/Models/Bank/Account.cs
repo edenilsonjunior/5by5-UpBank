@@ -1,11 +1,11 @@
-﻿using Models.DTO;
+using Models.DTO;
 using Models.People;
 using System;
 using System.Security.Principal;
 
 namespace Models.Bank
 {
-    public class Account
+    public class Account 
     {
         public static readonly string Get = @"
         SELECT 

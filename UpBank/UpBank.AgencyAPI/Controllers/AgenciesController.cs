@@ -203,6 +203,9 @@ namespace UpBank.AgencyAPI.Controllers
         {
             if (!CnpjValidator.IsValid(agency.CNPJ)) return BadRequest("CNPJ inválido.");
 
+            if (agency.Employees.Count == 0) return BadRequest("A agência deve ter ao menos um funcionário e um deles precisa ser um gerente.");
+
+
             string newAgencyNumber;
             bool agencyExists;
             do

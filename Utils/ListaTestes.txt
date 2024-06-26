@@ -1,0 +1,86 @@
+funcionário:
+    depende de:
+     -ninguem
+
+    testes:
+        1- Criar tres funcionarios(1 gerente, 1 normal e 1 normal para testes)
+        2- Testar Get/GetAll
+        3- Pegar  funcionario de teste e tentar update, delete
+	
+agencia:
+    depende de:
+	 -funciaonario
+
+    testes:
+        1- Criar uma agencia fluxo feliz
+        2- Testar verificacoes de agencia-post (fluxo infeliz- cnpj invalido, agencia sem funcionario, agencia sem gerente)
+        3- Testar Get/GetAll 
+        4- Pegar agencia de teste e tentar update, delete
+
+
+cliente:
+    depende de:
+     -ninguem
+
+    testes:
+        1- Criar um cliente
+        2- Testar verificacoes de cliente-post (fluxo infeliz- cpf invalido, data de nascimento nula)
+        3- Testar Get/GetAll
+        4- Pegar cliente de teste e tentar update, delete
+
+
+Conta:
+
+    depende de:
+     -cliente
+     -agencia
+     -funciaonario
+
+     testes:
+        1- Criar duas contas fluxo feliz 
+        2- Testar verificacoes de conta-post
+        {
+            -inserir uma agencia inexistente
+            -inserir uma agencia que tem restricao
+            -inserir um cliente menor de idade como dono da conta
+            -inserir um cpf que nao esta vinculado a um cliente
+            -inserir cliente com restricao
+        }
+
+        3- Testar Get/GetAll
+        4- Pegar conta de teste e tentar atualizar e deletar
+
+        5- Transacoes
+        {
+            Uma de cada:
+                saque
+                depósito
+                empréstimo
+                pagamento
+                transferência
+
+            verificacoes:
+                1- tentar fazer uma transacao com conta inexistente
+                2- tentar fazer uma transacao com conta que tem restricao
+                3- tentar fazer uma transacao com valor negativo
+                4- tentar fazer uma transacao com valor maior que o saldo
+                5- verificar se o overdraft e saldo estao sendo corretamente atualizados
+                6- verifica conta de destino
+        }
+
+        6- GetTransactionByType
+        7- GetBalance
+        8- GetBankStatement (extrato bancario)
+
+
+        9- testes que sao do funcionario mas manipulam conta:
+            - Criar conta (esperado: conta criada com restricao = true, profile, creditcardLimit, overdraft settados) 
+            - Aprovar conta (mudar o status da conta para aprovado)
+
+        10- testes que sao da agencia mas manipulam conta:
+            - Listar contas restritas de uma determinada agencia
+            - Listar contas por perfil de uma determinada agencia
+            - Listar contas que possuem emprestimo de uma determinada agencia
+
+            verificaoes:
+                - passar uma agencia que nao existe

@@ -2,10 +2,6 @@ create database DBAccountUpBank;
 use DBAccountUpBank;
 
 
-
-
-
-
 if exists (select * from sysobjects where name='AccountTransaction' and xtype='U')
 	drop table AccountTransaction;
 
@@ -91,14 +87,17 @@ CREATE TABLE AccountTransaction
     CONSTRAINT FK_TRANSACTION_RECEIVER FOREIGN KEY (ReceiverAccount) REFERENCES Account(AccountNumber)
 )
 
+
+/*
+-- Querys para teste
+
 select * from account;
 select * from ClientAccount;
 select * from CreditCard;
 select * from AccountTransaction;
-select * from AccountHistory
+select * from AccountHistory;
 
-
-delete from AccountTransaction
+delete from AccountTransaction;
 
 update Account set Balance = 10000 where AccountNumber = '1';
 update Account set Balance = 5000 where AccountNumber = '2';
@@ -108,4 +107,4 @@ update Account set Overdraft = 1000 where AccountNumber = '2';
 
 update Account set Restriction = 0 where AccountNumber = '1';
 update Account set Restriction = 0 where AccountNumber = '2';
-
+*/

@@ -9,8 +9,8 @@
         public static readonly string UPDATEBALANCEWITHDRAW = "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber";
 
         public static readonly string UPDATEBALANCEWITHDRAWOVERDRAFT = "" +
-            "UPDATE Account SET Balance = Balance - @Value WHERE AccountNumber = @AccountNumber;" +
-            "UPDATE Account SET Overdraft = Overdraft + Balance WHERE AccountNumber = @AccountNumber";
+            "UPDATE Account SET Balance = @Diff WHERE AccountNumber = @AccountNumber;" +
+            "UPDATE Account SET Overdraft = Overdraft - @UpdateOverdraft WHERE AccountNumber = @AccountNumber";
 
         public static readonly string UPDATEBALANCEOVERDRAFT = "" +
             "UPDATE Account SET Balance = @Diff WHERE AccountNumber = @AccountNumber;" +

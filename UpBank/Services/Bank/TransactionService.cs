@@ -21,12 +21,12 @@ namespace Services.Bank
         public async Task<List<BankTransaction>> GetAllTransactions()
         {
             List<BankTransaction> transactions = new();
-            var transactionDTO = await _repository.GetAllTransactions();
+            List<TransactionDTO> transactionDTO = await _repository.GetAllTransactions();
             if (transactionDTO.Count == 0) throw new ArgumentNullException("Nao existe nenhuma transacao efetuada");
 
             foreach (var dto in transactionDTO)
             {
-                var type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
+                ETransactionType type = Enum.TryParse<ETransactionType>(dto.TransactionType, out var transactionType) ? transactionType : default;
 
                 BankTransaction bt = new()
                 {
@@ -49,10 +49,11 @@ namespace Services.Bank
 
         public async Task<BankTransaction> GetTransaction(int Id)
         {
-            var transactionDTO = await _repository.GetTransaction(Id);
+            TransactionDTO transactionDTO = await _repository.GetTransaction(Id);
             if (transactionDTO == null) throw new ArgumentNullException("O identificador da transacao nao existe.");
 
-            var account = await _accountService.GetAccount(transactionDTO.ReceiverAccount);
+            Account account = await _accountService.GetAccount(transactionDTO.ReceiverAccount);
+            if (account == null) throw new ArgumentNullException("A conta nao existe.");
             var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
 
             return new BankTransaction
@@ -68,7 +69,7 @@ namespace Services.Bank
         public async Task<List<BankTransaction>> GetTransactionByType(string Type)
         {
             List<BankTransaction> transactions = new();
-            var transactionDTO = await _repository.GetTransactionsByType(Type);
+            List<TransactionDTO> transactionDTO = await _repository.GetTransactionsByType(Type);
             if (transactionDTO.Count == 0) return new();
 
             foreach (var dto in transactionDTO)
@@ -93,15 +94,11 @@ namespace Services.Bank
         {
             bool UseOverdraft = false;
             double diff = 0.0;
-            var account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
+            Account account = _accountService.GetAccount(transactionDTO.AccountNumber).Result;
             double totalBalance = account.Balance + account.Overdraft;
             Account receiver = new();
 
-            if (account.Number.Equals(transactionDTO.ReceiverAccount))
-            {
-                throw new InvalidOperationException("Nao pode ter pagamento ou transferencia para si mesmo.");
-            }
-
+            if (account.Number.Equals(transactionDTO.ReceiverAccount)) throw new InvalidOperationException("Nao pode ter pagamento ou transferencia para si mesmo.");
 
             if (transactionDTO.ReceiverAccount != null)
             {
@@ -109,7 +106,7 @@ namespace Services.Bank
                 if (receiver == null) throw new ArgumentNullException("A conta destino nao existe.");
             }
 
-            var type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
+            ETransactionType type = Enum.TryParse<ETransactionType>(transactionDTO.TransactionType, out var transactionType) ? transactionType : default;
 
             object obj = null;
             string bankTransaction = null;
@@ -118,6 +115,7 @@ namespace Services.Bank
             {
                 case "Lending":
                 case "Deposit":
+
                     if (transactionDTO.ReceiverAccount != null) throw new InvalidOperationException("Nao pode ter conta destino para emprestimo ou deposito.");
                     obj = new
                     {
@@ -126,16 +124,35 @@ namespace Services.Bank
                     };
                     bankTransaction = BankTransaction.UPDATEBALANCE;
                     break;
+
                 case "Withdraw":
+
                     if (transactionDTO.ReceiverAccount != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
-                    if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
                     if (transactionDTO.TransactionValue > account.Balance)
                     {
-                        //TODO: arrumar a logica para atualizar overdraft quando essa condicao for verdadeira.
+                        double amountToRemove;
+
+                        if (account.Balance >= 0)
+                        {
+                            diff = transactionDTO.TransactionValue - account.Balance;
+                            amountToRemove = diff;
+                            diff *= -1;
+                        }
+                        else
+                        {
+                            diff = transactionDTO.TransactionValue * -1;
+                            diff += account.Balance;
+                            amountToRemove = transactionDTO.TransactionValue;
+                        }
+
+                        if (amountToRemove > account.Overdraft) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
+
                         obj = new
                         {
                             Value = transactionDTO.TransactionValue,
-                            AccountNumber = transactionDTO.AccountNumber
+                            AccountNumber = transactionDTO.AccountNumber,
+                            Diff = diff,
+                            UpdateOverdraft = amountToRemove
                         };
                         bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAWOVERDRAFT;
                     }
@@ -148,6 +165,7 @@ namespace Services.Bank
                         };
                         bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAW;
                     }
+
                     break;
                 case "Transfer":
                 case "Payment":
@@ -182,6 +200,7 @@ namespace Services.Bank
                             throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
                         }
                     };
+
                     if (UseOverdraft)
                     {
                         obj = new
@@ -223,14 +242,14 @@ namespace Services.Bank
                             bankTransaction = BankTransaction.UPDATEBALANCERECEIVER;
                         }
                     }
+
                     break;
                 default:
                     throw new ArgumentException("Nao existe esse tipo de transacao");
             }
 
             DapperUtilsRepository<BankTransaction>.Insert(bankTransaction, obj);
-
-            var transaction = _repository.InsertTransaction(transactionDTO).Result;
+            BankTransaction transaction = _repository.InsertTransaction(transactionDTO).Result;
 
             if (transactionDTO.ReceiverAccount != null)
                 transaction.Receiver = receiver.Number;

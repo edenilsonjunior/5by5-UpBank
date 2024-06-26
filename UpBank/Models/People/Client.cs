@@ -6,8 +6,11 @@ namespace Models.People
 
     public class Client : Person
     {
+        public static readonly string InsertClientAccount = @"INSERT INTO ClientAccount VALUES (@AccountNumber, @ClientCPF)";
 
-        public bool Restriction { get; set; } //aqui adicionamos uma propriedade chamada Restrição bool, para indicar se o cliente tem restrição ou não
+        public bool Restriction { get; set; }
+
+        public bool Restriction { get; set; } 
 
         public Client() { }
 

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Models.Bank;
 using Models.DTO;
 using Models.People;
+using Newtonsoft.Json;
 using Services.People;
 using UpBank.ClientAPI.Data;
 
@@ -30,6 +33,7 @@ namespace UpBank.ClientAPI.Controllers
             foreach (var dto in Clients)
             {
                 Client clientResult = new(dto);
+                clientResult.Restriction = dto.Restriction;
                 clientResult.Address = await _clientService.GetAddressById(dto.AddressId);
 
                 clientsList.Add(clientResult);
@@ -51,6 +55,7 @@ namespace UpBank.ClientAPI.Controllers
             }
 
             Client clientResult = new(clientDTO);
+            clientResult.Restriction = clientDTO.Restriction;
             clientResult.Address = await _clientService.GetAddressById(clientDTO.AddressId);
 
             return Ok(clientResult);
@@ -64,7 +69,7 @@ namespace UpBank.ClientAPI.Controllers
             {
                 return BadRequest("CPF Invalido");
             }
-            if (_context.Client == null)
+            if (_context.Clients == null)
             {
                 return Problem("Entity set 'UpBankClientAPIContext.Client' is null.");
             }
@@ -79,6 +84,18 @@ namespace UpBank.ClientAPI.Controllers
             {
                 return Conflict("Já existe um cliente com este CPF.");
             }
+
+
+            if (clientDTOPost.Salary <= 0)
+            {
+                return BadRequest("Salário inválido.");
+            }
+
+            if (clientDTOPost.BirthDt.AddYears(16) > DateTime.Now)
+            {
+                return BadRequest("O cliente deve ter no mínimo 16 anos.");
+            }
+
 
             Address address = await _clientService.PostAddress(clientDTOPost.Address);
 
@@ -124,7 +141,7 @@ namespace UpBank.ClientAPI.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> PutClient(ClientUpdateDTO clientUpdateDTO)
+        public async Task<ActionResult<Client>> PutClient(ClientUpdateDTO clientUpdateDTO)
         {
 
             ClientDTO client = await _context.Clients.FirstOrDefaultAsync(c => c.CPF.Equals(clientUpdateDTO.CPF));
@@ -148,13 +165,27 @@ namespace UpBank.ClientAPI.Controllers
                 return BadRequest("Não foi possível atualizar o cliente. Por favor, tente novamente.");
             }
 
-            return Ok(client);
+            return await GetClient(client.CPF);
         }
 
 
         [HttpDelete("{cpf}")]
         public async Task<IActionResult> DeleteClient(string cpf)
         {
+            var accounts = await GetAllAccounts();
+
+            if (accounts != null)
+            {
+                foreach (var account in accounts)
+                {
+                    if (account.Client.Find(c => c.CPF.Equals(cpf)) != null)
+                    {
+                        return BadRequest("Não é possível excluir um cliente com conta ativa.");
+                    }
+                }
+            }
+
+
             var list = await _context.Clients.ToListAsync();
 
             var clientToBeCancelled = list.FirstOrDefault(c => c.CPF.Equals(cpf));
@@ -172,6 +203,7 @@ namespace UpBank.ClientAPI.Controllers
 
 
             clientToBeCancelled.Restriction = true;
+            _context.Entry(clientToBeCancelled).State = EntityState.Modified;
 
             // Cria nova entrada para a tabela de clientes cancelados
             var clientCancelled = new ClientCancelled
@@ -188,15 +220,24 @@ namespace UpBank.ClientAPI.Controllers
             };
 
             _context.DeletedClient.Add(clientCancelled);
-            await _context.SaveChangesAsync();
+
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Não foi possível cancelar o cliente. Por favor, tente novamente.");
+            }
 
             return Ok("Cliente movido para a tabela de clientes cancelados e Restricao mudado para true.");
         }
 
 
-        private bool ClientExists(string id)
+        private bool ClientExists(string cpf)
         {
-            return _context.Clients.Any(e => e.CPF == id);
+            return _context.Clients.Any(e => e.CPF.Equals(cpf));
         }
 
 
@@ -241,6 +282,20 @@ namespace UpBank.ClientAPI.Controllers
                 return false;
             }
             return true;
+        }
+
+        public async Task<List<Account>> GetAllAccounts()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync("https://localhost:7011/api/Accounts");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<Account>>(content);
+                }
+                return null;
+            }
         }
     }
 }

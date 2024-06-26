@@ -1,7 +1,10 @@
 create database DBAccountUpBank;
 use DBAccountUpBank;
 
-SELECT Id, AccountNumber, TransactionDt, TransactionType, ReceiverAccount, TransactionValue FROM AccountTransaction where AccountNumber = '123456789';
+
+
+
+
 
 if exists (select * from sysobjects where name='AccountTransaction' and xtype='U')
 	drop table AccountTransaction;
@@ -105,3 +108,4 @@ update Account set Overdraft = 1000 where AccountNumber = '2';
 
 update Account set Restriction = 0 where AccountNumber = '1';
 update Account set Restriction = 0 where AccountNumber = '2';
+

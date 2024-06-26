@@ -11,7 +11,7 @@ namespace Services.Agencies
         {
             using (HttpClient client = new HttpClient())
             {
-                var response = await client.GetAsync("https://localhost:7011/Accounts");
+                var response = await client.GetAsync("https://localhost:7011/api/Accounts");
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -25,7 +25,7 @@ namespace Services.Agencies
         {
             using (HttpClient client = new HttpClient())
             {
-                var response = await client.GetAsync("https://localhost:7042/Employees");
+                var response = await client.GetAsync("https://localhost:7042/api/Employees");
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -50,9 +50,12 @@ namespace Services.Agencies
             List<EmployeeDTOEntity> newAgencyEmployees = new();
             int managerQuantity = 0;
 
-            foreach (var employee in employees)
+
+            foreach (var employeeDto in agency.Employees)
             {
-                if (agency.Employees.Contains(employee.CPF))
+                Employee? employee = employees.Find(e => e.Registry == employeeDto);
+
+                if (employee != null)
                 {
                     if (employee.Manager == true) managerQuantity++;
 
@@ -70,7 +73,7 @@ namespace Services.Agencies
                         Registry = employee.Registry
                     });
                 }
-                else { throw new Exception("CPF de funcionário não encontrado no banco de dados."); }
+                else { throw new Exception("Registro de funcionário não encontrado no banco de dados."); }
             }
 
             if (managerQuantity == 0) throw new Exception("A agência deve ter pelo menos um gerente.");

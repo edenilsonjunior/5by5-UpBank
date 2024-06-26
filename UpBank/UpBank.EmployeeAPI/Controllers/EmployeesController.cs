@@ -25,18 +25,32 @@ namespace UpBank.EmployeeAPI.Controllers
 
 
         [HttpGet("{registry}")]
-        public Employee GetEmployee(int registry)
+        public ActionResult<Employee> GetEmployee(int registry)
         {
-            return _employeeService.GetEmployee(registry);
+            try
+            {
+                return _employeeService.GetEmployee(registry);
+            }
+            catch (Exception)
+            {
+                return NotFound("Cliente nao encontrado.");
+            }
         }
 
 
         // Posts
 
         [HttpPost]
-        public async Task<Employee> PostEmployee(EmployeeDTO employeeDTO)
+        public async Task<ActionResult<Employee>> PostEmployee(EmployeeDTO employeeDTO)
         {
-            return await _employeeService.PostEmployee(employeeDTO);
+            try
+            {
+                return await _employeeService.PostEmployee(employeeDTO);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
         }
 
 
@@ -49,10 +63,18 @@ namespace UpBank.EmployeeAPI.Controllers
 
         // Patches
 
-        [HttpPatch("{registry}")]
-        public void UpdateEmployee(int registry, EmployeeUpdateDTO employee)
+        [HttpPatch]
+        public ActionResult UpdateEmployee(EmployeeUpdateDTO employee)
         {
-            _employeeService.UpdateEmployee(registry, employee);
+            try
+            {
+                _employeeService.UpdateEmployee(employee);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
         }
 
 
@@ -67,9 +89,17 @@ namespace UpBank.EmployeeAPI.Controllers
         // Deletes
 
         [HttpDelete("{registry}")]
-        public void RemoveEmployee(int registry)
+        public ActionResult RemoveEmployee(int registry)
         {
-            _employeeService.RemoveEmployee(registry);
+            try
+            {
+                _employeeService.RemoveEmployee(registry);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Erro: " + e.Message);
+            }
         }
     }
 }

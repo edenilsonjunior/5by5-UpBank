@@ -3,19 +3,19 @@ funcionário:
      -ninguem
 
     testes:
-        1- Criar tres funcionarios(1 gerente, 1 normal e 1 normal para testes)
-        2- Testar Get/GetAll
-        3- Pegar  funcionario de teste e tentar update, delete
+        1- Criar tres funcionarios(1 gerente, 1 normal e 1 normal para testes)  // ok
+        2- Testar Get/GetAll                                                    // ok
+        3- Pegar  funcionario de teste e tentar update, delete                  // ok  
 	
 agencia:
     depende de:
 	 -funciaonario
 
     testes:
-        1- Criar uma agencia fluxo feliz
-        2- Testar verificacoes de agencia-post (fluxo infeliz- cnpj invalido, agencia sem funcionario, agencia sem gerente)
-        3- Testar Get/GetAll 
-        4- Pegar agencia de teste e tentar update, delete
+        1- Criar uma agencia fluxo feliz                                                                                        // ok 
+        2- Testar verificacoes de agencia-post (fluxo infeliz- cnpj invalido, agencia sem funcionario, agencia sem gerente)     // ok
+        3- Testar Get/GetAll                                                                                                    // ok
+        4- Pegar agencia de teste e tentar update, delete                                                                       // ok
 
 
 cliente:
@@ -23,10 +23,10 @@ cliente:
      -ninguem
 
     testes:
-        1- Criar um cliente
-        2- Testar verificacoes de cliente-post (fluxo infeliz- cpf invalido, data de nascimento nula)
-        3- Testar Get/GetAll
-        4- Pegar cliente de teste e tentar update, delete
+        1- Criar um cliente                                                                                                             // ok
+        2- Testar verificacoes de cliente-post (fluxo infeliz- cpf invalido, data de nascimento nula e/ou idade menor que 16 anos)      // ok
+        3- Testar Get/GetAll                                                                                                            // ok
+        4- Pegar cliente de teste e tentar update, delete                                                                               // ok
 
 
 Conta:
@@ -37,50 +37,50 @@ Conta:
      -funciaonario
 
      testes:
-        1- Criar duas contas fluxo feliz 
-        2- Testar verificacoes de conta-post
+        1- Criar duas contas fluxo feliz                                //ok
+        2- Testar verificacoes de conta-post        
         {
-            -inserir uma agencia inexistente
-            -inserir uma agencia que tem restricao
-            -inserir um cliente menor de idade como dono da conta
-            -inserir um cpf que nao esta vinculado a um cliente
-            -inserir cliente com restricao
-        }
+            -inserir uma agencia inexistente                            // ok
+            -inserir uma agencia que tem restricao                      // ok
+            -inserir um cliente menor de idade como dono da conta       // ok
+            -inserir um cpf que nao esta vinculado a um cliente         // ok
+            -inserir cliente com restricao                              // ok
+        }   
 
-        3- Testar Get/GetAll
-        4- Pegar conta de teste e tentar atualizar e deletar
+        3- Testar Get/GetAll                                            // ok
+        4- Pegar conta de teste e tentar atualizar e deletar            // ok
 
         5- Transacoes
         {
             Uma de cada:
-                saque
-                depósito
-                empréstimo
-                pagamento
-                transferência
+                saque           //ok
+                depósito        //ok
+                empréstimo      //ok
+                pagamento       //ok
+                transferência   //ok
 
             verificacoes:
-                1- tentar fazer uma transacao com conta inexistente
-                2- tentar fazer uma transacao com conta que tem restricao
-                3- tentar fazer uma transacao com valor negativo
-                4- tentar fazer uma transacao com valor maior que o saldo
-                5- verificar se o overdraft e saldo estao sendo corretamente atualizados
-                6- verifica conta de destino
+                1- tentar fazer uma transacao com conta inexistente                          // ok
+                2- tentar fazer uma transacao com conta que tem restricao                    // ok
+                3- tentar fazer uma transacao com valor negativo                             // ok
+                4- tentar fazer uma transacao com valor maior que o saldo                    // ok
+                5- verificar se o overdraft e saldo estao sendo corretamente atualizados     // ok
+                6- verifica conta de destino                                                 //ok
         }
 
-        6- GetTransactionByType
-        7- GetBalance
-        8- GetBankStatement (extrato bancario)
+        6- GetTransactionByType                 // ok
+        7- GetBalance                           // ok
+        8- GetBankStatement (extrato bancario)  // ok
 
 
         9- testes que sao do funcionario mas manipulam conta:
-            - Criar conta (esperado: conta criada com restricao = true, profile, creditcardLimit, overdraft settados) 
-            - Aprovar conta (mudar o status da conta para aprovado)
+            - Criar conta (esperado: conta criada com restricao = true, profile, creditcardLimit, overdraft settados) // ok
+            - Aprovar conta (mudar o status da conta para aprovado)                                                   // ok
 
         10- testes que sao da agencia mas manipulam conta:
-            - Listar contas restritas de uma determinada agencia
-            - Listar contas por perfil de uma determinada agencia
-            - Listar contas que possuem emprestimo de uma determinada agencia
+            - Listar contas restritas de uma determinada agencia                                                        // ok
+            - Listar contas por perfil de uma determinada agencia                                                       // ok
+            - Listar contas que possuem emprestimo de uma determinada agencia                                           // ok
 
-            verificaoes:
-                - passar uma agencia que nao existe
+            verificaoes:    
+                - passar uma agencia que nao existe //ok

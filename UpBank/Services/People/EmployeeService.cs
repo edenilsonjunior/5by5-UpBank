@@ -10,6 +10,7 @@ using System;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
@@ -27,6 +28,7 @@ namespace Services.People
             _connString = connString;
             _employeeRepository = new EmployeeRepository();
         }
+
 
         //Get: api/Employees
         public async Task<List<Employee>> GetAllEmployee()
@@ -80,6 +82,10 @@ namespace Services.People
                 connection.Open();
                 var query = "SELECT * FROM Table_Employee WHERE Registry = @Registry";
                 var row = connection.Query<dynamic>(query, new { Registry = registry }).FirstOrDefault();
+
+                if (row == null)
+                    throw new Exception("Funcionário não encontrado.");
+
                 Employee employee = new Employee()
                 {
                     Name = row.Name,
@@ -112,10 +118,16 @@ namespace Services.People
         }
 
 
-
         //POST: api/Employees
         public async Task<Employee> PostEmployee(EmployeeDTO employeeDTO)
         {
+            if (employeeDTO.Salary <= 0)
+                throw new Exception("O funcionario deve ter um salario valido.");
+
+            if (employeeDTO.BirthDt.AddYears(14) > DateTime.Now)
+                throw new Exception("Data de nascimento inválida.");
+
+
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
@@ -152,7 +164,7 @@ namespace Services.People
                         throw new Exception("CPF já cadastrado");
                     }
 
-                    if(emp.Registry == employeeDTO.Registry)
+                    if (emp.Registry == employeeDTO.Registry)
                     {
                         throw new Exception("Registro já cadastrado");
                     }
@@ -186,21 +198,25 @@ namespace Services.People
         }
 
 
-
-
         //PATCH: api/Employees
-        public void UpdateEmployee(int registry, EmployeeUpdateDTO employee)
+        public void UpdateEmployee(EmployeeUpdateDTO employee)
         {
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
-                var updateEmployee = GetEmployee(registry);
-                if (registry != employee.Registry)
+
+                try
+                {
+                    var updateEmployee = GetEmployee(employee.Registry);
+                }
+                catch (Exception) { throw; }
+
+                if (employee.Registry != employee.Registry)
                 {
                     throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");
                 }
                 var querySelect = @"SELECT * FROM Table_Employee WHERE Registry = @Registry";
-                var result = connection.Query<dynamic>(querySelect, new { Registry = registry }).FirstOrDefault();
+                var result = connection.Query<dynamic>(querySelect, new { Registry = employee.Registry }).FirstOrDefault();
                 if (result == null)
                 {
                     throw new Exception("Funcionário não encontrado no banco de dados.");
@@ -222,26 +238,44 @@ namespace Services.People
                     Phone = employee.Phone,
                     Email = employee.Email,
                     Manager = employee.Manager,
-                    Registry = registry
+                    Registry = employee.Registry
                 });
             }
         }
 
 
-
         // DELETE: api/Employees/5
         public Employee RemoveEmployee(int registry)
         {
+            var agencyList = ApiConsume<List<Agency>>.Get("https://localhost:7217", "api/Agencies").Result;
+
+            if(agencyList != null || agencyList.Count > 0)
+            {
+                foreach (var agency in agencyList)
+                {
+                    if(agency.Employees.Find(e => e.Registry == registry) != null)
+                    {
+                        throw new Exception("Funcionário não pode ser excluído, pois está vinculado a uma agência.");
+                    }
+                }
+            }
+
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
 
-                var employee = GetEmployee(registry);
-                if (employee == null)
+                Employee employee = new();
+                try
                 {
-                    Console.WriteLine("Funcionário não encontrado.");
-                    return null;
+                    employee = GetEmployee(registry);
+
                 }
+                catch (Exception)
+                {
+                    throw new ArgumentNullException("Funcionário não encontrado.");
+                }
+
+
                 if (employee != null)
                 {
                     try //cria um registro na tabela de funcionário excluído
@@ -317,14 +351,19 @@ namespace Services.People
                 throw new Exception("Cliente já possui uma conta.");
 
             //buscar funcionário pelo registro
-            Employee? employee = GetEmployee(accountCreateDTO.EmployeeRegister);
-            if (employee == null)
+            Employee? employee;
+            try
+            {
+                employee = GetEmployee(accountCreateDTO.EmployeeRegister);
+            }
+            catch
             {
                 throw new Exception("Funcionário não encontrado.");
             }
 
             Account accountcreate = new Account
             {
+                Number = accountCreateDTO.AccountNumber,
                 Client = clients,
                 CreditCard = new CreditCard(),
                 Agency = new Agency() { Number = accountCreateDTO.AgencyNumber },
@@ -347,7 +386,7 @@ namespace Services.People
                 AccountNumber = account.Number,
                 AgencyNumber = account.Agency.Number,
                 AccountProfile = account.Profile.ToString(),
-                Overdraft=account.Overdraft,
+                Overdraft = account.Overdraft,
                 CreditCardLimit = account.CreditCard.Limit,
                 CreditCardHolder = account.Client[0].Name,
             };
@@ -378,22 +417,20 @@ namespace Services.People
 
             List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
 
-            if(accounts == null)
+            if (accounts == null)
             {
                 throw new Exception("Nenhuma conta encontrada.");
             }
 
             Account? account = accounts.Find(a => a.Number.Equals(number));
 
-            if(account == null)
+            if (account == null)
             {
                 throw new Exception("Conta não encontrada.");
             }
 
+            Employee? employee = account.Agency.Employees.Find(e => e.Registry == registry);
 
-            //verificar se o funcionário tem permissão de aprovar a conta
-            var employees = await GetAllEmployee();
-            Employee? employee = employees.Find(e => e.Registry == registry);
             if (employee == null)
             {
                 throw new Exception("Funcionário não encontrado.");
@@ -402,7 +439,6 @@ namespace Services.People
             {
                 throw new Exception("Funcionário não tem permissão para aprovar contas.");
             }
-
 
             var httpClient = new HttpClient();
             var response = await httpClient.PatchAsync($"https://localhost:7011/api/Accounts/ApproveAccount/{account.Number}", null);
@@ -474,6 +510,7 @@ namespace Services.People
             }
             return true;
         }
+
 
         public async Task<Account> DefineProfile(Account account)
         {

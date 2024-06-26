@@ -15,7 +15,7 @@ namespace Services.Bank
         public AccountService()
         {
             _repository = new();
-            _agenciesUri = "https://localhost:7166";
+            _agenciesUri = "https://localhost:7217/";
             _clientsUri = "https://localhost:7166";
         }
 
@@ -151,7 +151,7 @@ namespace Services.Bank
 
         private async Task<Agency> RetrieveAgency(string number)
         {
-            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"/GetAgencies/{number}");
+            var agency = await ApiConsume<Agency>.Get(_agenciesUri, $"api/Agencies/{number}");
 
             return agency ?? throw new ArgumentException("Agencia não encontrada");
         }

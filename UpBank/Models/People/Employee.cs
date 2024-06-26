@@ -1,4 +1,6 @@
-﻿namespace Models.People
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Models.People
 {
     public class Employee : Person
     {
@@ -6,6 +8,7 @@
             VALUES (@CPF, @Name, @BirthDt, @Sex, @AddressId, @Salary, @Phone, @Email, @Manager, @Registry, @AgencyNumber);";
 
         public bool Manager { get; set; }
+        [Key]
         public int Registry { get; set; }
     }
 }

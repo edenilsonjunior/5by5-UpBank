@@ -10,8 +10,6 @@ namespace Models.People
 
         public bool Restriction { get; set; }
 
-        public bool Restriction { get; set; } 
-
         public Client() { }
 
         public Client(ClientDTO clientDTO)

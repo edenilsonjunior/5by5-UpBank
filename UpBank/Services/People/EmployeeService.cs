@@ -172,7 +172,7 @@ namespace Services.People
                 var updateEmployee = GetEmployee(registry);
                 if (registry != employee.Registry)
                 {
-                   throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");                
+                    throw new ArgumentException("O número de registro não corresponde ao registro do funcionário.");
                 }
                 var querySelect = @"SELECT * FROM Table_Employee WHERE Registry = @Registry";
                 var result = connection.Query<dynamic>(querySelect, new { Registry = registry }).FirstOrDefault();
@@ -180,7 +180,7 @@ namespace Services.People
                 {
                     throw new Exception("Funcionário não encontrado no banco de dados.");
                 }
-               var query = @"UPDATE Table_Employee
+                var query = @"UPDATE Table_Employee
                                     SET Name = @Name, 
                                         
                                         BirthDt = @BirthDt, 
@@ -265,12 +265,15 @@ namespace Services.People
         }
         public async Task<Account> CreateAccount(AccountCreateDTO accountCreateDTO)
         {
+            List<Client> clients = new List<Client>();
             // Consumindo a api de dados mockados
-            string cpf = accountCreateDTO.ClientCPF[0];
-            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}");//7142 Clientes
-
-            if (client == null)
-                throw new Exception("Cliente não encontrado.");
+            foreach (var cpf in accountCreateDTO.ClientCPF)
+            {
+                Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}");//7142 Clientes
+                if (client == null)
+                    throw new Exception("Cliente não encontrado.");
+                clients.Add(client);
+            }
 
             // Consumindo a api de Account
             List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
@@ -278,7 +281,7 @@ namespace Services.People
             Account? account = null;
             foreach (var ac in accounts)
             {
-                if (ac.Client[0].CPF.Equals(cpf))
+                if (ac.Client[0].CPF.Equals(clients[0].CPF))
                 {
                     account = ac;
                     break;
@@ -294,25 +297,30 @@ namespace Services.People
                 throw new Exception("Funcionário não encontrado.");
             }
 
-            //Definir perfil da conta        
-            DefineAccountProfile(client);
-
-            return await InsertAccount(accountCreateDTO);
-        }
-        public async Task<Account> InsertAccount(AccountCreateDTO accountCreateDTO)
-        {
-            Employee employee = GetEmployee(accountCreateDTO.EmployeeRegister);
-            if (employee == null)
+            Account accountcreate = new Account
             {
-                throw new Exception("Funcionário não encontrado.");
-            }
+                Client = clients,
+                CreditCard = new CreditCard(),
+                Agency = new Agency() { Number = accountCreateDTO.AgencyNumber },
+            };
+            //Definir perfil da conta        
+            accountcreate = await DefineProfile(accountcreate);
 
+
+
+            return await InsertAccount(accountcreate);
+        }
+        public async Task<Account> InsertAccount(Account account)
+        {
             AccountDTO accountDTO = new AccountDTO
             {
-                ClientCPF = accountCreateDTO.ClientCPF,
-                AccountNumber = accountCreateDTO.AccountNumber,
-                AgencyNumber = accountCreateDTO.AgencyNumber,
-                CreditCard = accountCreateDTO.CreditCard
+                ClientCPF = account.Client.Select(c => c.CPF).ToList(),
+                AccountNumber = account.Number,
+                AgencyNumber = account.Agency.Number,
+                AccountProfile = account.Profile.ToString(),
+                Overdraft=account.Overdraft,
+                CreditCardLimit = account.CreditCard.Limit,
+                CreditCardHolder = account.Client[0].Name,
             };
 
             using var httpClient = new HttpClient();
@@ -384,35 +392,6 @@ namespace Services.People
             }
             return account;
         }
-        public async Task<Account> DefineAccountProfile(Client cliente)
-        {
-            //Consumir a api de dados mockados
-            string cpf = cliente.CPF;
-            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}"); //7142 Clientes
-            if (client == null)
-                throw new Exception("Cliente não encontrado.");
-            // Consumindo a api de Account
-            List<Account>? accounts = await ApiConsume<List<Account>>.Get("https://localhost:7011", $"api/Accounts");
-            Account? account = null;
-            foreach (var ac in accounts)
-            {
-                if (ac.Client[0].CPF.Equals(cpf))
-                {
-                    account = ac;
-                    break;
-                }
-            }
-            if (account != null)
-            {
-                //pegar o Enum profile da conta existente
-                EProfile profile = account.Profile;
-            }
-            else
-            {
-                throw new Exception("Conta não localizada.");
-            }
-            return account; //retornar um objeto conta com o profile 
-        }
         public static bool ValidateCPF(string cpf)
         {
             // Removendo caracteres não numéricos do CPF
@@ -456,56 +435,48 @@ namespace Services.People
             return true;
         }
 
-        public async Task<EProfile> DefineProfile(Client cliente)
+        public async Task<Account> DefineProfile(Account account)
         {
-            EProfile profile;
-            //Consumir a api de dados mockados
-            string cpf = cliente.CPF;
-            Client? client = await ApiConsume<Client>.Get("https://localhost:7166", $"/GetClients/{cpf}"); //7142 Clientes
-            if (client == null)
-                throw new Exception("Cliente não encontrado.");
-            if (client.CPF == cpf && cliente.Salary != null)
+            if (account.Client[0].Salary != null && account.Client[0].Salary >= 0)
             {
-                double salary = cliente.Salary;                      
-                double income = 0;//=salary********************************************************************************
-                double creditLimit = 0;
-                double overdraftLimit = 0;
+                double salary = account.Client[0].Salary;
+
                 Random r = new();
-                if (income < 3000)
+                if (salary < 3000)
                 {
-                    profile = EProfile.Academic;
+                    account.Profile = EProfile.Academic;
                 }
-                else if (income >= 3000 && income < 10000)
+                else if (salary >= 3000 && salary < 10000)
                 {
-                    profile = EProfile.Normal;
+                    account.Profile = EProfile.Normal;
                 }
                 else
                 {
-                    profile = EProfile.VIP;
+                    account.Profile = EProfile.VIP;
                 }
-                switch (profile)
+                switch (account.Profile)
                 {
                     case EProfile.Academic:
-                        creditLimit = r.Next(1000, 3001);  // Limite de 1000 a 3000
-                        overdraftLimit = r.Next(500, 1501);  // Limite de 500 a 1500
+                        account.CreditCard.Limit = r.Next(1000, 3001);  // Limite de 1000 a 3000
+                        account.Overdraft = r.Next(500, 1501);  // Limite de 500 a 1500
                         break;
 
                     case EProfile.Normal:
-                        creditLimit = r.Next(3000, 10001);  // Limite de 3000 a 10000
-                        overdraftLimit = r.Next(1500, 5001);  // Limite de 1500 a 5000
+                        account.CreditCard.Limit = r.Next(3000, 10001);  // Limite de 3000 a 10000
+                        account.Overdraft = r.Next(1500, 5001);  // Limite de 1500 a 5000
                         break;
 
                     case EProfile.VIP:
-                        creditLimit = r.Next(10000, 50001);  // Limite de 10000 a 50000
-                        overdraftLimit = r.Next(5000, 20001);  // Limite de 5000 a 20000
+                        account.CreditCard.Limit = r.Next(10000, 50001);  // Limite de 10000 a 50000
+                        account.Overdraft = r.Next(5000, 20001);  // Limite de 5000 a 20000
                         break;
                 }
             }
             else
             {
-                throw new Exception("Cliente encontrado, verifique o salário.");
+                throw new Exception("Salário inválido.");
             }
-            return profile;      
+            return account;
         }
     }
 }

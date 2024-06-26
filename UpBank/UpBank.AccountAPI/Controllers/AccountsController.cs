@@ -136,15 +136,13 @@ namespace UpBank.AccountAPI.Controllers
             return Ok(account);
         }
 
+        [HttpPatch]
+        public async Task<ActionResult<Account>> UpdateAccount(AccountUpdateDTO accountUpdateDTO)
+        {
+            var account = await _accountService.UpdateAccount(accountUpdateDTO);
 
-
-
-
-        //[HttpPatch]
-        //public async Task<ActionResult<Account>> UpdateAccount(string number)
-        //{
-        //if (account.Restriction) return BadRequest("Conta esta restrita e nao pode ter seus dados atualizados");
-        //}
+            return account;
+        }
 
         [HttpDelete("{number}")]
         public async Task<ActionResult<Account>> CloseAccount(string number)

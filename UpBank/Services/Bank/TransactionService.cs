@@ -129,17 +129,30 @@ namespace Services.Bank
                 case "Withdraw":
                     if (transactionDTO.ReceiverAccount != null) throw new InvalidOperationException("Nao pode ter conta destino para saque");
                     if (transactionDTO.TransactionValue > totalBalance) throw new InvalidOperationException("Saldo insuficiente para realizar o saque");
-                    obj = new
+                    if (transactionDTO.TransactionValue > account.Balance)
                     {
-                        Value = transactionDTO.TransactionValue,
-                        AccountNumber = transactionDTO.AccountNumber
-                    };
-                    bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAW;
+                        //TODO: arrumar a logica para atualizar overdraft quando essa condicao for verdadeira.
+                        obj = new
+                        {
+                            Value = transactionDTO.TransactionValue,
+                            AccountNumber = transactionDTO.AccountNumber
+                        };
+                        bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAWOVERDRAFT;
+                    }
+                    else
+                    {
+                        obj = new
+                        {
+                            Value = transactionDTO.TransactionValue,
+                            AccountNumber = transactionDTO.AccountNumber
+                        };
+                        bankTransaction = BankTransaction.UPDATEBALANCEWITHDRAW;
+                    }
                     break;
                 case "Transfer":
                 case "Payment":
 
-                    double qntTiraOverdraft = 0.0;
+                    double amountToRemoveOverdraft = 0.0;
 
                     if (transactionDTO.ReceiverAccount == null)
                         throw new InvalidOperationException("Nao foi informado a conta destino para transferencia ou pagamento");
@@ -153,20 +166,18 @@ namespace Services.Bank
                         if (account.Balance >= 0)
                         {
                             diff = transactionDTO.TransactionValue - account.Balance; // O novo saldo da conta vai ser o valor da transacao menos o saldo atual
-                            qntTiraOverdraft = diff; // O valor que vai ser retirado do cheque especial vai ser o valor da diferenca
-
-                            diff *= -1; // Multiplica por -1 para o saldo ficar negativo
+                            amountToRemoveOverdraft = diff; // O valor que vai ser retirado do cheque especial vai ser o valor da diferenca
+                            diff *= -1;
                         }
                         else
                         {
                             // O saldo novo vai ser a trasacao negativada e o saldo atual (exemplo: -10 + -100 = -110)
                             diff = transactionDTO.TransactionValue * -1;
                             diff += account.Balance;
-
-                            qntTiraOverdraft = transactionDTO.TransactionValue; // O valor que vai ser retirado do cheque especial vai ser o valor da transacao
+                            amountToRemoveOverdraft = transactionDTO.TransactionValue; // O valor que vai ser retirado do cheque especial vai ser o valor da transacao
                         }
 
-                        if (qntTiraOverdraft > account.Overdraft)
+                        if (amountToRemoveOverdraft > account.Overdraft)
                         {
                             throw new InvalidOperationException("Saldo insuficiente para realizar o pagamento ou transferencia");
                         }
@@ -179,7 +190,7 @@ namespace Services.Bank
                             AccountNumber = transactionDTO.AccountNumber,
                             Diff = diff,
                             ReceiverAccount = transactionDTO.ReceiverAccount,
-                            AtualizarOverdrat = qntTiraOverdraft
+                            UpdateOverdraft = amountToRemoveOverdraft
                         };
                         bankTransaction = BankTransaction.UPDATEBALANCEOVERDRAFT;
                     }

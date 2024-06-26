@@ -38,6 +38,7 @@ namespace Services.Bank
                 List<Client> clients = t3.Result;
 
                 Account account = new(register, agency, clients, extract);
+                account.SavingAccountNumber = register.SavingAccountNumber;
 
                 list.Add(account);
             }
@@ -64,6 +65,7 @@ namespace Services.Bank
             List<Client> clients = t3.Result;
 
             Account account = new(register, agency, clients, extract);
+            account.SavingAccountNumber = register.SavingAccountNumber;
 
             return account;
         }
@@ -98,7 +100,37 @@ namespace Services.Bank
             return await _repository.ApproveAccount(account);
         }
 
+        public async Task<Account> UpdateAccount(AccountUpdateDTO accountDTO)
+        {
+            var account = await GetAccount(accountDTO.Number);
+            Random r = new();
+            account.CreditCard.Active = accountDTO.CreditCardStatus;
+            var profile = Enum.TryParse<EProfile>(accountDTO.AccountProfile, out var accountProfile) ? accountProfile : throw new ArgumentException("O perfil de conta informado nao existe.");
+            account.Profile = profile;
+            account.Restriction = accountDTO.Restriction;
 
+            switch (account.Profile)
+            {
+                case EProfile.Academic:
+                    account.CreditCard.Limit = r.Next(1000, 3001);
+                    account.Overdraft = r.Next(500, 1501);
+                    break;
+
+                case EProfile.Normal:
+                    account.CreditCard.Limit = r.Next(3000, 10001);
+                    account.Overdraft = r.Next(1500, 5001);
+                    break;
+
+                case EProfile.VIP:
+                    account.CreditCard.Limit = r.Next(10000, 50001);
+                    account.Overdraft = r.Next(5000, 20001);
+                    break;
+            }
+
+            await _repository.UpdateAccount(account);
+
+            return account;
+        }
 
         private async Task<List<Client>> RetrieveClients(List<string> cpfs)
         {
@@ -152,8 +184,7 @@ namespace Services.Bank
                     Value = dto.Value
                 };
 
-                if (dto.AccountReceiver != null)
-                    bt.Receiver = await GetAccount(dto.AccountReceiver);
+                bt.Receiver = dto.AccountReceiver;
 
                 list.Add(bt);
             }
@@ -166,7 +197,7 @@ namespace Services.Bank
             List<Account> accounts = GetAllAccounts().Result;
 
 
-            foreach(var ac in accounts)
+            foreach (var ac in accounts)
             {
                 if (ac.Number.Equals(account.Number))
                     throw new ArgumentException("Erro ao inserir. O numero de conta digitado pertence a outra conta");
@@ -186,6 +217,15 @@ namespace Services.Bank
                 if (c.Restriction == true)
                     throw new ArgumentException($"Cliente {c.Name} com restrição");
             }
+        }
+
+        public async Task<Account> DeleteAccount(string number)
+        {
+            var account = await GetAccount(number);
+            if (account == null) throw new NullReferenceException($"A conta com o numero {number} nao consta na tabela Account");
+            _repository.PostAccountHistory(account);
+
+            return account;
         }
     }
 }

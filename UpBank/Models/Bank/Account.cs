@@ -1,5 +1,7 @@
 ﻿using Models.DTO;
 using Models.People;
+using System;
+using System.Security.Principal;
 
 namespace Models.Bank
 {
@@ -9,6 +11,7 @@ namespace Models.Bank
         SELECT 
             a.AccountNumber,
             a.AgencyNumber,
+            a.SavingAccountNumber,
             a.Restriction,
             a.CreditCardNumber,
             a.Overdraft,
@@ -29,13 +32,23 @@ namespace Models.Bank
 
         public static readonly string GetByClientCPF = @"SELECT ClientCPF FROM ClientAccount WHERE AccountNumber = @AccountNumber";
 
+        public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, SavingAccountNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @SavingAccountNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
 
-        public static readonly string INSERT = @"INSERT INTO Account(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance)";
+        public static readonly string UPDATE = @"
+        UPDATE Account SET Restriction = @Restriction, Overdraft = @Overdraft WHERE AccountNumber = @AccountNumber;
+        UPDATE Account SET AccountProfile = @AccountProfile WHERE AccountNumber = @AccountNumber;
+        UPDATE CreditCard SET Active = @Active, CreditCardLimit = @CreditCardLimit WHERE CreditCardNumber = @CreditCardNumber";
 
-        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, AccountProfile,  Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);DELETE FROM Account WHERE AccountNumber = @Number";
+        public static readonly string DELETE = @"INSERT INTO AccountHistory(AccountNumber, AgencyNumber, SavingAccountNumber, AccountProfile, Restriction, CreditCardNumber, Overdraft, CreatedDt, Balance) VALUES (@AccountNumber, @AgencyNumber, @SavingAccountNumber, @AccountProfile, @Restriction, @CreditCardNumber, @Overdraft, @CreatedDt, @Balance);UPDATE Account SET Restriction = 1 WHERE AccountNumber = @AccountNumber";
+
+        private static readonly string[] cardBrands = { "Visa", "MasterCard", "American Express", "Elo" };
+
+        private static string FlagRandom { get => cardBrands[new Random().Next(cardBrands.Length)]; }
+
 
         public string Number { get; set; }
         public Agency Agency { get; set; }
+        public string SavingAccountNumber { get; set; }
         public List<Client> Client { get; set; }
         public bool Restriction { get; set; }
         public CreditCard CreditCard { get; set; }
@@ -50,16 +63,29 @@ namespace Models.Bank
 
         public Account(AccountDTO accountDTO)
         {
-            Number = accountDTO.AccountNumber;
-            CreditCard = accountDTO.CreditCard;
+            Random r = new();
 
-            Overdraft = 0;
-            Balance = 0;
-            CreatedDt = DateTime.Now;
+            Number = accountDTO.AccountNumber;
+            SavingAccountNumber = $"{Number}-{r.Next(10, 100)}";
             Restriction = true;
+            Overdraft = accountDTO.Overdraft;
+            Profile = Enum.Parse<EProfile>(accountDTO.AccountProfile);
+            CreatedDt = DateTime.Now;
+            Balance = 0;
+
             Client = new();
             Extract = new();
-            Profile = EProfile.Normal;
+
+            CreditCard = new()
+            {
+                Number = r.NextInt64(1000000000000000, 9999999999999999),
+                ExpirationDt = DateTime.Now.AddYears(5),
+                Limit = accountDTO.CreditCardLimit,
+                CVV = r.Next(100, 999).ToString(),
+                Holder = accountDTO.CreditCardHolder,
+                Flag = FlagRandom,
+                Active = false
+            };
         }
 
         public Account(AccountDTO dto, Agency agency, List<Client> clients, List<BankTransaction> extract)
@@ -80,4 +106,3 @@ namespace Models.Bank
         }
     }
 }
-

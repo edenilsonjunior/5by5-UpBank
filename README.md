@@ -369,7 +369,7 @@ Neste projeto foi retirado a utilização do _Swagger_. Para testar os endpoints
 </details>
 <br>
 
-## Clientes: @edenilsonjunior - Edenilson Garcia 👨🏻‍💻​
+## Endereço: @edenilsonjunior - Edenilson Garcia 👨🏻‍💻​
 
 <details>
 <summary>💼​ <strong>Funções</strong></summary><br />
